@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;700&amp;family=Space+Grotesk:wght@300;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#ffb3af",
+                    "on-primary-fixed-variant": "#763130",
+                    "secondary-fixed": "#ffdad5",
+                    "primary": "#ffb3af",
+                    "surface-container-lowest": "#0e0e0e",
+                    "primary-fixed": "#ffdad7",
+                    "secondary": "#ffb4a9",
+                    "on-error-container": "#ffdad6",
+                    "primary-container": "#380306",
+                    "on-error": "#690005",
+                    "inverse-primary": "#934845",
+                    "on-tertiary-fixed-variant": "#344573",
+                    "on-tertiary-fixed": "#031945",
+                    "inverse-surface": "#e5e2e1",
+                    "on-primary": "#591b1b",
+                    "surface-bright": "#3a3939",
+                    "tertiary-fixed": "#dae2ff",
+                    "on-surface": "#e5e2e1",
+                    "outline-variant": "#544342",
+                    "on-surface-variant": "#d9c1bf",
+                    "error-container": "#93000a",
+                    "surface": "#141313",
+                    "on-tertiary": "#1c2e5b",
+                    "outline": "#a18c8a",
+                    "secondary-container": "#8e130c",
+                    "on-secondary-container": "#ff9a8b",
+                    "surface-container-low": "#1c1b1b",
+                    "surface-dim": "#141313",
+                    "surface-container": "#201f1f",
+                    "surface-container-highest": "#353434",
+                    "error": "#ffb4ab",
+                    "background": "#141313",
+                    "on-background": "#e5e2e1",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-tint": "#ffb3af",
+                    "tertiary-fixed-dim": "#b4c5fb",
+                    "tertiary": "#b4c5fb",
+                    "on-secondary": "#690001",
+                    "on-secondary-fixed-variant": "#8e130c",
+                    "on-secondary-fixed": "#410000",
+                    "surface-variant": "#353434",
+                    "on-tertiary-container": "#6f80b2",
+                    "tertiary-container": "#001542",
+                    "inverse-on-surface": "#313030",
+                    "on-primary-container": "#be6966",
+                    "secondary-fixed-dim": "#ffb4a9",
+                    "on-primary-fixed": "#3d0608"
+            },
+            "borderRadius": {
+                    "none": "0px",
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "0px"
+            },
+            "fontFamily": {
+                    "headline": ["Bebas Neue", "cursive"],
+                    "body": ["Inter", "sans-serif"],
+                    "label": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #030303;
+            color: #F5F5F5;
+            font-family: 'Inter', sans-serif;
+        }
+        .bebas { font-family: 'Bebas Neue', cursive; }
+        /* Force zero radius globally for this project */
+        * { border-radius: 0px !important; }
+    </style>
+</head>
+<body class="bg-[#030303] text-[#F5F5F5] selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="bg-[#141313] dark:bg-[#141313] fixed top-0 w-full z-50 flex justify-between items-center w-full px-12 h-20">
+<div class="text-2xl font-black tracking-[0.2em] text-[#F5F5F5] uppercase">
+            THE FRAME CLUB
+        </div>
+<div class="hidden md:flex items-center gap-12">
+<a class="text-[#F5F5F5] border-b-2 border-[#380306] pb-1 hover:text-[#F5F5F5] transition-colors duration-200" href="#">Collection</a>
+<a class="text-[#888888] pb-1 hover:text-[#F5F5F5] transition-colors duration-200" href="#">Showroom</a>
+<a class="text-[#888888] pb-1 hover:text-[#F5F5F5] transition-colors duration-200" href="#">Heritage</a>
+<a class="text-[#888888] pb-1 hover:text-[#F5F5F5] transition-colors duration-200" href="#">Logistics</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-[#F5F5F5] hover:opacity-80 transition-all" data-icon="shopping_cart">shopping_cart</button>
+<button class="material-symbols-outlined text-[#F5F5F5] hover:opacity-80 transition-all" data-icon="person">person</button>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Collection Header -->
+<header class="w-full bg-[#0F0F0F] border-b border-[#494542] px-12 py-10 flex justify-between items-end">
+<div>
+<span class="text-primary-fixed-dim text-xs tracking-[0.3em] font-bold uppercase mb-2 block">Premium Archive</span>
+<h1 class="bebas text-7xl md:text-8xl text-[#F5F5F5] leading-none tracking-tight">THE COLLECTION</h1>
+</div>
+<div class="pb-2">
+<div class="flex items-center gap-4 bg-[#1A1614] border border-[#494542] px-4 py-2 cursor-pointer group hover:border-[#F5F5F5] transition-colors">
+<span class="text-xs uppercase tracking-widest text-[#888888] group-hover:text-[#F5F5F5]">Sort By: Newest</span>
+<span class="material-symbols-outlined text-sm text-[#888888]">expand_more</span>
+</div>
+</div>
+</header>
+<!-- Filter Bar -->
+<section class="px-12 py-6 bg-[#030303] overflow-x-auto">
+<div class="flex gap-4 min-w-max">
+<button class="px-8 py-2 bg-[#380306] text-[#F5F5F5] text-xs uppercase tracking-widest font-bold">All</button>
+<button class="px-8 py-2 bg-[#1A1614] border border-[#494542] text-[#888888] text-xs uppercase tracking-widest hover:border-[#F5F5F5] hover:text-[#F5F5F5] transition-colors">Available</button>
+<button class="px-8 py-2 bg-[#1A1614] border border-[#494542] text-[#888888] text-xs uppercase tracking-widest hover:border-[#F5F5F5] hover:text-[#F5F5F5] transition-colors">Pre-Order</button>
+<button class="px-8 py-2 bg-[#1A1614] border border-[#494542] text-[#888888] text-xs uppercase tracking-widest hover:border-[#F5F5F5] hover:text-[#F5F5F5] transition-colors">Coming Soon</button>
+</div>
+</section>
+<!-- Product Grid -->
+<section class="px-12 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1: Available -->
+<div class="bg-[#0F0F0F] border border-[#494542] flex flex-col group">
+<div class="relative aspect-[4/3] overflow-hidden bg-[#141313]">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="luxury sports car profile shot against a dark studio background with dramatic rim lighting and shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSDq1RozQrbZVtcP3Mene9rRx2gIvWt9jo3vosBAG2Boo8THSA8EzYJwOKG3BKiJkaSTTnjI7AE-hdits7IkR-sc-GDl-S2cxtn4l65QRtwY4QU4QU9-f2S03lHi3x6zQmKSQvEZJTEqnT1Ir4n-bN2AsZY6PG9_qwZGY4hLn9bzdPHeHWLNqZFW09BGjRDahYcpxH_mnBiF4CVWDtEzkFZo9GbjFoKGCWElbfvkCBdceZry-QLi9Q3nHbst-BMhcrKTuFm5Tl-Hnn"/>
+<span class="absolute top-4 right-4 bg-[#380306] text-[#F5F5F5] text-[10px] px-3 py-1 uppercase tracking-widest font-bold">Available</span>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="bebas text-3xl text-[#F5F5F5] tracking-wide mb-1">GT MONOLITH X-1</h3>
+<p class="text-[#888888] text-xs uppercase tracking-[0.2em] mb-6">Engineered by Frame Dynamics</p>
+<div class="mt-auto">
+<p class="text-xl font-bold text-[#F5F5F5] mb-6">Rs. 5,000</p>
+<button class="w-full bg-[#380306] text-[#F5F5F5] py-4 text-xs uppercase tracking-[0.3em] font-black hover:bg-[#8E130C] transition-colors">Order Now</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Pre-Order -->
+<div class="bg-[#0F0F0F] border border-[#494542] flex flex-col group">
+<div class="relative aspect-[4/3] overflow-hidden bg-[#141313]">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="ultra-modern hypercar front view in a dark industrial hangar with cinematic red ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv9BnsyvUXksk332twScBP-YTb_VL2O6Vx-kgX2Mio8AduEDMOuF02yKRITQL9UIyqWUvi1qwYcPNobgDDbhZ1amwDal7KkNlpOCCUBM1Y12CkLg5Q0FM7KIonBrCHngGaT-6IVbwnhqMVSJA6uAbMa2OClguMent2QDc9dUQcm7vOJZMcPnLsl1xu8lKDh-zxZ1LIKqYpTMcSWgbpADuJFEgufvuqirHWeXT4LQsGHCgvreBseWRAT4KCVNjzVjSU4rdViDw76jHS"/>
+<span class="absolute top-4 right-4 bg-[#494542] text-[#F5F5F5] text-[10px] px-3 py-1 uppercase tracking-widest font-bold">Pre-Order</span>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="bebas text-3xl text-[#F5F5F5] tracking-wide mb-1">APEX V8 SPECTRE</h3>
+<p class="text-[#888888] text-xs uppercase tracking-[0.2em] mb-6">Limited Machined Edition</p>
+<div class="mt-auto">
+<p class="text-xl font-bold text-[#F5F5F5] mb-6">Rs. 5,000</p>
+<button class="w-full bg-[#380306] text-[#F5F5F5] py-4 text-xs uppercase tracking-[0.3em] font-black hover:bg-[#8E130C] transition-colors">Order Now</button>
+<p class="text-[#888888] text-[10px] uppercase tracking-widest mt-4 text-center">Est. delivery 3-4 weeks</p>
+</div>
+</div>
+</div>
+<!-- Card 3: Unavailable -->
+<div class="bg-[#0F0F0F] border border-[#494542] flex flex-col group opacity-60">
+<div class="relative aspect-[4/3] overflow-hidden bg-[#141313]">
+<img class="w-full h-full object-cover grayscale" data-alt="classic luxury vintage car in a dark shadows with slight highlight on the chrome grill and headlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNdz6wjWEhIoTCbQCHb9AoLq1dkFgtK2guDwR49SAQDo0Wy4IUEXvzyq1IlthsBzX9NbJQH2Wd-YztXRGhzzGpyMpxNPmuJWylOp8pSVK4jNFlQosQ3URJApV1W_ghvP7-apqULcezdHOs1LYB3dPdxQjeF9lNanA9Mqu-vYSmutAc67EQ1ca-MgDciri3m00ZBaWJWHFcO8c9wFnEkmVHM7w1NsANwWN6a8aYr1kpMvQaPAOQG4pXXDg3Q1DXtgZcGLoR28eA1hCe"/>
+<span class="absolute top-4 right-4 bg-[#1A1614] text-[#888888] text-[10px] px-3 py-1 uppercase tracking-widest font-bold">Unavailable</span>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="bebas text-3xl text-[#F5F5F5] tracking-wide mb-1">LEGACY COUPE '64</h3>
+<p class="text-[#888888] text-xs uppercase tracking-[0.2em] mb-6">Heritage Series</p>
+<div class="mt-auto">
+<p class="text-xl font-bold text-[#F5F5F5] mb-6">Rs. 5,000</p>
+<button class="w-full bg-[#1A1614] text-[#494542] py-4 text-xs uppercase tracking-[0.3em] font-black cursor-not-allowed" disabled="">Sold Out</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Available -->
+<div class="bg-[#0F0F0F] border border-[#494542] flex flex-col group">
+<div class="relative aspect-[4/3] overflow-hidden bg-[#141313]">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="black sports car dashboard and steering wheel detail with subtle interior lighting in dark garage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs-wmdyynHmNhGnveVfBBwQE2QXoSeWPtNEs7_DHxMjtOgeHekO2vsB7GeatG-QR40gazeilmLH5VO9CDIXbV77BIxwFxkQ7PvLnd5ebsMFhyvljhNLUNGOvcQZ3A8mktRTTa-Brfyff6-CQeqzSL2BnTZ2RZhlfC2HzxoLbxPgxWJqtqgn92Y3aSLxS1ZShU45y7xgQN_rc3ZIovzL08--yBpvtz5VeRj1k4BzrOGCPwnf9O4PFdJ5Au88lLWiZSbIHet-Z23xvuo"/>
+<span class="absolute top-4 right-4 bg-[#380306] text-[#F5F5F5] text-[10px] px-3 py-1 uppercase tracking-widest font-bold">Available</span>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="bebas text-3xl text-[#F5F5F5] tracking-wide mb-1">INTERCEPTOR DARK</h3>
+<p class="text-[#888888] text-xs uppercase tracking-[0.2em] mb-6">Midnight Chassis Program</p>
+<div class="mt-auto">
+<p class="text-xl font-bold text-[#F5F5F5] mb-6">Rs. 5,000</p>
+<button class="w-full bg-[#380306] text-[#F5F5F5] py-4 text-xs uppercase tracking-[0.3em] font-black hover:bg-[#8E130C] transition-colors">Order Now</button>
+</div>
+</div>
+</div>
+<!-- Card 5: Pre-Order -->
+<div class="bg-[#0F0F0F] border border-[#494542] flex flex-col group">
+<div class="relative aspect-[4/3] overflow-hidden bg-[#141313]">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="red luxury car side profile in minimalist dark environment with sharp reflections on the paint" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSFAvVsYkbaHhUlRPkHIu_3hQrxuhuJFgh4pDTCwah1rLBB4-Ao9mHxKOoPpr86DgtvoIDeA6MKQin0lwcN3-4Rh9rzDQ1yX52vIXVCycV7YLMokAbNhkBFwLqnUTH7c7DJsY0L_zft4Z0xvS0QQvhOzVzdtXd3nbo9Ipoy1Q33DW35Cx5KzCNkNbj7ceNJbXipv56TWxIljQ3BteAWjfresIB1b0hm64KT6zsZNU6yRQgvQjWcU5LlbEtjxrQ87U3Pk5aeQ13ugL3"/>
+<span class="absolute top-4 right-4 bg-[#494542] text-[#F5F5F5] text-[10px] px-3 py-1 uppercase tracking-widest font-bold">Pre-Order</span>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="bebas text-3xl text-[#F5F5F5] tracking-wide mb-1">TITAN GRAND TOURING</h3>
+<p class="text-[#888888] text-xs uppercase tracking-[0.2em] mb-6">Precision Aero Package</p>
+<div class="mt-auto">
+<p class="text-xl font-bold text-[#F5F5F5] mb-6">Rs. 5,000</p>
+<button class="w-full bg-[#380306] text-[#F5F5F5] py-4 text-xs uppercase tracking-[0.3em] font-black hover:bg-[#8E130C] transition-colors">Order Now</button>
+<p class="text-[#888888] text-[10px] uppercase tracking-widest mt-4 text-center">Est. delivery 3-4 weeks</p>
+</div>
+</div>
+</div>
+<!-- Card 6: Available -->
+<div class="bg-[#0F0F0F] border border-[#494542] flex flex-col group">
+<div class="relative aspect-[4/3] overflow-hidden bg-[#141313]">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="modern car aerodynamic rear spoiler detail with carbon fiber texture in dark moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCAO_XdAhaTxwDC9s53lFYEHTsxppDB1L8Izxjv4CWXXXBrupy77GkoP7VbuAyrYEWUV2c3gPhtLUpEY35IylcEYyVoaczcDEQMGddCR0s2KyRSqkcrKOweotUrIfVOA1LlGYD19o_O5tAmAxftmA3WlvR3RNzLgnPgOAa02d_ZA-gj8gR7miLwVfC3g6tRm4yj9LLuJjidb0kGETKk2_3OlSFGPQiSS7exJ6oI5JqK5Qv5emkstFcN4_bcdLPinJQ8_U3OB_K1cTb"/>
+<span class="absolute top-4 right-4 bg-[#380306] text-[#F5F5F5] text-[10px] px-3 py-1 uppercase tracking-widest font-bold">Available</span>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="bebas text-3xl text-[#F5F5F5] tracking-wide mb-1">AERO-BLADE GT</h3>
+<p class="text-[#888888] text-xs uppercase tracking-[0.2em] mb-6">Carbon Composite Series</p>
+<div class="mt-auto">
+<p class="text-xl font-bold text-[#F5F5F5] mb-6">Rs. 5,000</p>
+<button class="w-full bg-[#380306] text-[#F5F5F5] py-4 text-xs uppercase tracking-[0.3em] font-black hover:bg-[#8E130C] transition-colors">Order Now</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / CTA -->
+<section class="px-12 py-24 bg-[#0E0E0E] border-t border-[#353434]/15 text-center">
+<h2 class="bebas text-5xl text-[#F5F5F5] mb-6 tracking-widest">JOIN THE INNER CIRCLE</h2>
+<p class="text-[#888888] uppercase text-xs tracking-[0.4em] mb-12 max-w-2xl mx-auto leading-relaxed">Early access to limited releases and precision-engineered mechanical updates. No clutter. Just permanence.</p>
+<div class="flex flex-col md:flex-row justify-center max-w-xl mx-auto">
+<input class="bg-[#1A1614] border-b-2 border-[#494542] text-[#F5F5F5] px-6 py-4 flex-grow focus:outline-none focus:border-primary-fixed-dim text-xs tracking-widest uppercase mb-4 md:mb-0" placeholder="COMMUNICATION PROTOCOL (EMAIL)" type="email"/>
+<button class="bg-primary-container text-[#F5F5F5] px-12 py-4 text-xs uppercase tracking-[0.3em] font-black hover:bg-secondary-container transition-all">Authenticate</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0E0E0E] dark:bg-[#0E0E0E] w-full border-t border-[#353434]/15 flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 gap-8">
+<div class="text-[#F5F5F5] font-black uppercase tracking-[0.2em]">
+            THE FRAME CLUB
+        </div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-inter tracking-wider text-xs uppercase text-[#888888] hover:text-[#F5F5F5] transition-colors" href="#">Terms of Service</a>
+<a class="font-inter tracking-wider text-xs uppercase text-[#888888] hover:text-[#F5F5F5] transition-colors" href="#">Privacy Protocol</a>
+<a class="font-inter tracking-wider text-xs uppercase text-[#888888] hover:text-[#F5F5F5] transition-colors" href="#">Shipping Logistics</a>
+<a class="font-inter tracking-wider text-xs uppercase text-[#888888] hover:text-[#F5F5F5] transition-colors" href="#">Contact Engineering</a>
+</div>
+<div class="font-inter tracking-wider text-xs uppercase text-[#888888]">
+            © 2024 THE FRAME CLUB. ENGINEERED FOR PERMANENCE.
+        </div>
+</footer>
+</body></html>

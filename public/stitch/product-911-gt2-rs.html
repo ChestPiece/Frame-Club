@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@300..700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#2a2a2a",
+                    "primary": "#ffb3af",
+                    "on-tertiary-fixed": "#031945",
+                    "on-secondary-fixed-variant": "#8e130c",
+                    "on-secondary-container": "#ff9a8b",
+                    "on-primary-container": "#be6966",
+                    "error": "#ffb4ab",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary-fixed": "#ffdad5",
+                    "outline": "#a18c8a",
+                    "on-secondary-fixed": "#410000",
+                    "surface-container": "#201f1f",
+                    "on-tertiary": "#1c2e5b",
+                    "surface-variant": "#353434",
+                    "on-surface": "#e5e2e1",
+                    "surface-dim": "#141313",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#d9c1bf",
+                    "on-primary-fixed-variant": "#763130",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#b4c5fb",
+                    "inverse-primary": "#934845",
+                    "primary-container": "#380306",
+                    "on-primary-fixed": "#3d0608",
+                    "surface-bright": "#3a3939",
+                    "primary-fixed": "#ffdad7",
+                    "on-tertiary-fixed-variant": "#344573",
+                    "secondary-fixed-dim": "#ffb4a9",
+                    "secondary": "#ffb4a9",
+                    "background": "#141313",
+                    "tertiary-fixed": "#dae2ff",
+                    "secondary-container": "#8e130c",
+                    "tertiary-container": "#001542",
+                    "on-background": "#e5e2e1",
+                    "on-primary": "#591b1b",
+                    "inverse-surface": "#e5e2e1",
+                    "surface": "#141313",
+                    "on-secondary": "#690001",
+                    "inverse-on-surface": "#313030",
+                    "primary-fixed-dim": "#ffb3af",
+                    "surface-container-highest": "#353434",
+                    "on-tertiary-container": "#6f80b2",
+                    "on-error": "#690005",
+                    "surface-tint": "#ffb3af",
+                    "outline-variant": "#544342",
+                    "tertiary": "#b4c5fb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Bebas Neue"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #141313;
+        color: #F5F5F5;
+        font-family: 'Inter', sans-serif;
+      }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#141313] flex justify-between items-center px-12 py-6 w-full font-['Bebas_Neue'] tracking-[0.2em] uppercase">
+<div class="text-2xl font-black text-[#F5F5F5] tracking-widest">THE FRAME CLUB</div>
+<div class="hidden md:flex gap-12">
+<a class="text-[#888888] hover:text-[#F5F5F5] transition-colors duration-200" href="#">HOME</a>
+<a class="text-[#F5F5F5] border-b-2 border-[#380306] pb-1" href="#">SHOP</a>
+<a class="text-[#888888] hover:text-[#F5F5F5] transition-colors duration-200" href="#">ABOUT</a>
+<a class="text-[#888888] hover:text-[#F5F5F5] transition-colors duration-200" href="#">CONTACT</a>
+</div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-[#F5F5F5] cursor-pointer" data-icon="shopping_cart">shopping_cart</span>
+<button class="bg-[#380306] text-[#F5F5F5] px-6 py-2 text-sm tracking-widest">JOIN CLUB</button>
+</div>
+</nav>
+<main class="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+<!-- Breadcrumb -->
+<nav class="flex gap-2 text-xs font-['Inter'] text-[#888888] mb-12 uppercase tracking-tighter">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span>&gt;</span>
+<a class="hover:text-primary transition-colors" href="#">Shop</a>
+<span>&gt;</span>
+<span class="text-on-surface">Porsche 911 GT2 RS</span>
+</nav>
+<!-- Product Section -->
+<div class="grid grid-cols-1 lg:grid-cols-10 gap-16">
+<!-- Left: Gallery (60%) -->
+<div class="lg:col-span-6 space-y-4">
+<div class="aspect-[4/5] bg-[#0F0F0F] border border-[#544342]/30 p-8 flex items-center justify-center relative group">
+<img alt="Framed Porsche 911 GT2 RS" class="w-full h-full object-contain" data-alt="Premium minimalist wall frame featuring a side profile of a silver Porsche 911 GT2 RS against a deep black architectural background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCae4-EuzoI9GJsoDFVnc-zMc8NgvRE-WN_A9tVyVF1c_bgp4WF1H2ubZ1cDXDWdfAQlrFFdG2XxqMJSonyvC8OmjfmZVz3KjGtM3R1-ChJ29CWbkyQ7ey29jg7Kp5zRMxiH2Tj4TRo3OuKDuEnI6DJ4aPymrY6-Eb_cNyq448y6WStcs-fhtBK6upMCEyIZChNEAFqzoooTXH87IwVTy2DQgaFZUIEaCm_287zIcS33XAZQka0F77QLTa5IT_cVb4YQiL6vvB_t4K2"/>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="aspect-square bg-[#0F0F0F] border-2 border-[#380306] cursor-pointer">
+<img alt="Thumbnail 1" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" data-alt="Close-up detail of a silver Porsche sports car wheel and ceramic brakes in a dark studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMMgx0YPAR2UsCDpg1P3cJpGarmAFXuGUnCKwWiCyF51ZBoKV2mOp88zgJ-krftVXBFtbinNP5lgVqaD7efdrKaqvQYEl8Rsr3Ox1cq4YxhPpgTkjejm_tr1TGSHs_ynFEXyxg5lBpOUk1aSIQq4HL6AbtezevcOHAqLoE48cIlwQrGmFEdTrcQzNIACqDc8kQvSb9pIQEG5JPbTr1cggNB0Uu30or3MoL3UvCyJY_ONs2e79Hv7evat-le-OXIlHo8NLVvqCVjsTB"/>
+</div>
+<div class="aspect-square bg-[#0F0F0F] border border-[#544342]/30 cursor-pointer">
+<img alt="Thumbnail 2" class="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" data-alt="Dynamic rear view of a Porsche 911 GT2 RS highlighting the massive wing and titanium exhaust" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-8P-FpbS3r_yOnZZ5_OtEqziq3mUOwzDkRu_HXa897000UCpKkrr2ULdsO6HwGAgkgvQscZsDIdab9QXEcliPCpTyp6B04EjPdOzEbLO2pG60i6prfLIecVPlw_2apn7dY8yNWUeFi7wYtJqZQ0NhoK8UvB-odhge1_sCOhS9DzWhBDajvPuFHCecLoEPXPRebocTBg1_wuHjULGdtNh-cNu6mq5CXywxfE8pxeyakvVm0ITdxZo7kmniRI6VMpd04yf2KX3yxJDt"/>
+</div>
+<div class="aspect-square bg-[#0F0F0F] border border-[#544342]/30 cursor-pointer">
+<img alt="Thumbnail 3" class="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" data-alt="Interior view of a luxury performance car with carbon fiber accents and alcantara steering wheel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLVa6BjBZ_Rlx4SMGS7DMGMhRktWPyGjVWdXdblaFkvhqxMnEA1ilhEpxYtFQ9hD_1fpaD0YW04Oe7ZPom1yUw1ab-1Y7JlKV8GlfQPtk_0HybTy0AM5WtAPaSzNTsXMryLl8zLclP_QBICig82U1LKNlSkN0VrOxHquLcxjYiQAxTyic8q8-wO0x8sKxO-vPMRSWkBsqN4qhw97AyDwW_ISc1gzQ4dbevNyfQwvwiyRTXBRHRPbOLvDsqD9VHavv24ZCR3tKC_4Vb"/>
+</div>
+</div>
+</div>
+<!-- Right: Details (40%) -->
+<div class="lg:col-span-4 flex flex-col">
+<div class="mb-8">
+<span class="text-xs font-medium text-[#888888] tracking-[0.3em] uppercase">PORSCHE</span>
+<h1 class="text-6xl md:text-8xl font-['Bebas_Neue'] text-[#F5F5F5] leading-none mb-4">911 GT2 RS</h1>
+<div class="flex items-center gap-4">
+<span class="bg-[#380306] text-[#F5F5F5] text-[10px] px-3 py-1 tracking-widest font-bold uppercase">Available</span>
+<span class="text-2xl font-bold font-['Inter'] text-[#F5F5F5]">Rs. 5,000</span>
+</div>
+</div>
+<div class="space-y-8 flex-grow">
+<!-- Customization -->
+<div class="space-y-4">
+<label class="text-[10px] text-[#888888] uppercase tracking-widest block font-semibold">Background Design</label>
+<div class="flex gap-3">
+<button class="w-10 h-10 bg-[#1A1A1A] border-2 border-[#380306] relative" title="Carbon">
+<div class="absolute inset-1 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-50"></div>
+</button>
+<button class="w-10 h-10 bg-[#2A2A2A] border border-[#544342]/30 relative" title="Topo Map">
+<div class="absolute inset-1 border border-white/10 opacity-20"></div>
+</button>
+<button class="w-10 h-10 bg-[#444444] border border-[#544342]/30" title="Solid Grey"></button>
+<button class="w-10 h-10 bg-[#0E0E0E] border border-[#544342]/30 flex items-center justify-center" title="Race Track">
+<div class="w-full h-[1px] bg-white/20 rotate-45"></div>
+</button>
+</div>
+</div>
+<!-- Special Notes -->
+<div class="space-y-4">
+<label class="text-[10px] text-[#888888] uppercase tracking-widest block font-semibold">Special Instructions</label>
+<textarea class="w-full bg-[#1A1614] border border-[#544342] text-sm text-[#F5F5F5] p-4 h-24 focus:ring-0 focus:border-primary placeholder-[#494542] resize-none" placeholder="Add custom text or delivery notes..."></textarea>
+</div>
+<!-- Actions -->
+<div class="space-y-3">
+<button class="w-full bg-[#380306] text-[#F5F5F5] py-5 font-['Bebas_Neue'] text-xl tracking-[0.2em] hover:bg-[#8E130C] transition-colors">
+                            ORDER NOW — Rs. 5,000
+                        </button>
+<button class="w-full border border-[#544342] text-[#F5F5F5] py-5 font-['Bebas_Neue'] text-xl tracking-[0.2em] hover:bg-[#1C1B1B] transition-colors flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-lg" data-icon="chat">chat</span>
+                            ASK A QUESTION ON WHATSAPP
+                        </button>
+</div>
+<!-- Trust Row -->
+<div class="flex justify-between text-[10px] text-[#888888] font-['Inter'] uppercase tracking-tighter border-t border-[#544342]/15 pt-6">
+<span>Nationwide Delivery</span>
+<span class="text-[#544342]">|</span>
+<span>Secure Payment</span>
+<span class="text-[#544342]">|</span>
+<span>Handcrafted to Order</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Specs Section -->
+<section class="bg-[#0E0E0E] py-24 px-6 md:px-12">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl font-['Bebas_Neue'] text-[#F5F5F5] mb-12 tracking-widest">THE SPECS</h2>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-0.5 bg-[#544342]/10 border border-[#544342]/10">
+<div class="bg-[#141313] p-8 space-y-2">
+<span class="text-[10px] text-[#888888] uppercase tracking-widest font-medium">Engine</span>
+<p class="text-xl text-[#F5F5F5] font-['Inter'] font-semibold">3.8L Flat-6</p>
+</div>
+<div class="bg-[#141313] p-8 space-y-2">
+<span class="text-[10px] text-[#888888] uppercase tracking-widest font-medium">Power</span>
+<p class="text-xl text-[#F5F5F5] font-['Inter'] font-semibold">700 hp</p>
+</div>
+<div class="bg-[#141313] p-8 space-y-2">
+<span class="text-[10px] text-[#888888] uppercase tracking-widest font-medium">Top Speed</span>
+<p class="text-xl text-[#F5F5F5] font-['Inter'] font-semibold">340 km/h</p>
+</div>
+<div class="bg-[#141313] p-8 space-y-2">
+<span class="text-[10px] text-[#888888] uppercase tracking-widest font-medium">Production</span>
+<p class="text-xl text-[#F5F5F5] font-['Inter'] font-semibold">1,000 units</p>
+</div>
+<div class="bg-[#141313] p-8 space-y-2">
+<span class="text-[10px] text-[#888888] uppercase tracking-widest font-medium">Years</span>
+<p class="text-xl text-[#F5F5F5] font-['Inter'] font-semibold">2017-2019</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Related Products -->
+<section class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+<h2 class="text-4xl font-['Bebas_Neue'] text-[#F5F5F5] mb-12 tracking-widest">YOU MIGHT ALSO LIKE</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] bg-[#0E0E0E] mb-6 overflow-hidden relative">
+<img alt="Ferrari F40 Frame" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Iconic red Ferrari F40 classic supercar shot from a low angle on a textured dark asphalt ground" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt-hhazOtWqta23UsUr0X6iW-9RUVQIFPw32FJzKOwqW-sPRyzM3ZGj2TVvFD2TroZAKWPJEJiiX2neSIHTtKDnXGnHD4dErv_OEKnpwSyRDfH3DVJO0f6-XTEdntgPrIxE8pypQjU-93fhfetALJl0Ku_BeJcGW2H4oNIcsSCzcEA48dRaSBAxunwD8LCzxvRnCvV7IcefBwzRQwnHcku4YxE955Vcbd09JLOuGlGavdY7KbO_Ky345Dfs1P7rT8dViG_6cMx2WSD"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="bg-[#F5F5F5] text-black px-6 py-2 text-xs font-bold tracking-widest">VIEW FRAME</span>
+</div>
+</div>
+<h3 class="font-['Bebas_Neue'] text-2xl tracking-widest text-[#F5F5F5]">FERRARI F40</h3>
+<p class="text-sm text-[#888888] font-['Inter']">Rs. 5,500</p>
+</div>
+<!-- Card 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] bg-[#0E0E0E] mb-6 overflow-hidden relative">
+<img alt="Nissan GTR R34 Frame" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Midnight purple Nissan Skyline GTR R34 under neon urban lights at night, moody cinematic atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBN2flPJgYg55ls0eqxWgCBx5We51M-YDBfpk7xZ_knCHuR-mKUgmUkhNLlC8FxkDcn2Wq-rDwBBI6VDpF36u8HzoukA75VxkzgeWfXmttvhb2eidVa5KpCGTiB3YF4BOqOt-m9e1-6vBA2Pzp6ckbuyqiv1lKrWiVy83YFp3OXoWQA4lDkRju02evYQlLkVVK-qqGeSEpMTxOoxHfPMZ7P1aCHCaJLgpQ_4pxHcHX7Jr6XXGE8EUxsHjCnNmEDx3dM05bmSUcsLcBN"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="bg-[#F5F5F5] text-black px-6 py-2 text-xs font-bold tracking-widest">VIEW FRAME</span>
+</div>
+</div>
+<h3 class="font-['Bebas_Neue'] text-2xl tracking-widest text-[#F5F5F5]">NISSAN GTR R34</h3>
+<p class="text-sm text-[#888888] font-['Inter']">Rs. 4,800</p>
+</div>
+<!-- Card 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] bg-[#0E0E0E] mb-6 overflow-hidden relative">
+<img alt="Defender 90 Frame" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Black Land Rover Defender 90 parked on a rugged rocky mountain peak during twilight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFugTWgv15y0ZP8DFPquVqjIh_iTVVPwqsV3ohaqpNookHkY_mgEjsoaxQYLNi7c-vtVyvATSQ65Uk9f5XdcP1i_DiyDiI0Lj0cUMAL21lu7YpAv8uQtHmX0Sf-fgRU4puRyfQZagWCE7RlWAyRoNPaBOKD-DFN8qAOauMSNxTyaOKI4W7O5Liz_dp7CW-iNGE4YR99GKoSWK5EXIfClIBso1aS1aWtYARanBszgIsXKSaa3XvXDqFTYFTz1NeeixTTxP7-eVDapX5"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="bg-[#F5F5F5] text-black px-6 py-2 text-xs font-bold tracking-widest">VIEW FRAME</span>
+</div>
+</div>
+<h3 class="font-['Bebas_Neue'] text-2xl tracking-widest text-[#F5F5F5]">DEFENDER 90</h3>
+<p class="text-sm text-[#888888] font-['Inter']">Rs. 5,200</p>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#0E0E0E] border-t border-[#544342]/15 px-12 py-16 w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<div class="font-['Bebas_Neue'] text-lg text-[#F5F5F5] mb-4 tracking-widest">THE FRAME CLUB</div>
+<p class="text-[#888888] font-['Inter'] text-xs tracking-tighter leading-relaxed">©2024 THE FRAME CLUB. ENGINEERED PRECISION.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<div class="flex flex-col gap-2">
+<a class="text-[#888888] hover:text-[#FFB3AF] transition-colors text-xs font-['Inter'] tracking-tighter" href="#">TECHNICAL SPECS</a>
+<a class="text-[#888888] hover:text-[#FFB3AF] transition-colors text-xs font-['Inter'] tracking-tighter" href="#">WARRANTY</a>
+</div>
+<div class="flex flex-col gap-2">
+<a class="text-[#888888] hover:text-[#FFB3AF] transition-colors text-xs font-['Inter'] tracking-tighter" href="#">SHIPPING</a>
+<a class="text-[#888888] hover:text-[#FFB3AF] transition-colors text-xs font-['Inter'] tracking-tighter" href="#">RETURNS</a>
+</div>
+<div class="flex flex-col gap-2">
+<a class="text-[#888888] hover:text-[#FFB3AF] transition-colors text-xs font-['Inter'] tracking-tighter" href="#">PRIVACY</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
 
 export default function AdminLoginPage() {
   return (
@@ -20,8 +21,8 @@ export default function AdminLoginPage() {
           <h2 className="display-kicker mt-3 text-5xl leading-none">OPERATOR LOGIN</h2>
 
           <form className="mt-7 space-y-4">
-            <input placeholder="ADMIN EMAIL" className="machined-field" />
-            <input type="password" placeholder="PASSWORD" className="machined-field" />
+            <Input placeholder="ADMIN EMAIL" />
+            <Input type="password" placeholder="PASSWORD" />
 
             <Link
               href="/admin"

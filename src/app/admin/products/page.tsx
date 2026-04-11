@@ -1,14 +1,15 @@
+import { Edit2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { listProductsForAdmin } from "@/lib/mock-services";
 import type { ProductStatus } from "@/lib/types";
-
-function EditIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-      <path d="m4 16.5 8.8-8.8 3.5 3.5-8.8 8.8L4 20z" />
-      <path d="m11.8 6.6 1.8-1.8a1.8 1.8 0 0 1 2.6 0l2.1 2.1a1.8 1.8 0 0 1 0 2.6l-1.8 1.8" />
-    </svg>
-  );
-}
 
 function ProductStatusToggle({ status }: { status: ProductStatus }) {
   const isAvailable = status === "available";
@@ -36,48 +37,54 @@ export default function AdminProductsPage() {
     <section className="border border-border-dark bg-bg-surface">
       <div className="flex items-center justify-between border-b border-border-dark bg-bg-recessed px-6 py-4">
         <h1 className="display-kicker text-5xl leading-none">PRODUCTS</h1>
-        <button
+        <Button
           type="button"
           disabled
-          className="display-kicker border border-border-dark px-4 py-2 text-[10px] text-text-muted"
+          variant="outline"
+          size="sm"
+          className="display-kicker text-[10px] text-text-muted"
         >
           Add Product
-        </button>
+        </Button>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-215 text-left text-sm">
-          <thead className="technical-label text-[10px] text-text-muted">
-            <tr>
-              <th className="px-6 py-3">Model</th>
-              <th className="px-6 py-3">Brand</th>
-              <th className="px-6 py-3">Price</th>
-              <th className="px-6 py-3">Delivery</th>
-              <th className="px-6 py-3">Status</th>
-              <th className="px-6 py-3">Action</th>
-            </tr>
-          </thead>
+      <Table className="min-w-215">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Model</TableHead>
+            <TableHead>Brand</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Delivery</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Action</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <tbody>
-            {products.map((product, index) => (
-              <tr key={product.id} className={`border-t border-border-dark/20 ${index % 2 === 0 ? "bg-bg-surface" : "bg-bg-base"}`}>
-                <td className="px-6 py-4 text-xs font-semibold text-text-primary">{product.name}</td>
-                <td className="px-6 py-4 text-xs text-text-muted">{product.brand}</td>
-                <td className="px-6 py-4 text-xs text-text-muted">Rs. {product.price.toLocaleString("en-PK")}</td>
-                <td className="px-6 py-4 text-xs text-text-muted">{product.deliveryDays} days</td>
-                <td className="px-6 py-4 text-xs uppercase tracking-[0.2em] text-text-muted">
-                  <ProductStatusToggle status={product.status} />
-                </td>
-                <td className="px-6 py-4 text-text-muted">
-                  <button type="button" className="transition-colors hover:text-text-primary" aria-label="Edit product">
-                    <EditIcon />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        <TableBody>
+          {products.map((product, index) => (
+            <TableRow key={product.id} className={index % 2 === 0 ? "bg-bg-surface" : "bg-bg-base"}>
+              <TableCell className="text-xs font-semibold text-text-primary">{product.name}</TableCell>
+              <TableCell className="text-xs text-text-muted">{product.brand}</TableCell>
+              <TableCell className="text-xs text-text-muted">Rs. {product.price.toLocaleString("en-PK")}</TableCell>
+              <TableCell className="text-xs text-text-muted">{product.deliveryDays} days</TableCell>
+              <TableCell className="text-xs uppercase tracking-[0.2em] text-text-muted">
+                <ProductStatusToggle status={product.status} />
+              </TableCell>
+              <TableCell className="text-text-muted">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="text-text-muted hover:text-text-primary"
+                  aria-label="Edit product"
+                >
+                  <Edit2 className="h-4 w-4" strokeWidth={1.5} />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </section>
   );
 }

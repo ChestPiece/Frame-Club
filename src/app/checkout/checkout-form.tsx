@@ -1,16 +1,24 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import type { Product } from "@/lib/types";
 
-type CheckoutFormState = {
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  customerAddress: string;
-  customerCity: string;
-};
+const checkoutSchema = z.object({
+  customerName: z.string().trim().min(1, "Full name is required."),
+  customerEmail: z.string().trim().email("Enter a valid email."),
+  customerPhone: z.string().trim().min(1, "Phone number is required."),
+  customerAddress: z.string().trim().min(1, "Delivery address is required."),
+  customerCity: z.string().trim().min(1, "City is required."),
+});
+
+type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 type CheckoutFormProps = {
   product: Product | undefined;
@@ -19,7 +27,7 @@ type CheckoutFormProps = {
   notes: string;
 };
 
-const defaultState: CheckoutFormState = {
+const defaultState: CheckoutFormValues = {
   customerName: "",
   customerEmail: "",
   customerPhone: "",
@@ -29,24 +37,25 @@ const defaultState: CheckoutFormState = {
 
 export function CheckoutForm({ product, slug, background, notes }: CheckoutFormProps) {
   const router = useRouter();
-  const [formState, setFormState] = useState<CheckoutFormState>(defaultState);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  function updateField(field: keyof CheckoutFormState, value: string) {
-    setFormState((previous) => ({ ...previous, [field]: value }));
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<CheckoutFormValues>({
+    resolver: zodResolver(checkoutSchema),
+    defaultValues: defaultState,
+    mode: "onSubmit",
+  });
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError(null);
+  async function onSubmit(values: CheckoutFormValues) {
+    setSubmitError(null);
 
     if (!product) {
-      setError("Select a frame from the collection first.");
+      setSubmitError("Select a frame from the collection first.");
       return;
     }
-
-    setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/orders", {
@@ -55,11 +64,11 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          customerName: formState.customerName,
-          customerEmail: formState.customerEmail,
-          customerPhone: formState.customerPhone,
-          customerAddress: formState.customerAddress,
-          customerCity: formState.customerCity,
+          customerName: values.customerName,
+          customerEmail: values.customerEmail,
+          customerPhone: values.customerPhone,
+          customerAddress: values.customerAddress,
+          customerCity: values.customerCity,
           productSlug: slug || product.slug,
           background,
           notes,
@@ -88,81 +97,73 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
           payload && !payload.success
             ? payload.error.message
             : "Unable to create order at the moment.";
-        setError(message);
-        setIsSubmitting(false);
+        setSubmitError(message);
         return;
       }
 
       router.push(`/order/${payload.data.order.id}`);
     } catch {
-      setError("Network error while creating order.");
-      setIsSubmitting(false);
+      setSubmitError("Network error while creating order.");
     }
   }
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr]">
-      <form onSubmit={handleSubmit} className="space-y-6 border border-border-dark bg-bg-surface p-8 md:p-10">
-        {error ? <p className="text-sm text-[#f1a39d]">{error}</p> : null}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 border border-border-dark bg-bg-surface p-8 md:p-10"
+      >
+        {submitError ? <p className="text-sm text-[#f1a39d]">{submitError}</p> : null}
 
-        <label className="technical-label block text-[10px] text-text-muted">
-          Full Name
-          <input
-            required
-            value={formState.customerName}
-            onChange={(event) => updateField("customerName", event.target.value)}
-            className="machined-field mt-2"
-          />
-        </label>
+        <div>
+          <Label htmlFor="customerName">Full Name</Label>
+          <Input id="customerName" {...register("customerName")} className="mt-2" />
+          {errors.customerName ? (
+            <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerName.message}</p>
+          ) : null}
+        </div>
 
-        <label className="technical-label block text-[10px] text-text-muted">
-          Email
-          <input
-            required
-            type="email"
-            value={formState.customerEmail}
-            onChange={(event) => updateField("customerEmail", event.target.value)}
-            className="machined-field mt-2"
-          />
-        </label>
+        <div>
+          <Label htmlFor="customerEmail">Email</Label>
+          <Input id="customerEmail" type="email" {...register("customerEmail")} className="mt-2" />
+          {errors.customerEmail ? (
+            <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerEmail.message}</p>
+          ) : null}
+        </div>
 
-        <label className="technical-label block text-[10px] text-text-muted">
-          Phone Number
-          <input
-            required
-            value={formState.customerPhone}
-            onChange={(event) => updateField("customerPhone", event.target.value)}
-            className="machined-field mt-2"
-          />
-        </label>
+        <div>
+          <Label htmlFor="customerPhone">Phone Number</Label>
+          <Input id="customerPhone" {...register("customerPhone")} className="mt-2" />
+          {errors.customerPhone ? (
+            <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerPhone.message}</p>
+          ) : null}
+        </div>
 
-        <label className="technical-label block text-[10px] text-text-muted">
-          Delivery Address
-          <input
-            required
-            value={formState.customerAddress}
-            onChange={(event) => updateField("customerAddress", event.target.value)}
-            className="machined-field mt-2"
-          />
-        </label>
+        <div>
+          <Label htmlFor="customerAddress">Delivery Address</Label>
+          <Input id="customerAddress" {...register("customerAddress")} className="mt-2" />
+          {errors.customerAddress ? (
+            <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerAddress.message}</p>
+          ) : null}
+        </div>
 
-        <label className="technical-label block text-[10px] text-text-muted">
-          City
-          <input
-            required
-            value={formState.customerCity}
-            onChange={(event) => updateField("customerCity", event.target.value)}
-            className="machined-field mt-2"
-          />
-        </label>
+        <div>
+          <Label htmlFor="customerCity">City</Label>
+          <Input id="customerCity" {...register("customerCity")} className="mt-2" />
+          {errors.customerCity ? (
+            <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerCity.message}</p>
+          ) : null}
+        </div>
 
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className="display-kicker w-full border border-brand bg-brand px-5 py-4 text-sm text-text-primary transition-colors hover:bg-brand-mid disabled:cursor-not-allowed disabled:opacity-70"
+          variant="brand"
+          size="lg"
+          className="display-kicker w-full"
         >
           {isSubmitting ? "Processing" : "Proceed to Payment"}
-        </button>
+        </Button>
 
         <p className="text-xs text-text-muted">
           This is a frontend-only mock flow. Real PayFast and order API integration comes next.
@@ -180,7 +181,7 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
 
         <div className="border-t border-border-dark/70 pt-4">
           <p className="technical-label text-[10px] text-text-muted">Total</p>
-          <p className="mt-2 text-2xl text-text-primary">Rs. {product?.price.toLocaleString("en-PK") ?? "0"}</p>
+          <p className="mt-2 text-2xl text-text-primary">Rs. {product ? product.price.toLocaleString("en-PK") : "0"}</p>
         </div>
 
         <p className="text-[10px] uppercase tracking-[0.16em] text-text-muted">

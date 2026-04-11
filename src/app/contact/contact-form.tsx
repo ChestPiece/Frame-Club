@@ -1,6 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 type ContactFormProps = {
   intentIsNotify: boolean;
@@ -19,17 +25,50 @@ const initialState: FormState = {
   message: "",
 };
 
+function createFormSchema(intentIsNotify: boolean) {
+  return z
+    .object({
+      name: z.string().trim(),
+      email: z.string().trim().email("Enter a valid email."),
+      message: z.string().trim(),
+    })
+    .superRefine((values, ctx) => {
+      if (!intentIsNotify && values.name.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["name"],
+          message: "Full name is required.",
+        });
+      }
+
+      if (!intentIsNotify && values.message.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["message"],
+          message: "Message is required.",
+        });
+      }
+    });
+}
+
 export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
-  const [formState, setFormState] = useState<FormState>(initialState);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState<string>("");
 
-  function updateField(field: keyof FormState, value: string) {
-    setFormState((previous) => ({ ...previous, [field]: value }));
-  }
+  const schema = useMemo(() => createFormSchema(intentIsNotify), [intentIsNotify]);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormState>({
+    resolver: zodResolver(schema),
+    defaultValues: initialState,
+    mode: "onSubmit",
+  });
+
+  async function onSubmit(values: FormState) {
     setStatus("loading");
     setMessage("");
 
@@ -37,13 +76,13 @@ export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
       const endpoint = intentIsNotify ? "/api/notify" : "/api/contact";
       const payload = intentIsNotify
         ? {
-            email: formState.email,
+            email: values.email,
             productSlug: productSlug ?? "unknown-product",
           }
         : {
-            name: formState.name,
-            email: formState.email,
-            message: formState.message,
+            name: values.name,
+            email: values.email,
+            message: values.message,
           };
 
       const response = await fetch(endpoint, {
@@ -71,7 +110,7 @@ export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
 
       setStatus("success");
       setMessage(intentIsNotify ? "You will be notified when this model is available." : "Message received. We will contact you soon.");
-      setFormState(initialState);
+      reset(initialState);
     } catch {
       setStatus("error");
       setMessage("Network error. Please try again.");
@@ -79,44 +118,34 @@ export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
   }
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit}>
+    <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
       {!intentIsNotify ? (
-        <input
-          required
-          value={formState.name}
-          onChange={(event) => updateField("name", event.target.value)}
-          placeholder="FULL NAME"
-          className="machined-field"
-        />
+        <div>
+          <Input placeholder="FULL NAME" {...register("name")} />
+          {errors.name ? <p className="mt-2 text-xs text-[#f1a39d]">{errors.name.message}</p> : null}
+        </div>
       ) : null}
 
-      <input
-        required
-        value={formState.email}
-        onChange={(event) => updateField("email", event.target.value)}
-        placeholder="EMAIL"
-        type="email"
-        className="machined-field"
-      />
+      <div>
+        <Input placeholder="EMAIL" type="email" {...register("email")} />
+        {errors.email ? <p className="mt-2 text-xs text-[#f1a39d]">{errors.email.message}</p> : null}
+      </div>
 
       {!intentIsNotify ? (
-        <textarea
-          required
-          value={formState.message}
-          onChange={(event) => updateField("message", event.target.value)}
-          placeholder="MESSAGE"
-          rows={4}
-          className="machined-field resize-none"
-        />
+        <div>
+          <Textarea placeholder="MESSAGE" rows={4} {...register("message")} />
+          {errors.message ? <p className="mt-2 text-xs text-[#f1a39d]">{errors.message.message}</p> : null}
+        </div>
       ) : null}
 
-      <button
+      <Button
         type="submit"
-        disabled={status === "loading"}
-        className="display-kicker w-full border border-brand bg-brand px-4 py-3 text-xs text-text-primary transition-colors hover:bg-brand-mid disabled:cursor-not-allowed disabled:opacity-70"
+        disabled={isSubmitting || status === "loading"}
+        variant="brand"
+        className="display-kicker w-full"
       >
         {status === "loading" ? "Submitting" : intentIsNotify ? "Notify Me" : "Send Message"}
-      </button>
+      </Button>
 
       {status === "success" ? <p className="text-sm text-[#9bf0ba]">{message}</p> : null}
       {status === "error" ? <p className="text-sm text-[#f1a39d]">{message}</p> : null}

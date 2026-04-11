@@ -1,5 +1,5 @@
 import { fail, ok } from "@/lib/api-envelope";
-import { createContactSubmission } from "@/lib/mock-services";
+import { createContactSubmission } from "@/lib/services";
 
 type ContactPayload = {
   name?: string;
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     return fail("VALIDATION_ERROR", "name, email and message are required.", 422);
   }
 
-  const submission = createContactSubmission({
+  const submission = await createContactSubmission({
     name: payload.name,
     email: payload.email,
     message: payload.message,

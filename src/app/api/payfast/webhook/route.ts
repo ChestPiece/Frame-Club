@@ -1,39 +1,59 @@
-import { fail, ok } from "@/lib/api-envelope";
-import { applyWebhook } from "@/lib/mock-services";
-import type { PaymentStatus } from "@/lib/types";
-
-type WebhookPayload = {
-  orderId?: string;
-  paymentStatus?: PaymentStatus;
-};
-
-function isPaymentStatus(value: unknown): value is PaymentStatus {
-  return value === "pending" || value === "paid" || value === "failed";
-}
+import { NextResponse } from "next/server";
+import { applyWebhook } from "@/lib/services";
+import { verifyPayFastSignature } from "@/lib/payfast";
+import { getProductBySlug } from "@/lib/data";
+import { sendAdminNotification, sendOrderConfirmation } from "@/lib/emails/send";
 
 export async function POST(request: Request) {
-  const payload = (await request.json().catch(() => null)) as WebhookPayload | null;
+  const formData = await request.formData().catch(() => null);
 
-  if (!payload) {
-    return fail("INVALID_JSON", "Request body must be valid JSON.", 400);
+  if (!formData) {
+    return new NextResponse("Invalid Request", { status: 400 });
   }
 
-  if (typeof payload.orderId !== "string" || payload.orderId.trim().length === 0) {
-    return fail("VALIDATION_ERROR", "orderId is required.", 422);
+  // Convert formData to a plain object
+  const data: Record<string, string> = {};
+  formData.forEach((value, key) => {
+    data[key] = value.toString();
+  });
+
+  // Verify the signature
+  const isValid = verifyPayFastSignature(data);
+  if (!isValid) {
+    console.error("PayFast signature verification failed", data);
+    return new NextResponse("Invalid Signature", { status: 400 });
   }
 
-  const paymentStatus: PaymentStatus = isPaymentStatus(payload.paymentStatus)
-    ? payload.paymentStatus
-    : "paid";
+  const paymentStatus = data.payment_status === "COMPLETE" ? "paid" : "failed";
+  const orderId = data.m_payment_id;
 
-  const result = applyWebhook({
-    orderId: payload.orderId,
+  if (!orderId) {
+    return new NextResponse("Missing m_payment_id", { status: 400 });
+  }
+
+  const result = await applyWebhook({
+    orderId,
     paymentStatus,
   });
 
-  if ("error" in result) {
-    return fail("ORDER_NOT_FOUND", "Could not match order for webhook update.", 404);
+  if ("error" in result || !result.data) {
+    console.error("Webhook processing failed:", result.error);
+    return new NextResponse("Processing Failed", { status: 500 });
   }
 
-  return ok({ order: result.data });
+  const order = result.data;
+
+  // Send emails if payment is complete
+  if (paymentStatus === "paid") {
+    const product = await getProductBySlug(order.productSlug);
+    const productName = product?.name || order.productSlug;
+
+    // We can fire these off concurrently
+    Promise.all([
+      sendOrderConfirmation(order, productName),
+      sendAdminNotification(order, productName)
+    ]).catch(console.error);
+  }
+
+  return new NextResponse("OK", { status: 200 });
 }

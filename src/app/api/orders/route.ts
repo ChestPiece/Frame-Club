@@ -1,5 +1,6 @@
 import { fail, ok } from "@/lib/api-envelope";
-import { createOrder } from "@/lib/mock-services";
+import { createOrder } from "@/lib/services";
+import { generatePayFastSignature, getPayFastUrl, payfastConfig } from "@/lib/payfast";
 
 type OrderPayload = {
   customerName?: string;
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
     return fail("VALIDATION_ERROR", "Missing required order fields.", 422);
   }
 
-  const result = createOrder({
+  const result = await createOrder({
     customerName: payload.customerName,
     customerEmail: payload.customerEmail,
     customerPhone: payload.customerPhone,
@@ -47,12 +48,39 @@ export async function POST(request: Request) {
   });
 
   if ("error" in result && result.error) {
-    return fail(result.error, "The selected product could not be found.", 404);
+    return fail(result.error, "The selected product could not be found or order creation failed.", 400);
   }
+
+  const order = result.data;
+  
+  if (!order) {
+    return fail("UNKNOWN_ERROR", "Order creation failed silently.", 500);
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
+  const payfastData: Record<string, string> = {
+    merchant_id: payfastConfig.merchantId,
+    merchant_key: payfastConfig.merchantKey,
+    return_url: `${siteUrl}/order/${order.id}`,
+    cancel_url: `${siteUrl}/checkout?slug=${order.productSlug}&cancel=true`,
+    notify_url: `${siteUrl}/api/payfast/webhook`,
+    name_first: payload.customerName.split(" ")[0] || payload.customerName,
+    name_last: payload.customerName.split(" ").slice(1).join(" ") || "",
+    email_address: payload.customerEmail,
+    m_payment_id: order.id,
+    amount: order.price.toFixed(2),
+    item_name: `Frame Club - ${order.productSlug}`,
+  };
+
+  const signature = generatePayFastSignature(payfastData);
+  payfastData.signature = signature;
 
   return ok(
     {
-      order: result.data,
+      order,
+      payfastUrl: getPayFastUrl(),
+      payfastData,
     },
     201
   );

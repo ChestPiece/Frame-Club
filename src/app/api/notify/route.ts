@@ -1,5 +1,5 @@
 import { fail, ok } from "@/lib/api-envelope";
-import { createNotifySubscription } from "@/lib/mock-services";
+import { createNotifySubscription } from "@/lib/services";
 
 type NotifyPayload = {
   email?: string;
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     return fail("VALIDATION_ERROR", "email and productSlug are required.", 422);
   }
 
-  const subscription = createNotifySubscription({
+  const subscription = await createNotifySubscription({
     email: payload.email,
     productSlug: payload.productSlug,
   });

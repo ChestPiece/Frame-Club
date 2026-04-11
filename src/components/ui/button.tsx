@@ -18,6 +18,7 @@ const buttonVariants = cva(
         default: "px-4 py-3 text-xs",
         lg: "px-5 py-4 text-sm",
         xl: "px-6 py-4 text-xl",
+        "icon-sm": "size-7 border-transparent p-0",
         icon: "size-8 border-transparent p-0",
       },
     },
@@ -32,12 +33,16 @@ function Button({
   className,
   variant = "brand",
   size = "default",
+  render,
+  nativeButton,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      render={render}
+      nativeButton={render ? false : nativeButton}
       {...props}
     />
   )

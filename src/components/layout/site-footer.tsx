@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function SiteFooter() {
   return (
@@ -7,18 +8,38 @@ export function SiteFooter() {
         <p className="display-kicker text-2xl text-text-primary">THE FRAME CLUB</p>
 
         <nav className="flex flex-wrap gap-6 text-[10px] uppercase tracking-[0.2em] text-text-muted">
-          <Link href="/shop" className="transition-colors hover:text-text-primary">
+          <Button
+            render={<Link href="/shop" />}
+            variant="ghost"
+            size="sm"
+            className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
+          >
             Collection
-          </Link>
-          <Link href="/about" className="transition-colors hover:text-text-primary">
+          </Button>
+          <Button
+            render={<Link href="/about" />}
+            variant="ghost"
+            size="sm"
+            className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
+          >
             Story
-          </Link>
-          <Link href="/contact" className="transition-colors hover:text-text-primary">
+          </Button>
+          <Button
+            render={<Link href="/contact" />}
+            variant="ghost"
+            size="sm"
+            className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
+          >
             Contact
-          </Link>
-          <Link href="/admin/login" className="transition-colors hover:text-text-primary">
+          </Button>
+          <Button
+            render={<Link href="/admin/login" />}
+            variant="ghost"
+            size="sm"
+            className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
+          >
             Admin
-          </Link>
+          </Button>
         </nav>
 
         <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted">

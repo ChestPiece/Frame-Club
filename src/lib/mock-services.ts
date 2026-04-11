@@ -1,4 +1,4 @@
-import { getProductBySlug, getProducts } from "@/lib/mock-data";
+import { getProductBySlug, getProducts } from "@/lib/data";
 import type {
   ContactSubmission,
   NotifySubscription,
@@ -92,8 +92,8 @@ let orders: OrderRecord[] = [
 let contactSubmissions: ContactSubmission[] = [];
 let notifySubscriptions: NotifySubscription[] = [];
 
-export function createOrder(input: CreateOrderInput) {
-  const product = getProductBySlug(input.productSlug);
+export async function createOrder(input: CreateOrderInput) {
+  const product = await getProductBySlug(input.productSlug);
   if (!product) {
     return { error: "PRODUCT_NOT_FOUND" as const };
   }
@@ -130,8 +130,8 @@ export function listOrders() {
   return [...orders].sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1));
 }
 
-export function listProductsForAdmin() {
-  return getProducts();
+export async function listProductsForAdmin() {
+  return await getProducts();
 }
 
 export function getAdminStats() {

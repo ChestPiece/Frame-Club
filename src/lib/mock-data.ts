@@ -38,7 +38,7 @@ export const PRODUCTS: Product[] = [
     brand: "Ferrari",
     description: "An icon from Maranello presented with archival visual treatment.",
     images: [
-      "https://images.pexels.com/photos/971434/pexels-photo-971434.jpeg",
+      "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg",
       "https://images.pexels.com/photos/3752169/pexels-photo-3752169.jpeg",
     ],
     price: 5000,
@@ -123,7 +123,7 @@ export const PRODUCTS: Product[] = [
     description: "Grand touring excess translated into a precision-crafted wall piece.",
     images: [
       "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg",
-      "https://images.pexels.com/photos/159293/car-vehicle-luxury-sport-159293.jpeg",
+      "https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg",
     ],
     price: 5000,
     status: "preorder",

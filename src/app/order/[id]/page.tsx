@@ -2,8 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { getProductBySlug } from "@/lib/mock-data";
-import { getOrderById } from "@/lib/mock-services";
+import { Button } from "@/components/ui/button";
+import { getProductBySlug } from "@/lib/data";
+import { getOrderById } from "@/lib/services";
 
 type OrderConfirmationProps = {
   params: Promise<{ id: string }>;
@@ -11,13 +12,13 @@ type OrderConfirmationProps = {
 
 export default async function OrderConfirmationPage({ params }: OrderConfirmationProps) {
   const { id } = await params;
-  const order = getOrderById(id);
+  const order = await getOrderById(id);
 
   if (!order) {
     notFound();
   }
 
-  const product = getProductBySlug(order.productSlug);
+  const product = await getProductBySlug(order.productSlug);
 
   return (
     <>
@@ -64,18 +65,20 @@ export default async function OrderConfirmationPage({ params }: OrderConfirmatio
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/shop"
-                className="display-kicker border border-brand bg-brand px-6 py-3 text-xs transition-colors hover:bg-brand-mid"
+              <Button
+                render={<Link href="/shop" />}
+                variant="brand"
+                className="display-kicker"
               >
                 ORDER ANOTHER FRAME
-              </Link>
-              <Link
-                href="/"
-                className="display-kicker border border-border-dark px-6 py-3 text-xs transition-colors hover:bg-bg-elevated"
+              </Button>
+              <Button
+                render={<Link href="/" />}
+                variant="outline"
+                className="display-kicker"
               >
                 BACK TO HOME
-              </Link>
+              </Button>
             </div>
           </article>
         </section>

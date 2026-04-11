@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,8 @@ const defaultState: CheckoutFormValues = {
 export function CheckoutForm({ product, slug, background, notes }: CheckoutFormProps) {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [payfastData, setPayfastData] = useState<{ url: string; data: Record<string, string> } | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const {
     register,
@@ -75,33 +77,35 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
         }),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | {
-            success: true;
-            data: {
-              order: {
-                id: string;
-              };
-            };
-          }
-        | {
-            success: false;
-            error: {
-              message: string;
-            };
-          }
-        | null;
+      const payload = (await response.json().catch(() => null)) as any;
 
       if (!response.ok || !payload || !payload.success) {
         const message =
           payload && !payload.success
-            ? payload.error.message
+            ? payload.error?.message
             : "Unable to create order at the moment.";
-        setSubmitError(message);
+        setSubmitError(message || "Error processing order.");
         return;
       }
 
-      router.push(`/order/${payload.data.order.id}`);
+      const { payfastUrl, payfastData } = payload.data;
+      
+      if (!payfastUrl || !payfastData) {
+        // If PayFast config is missing on backend, fall back to mock
+        router.push(`/order/${payload.data.order.id}`);
+        return;
+      }
+
+      // Auto-submit PayFast form
+      setPayfastData({ url: payfastUrl, data: payfastData });
+      
+      // We need a slight delay to allow React to render the hidden form before submitting it
+      setTimeout(() => {
+        if (formRef.current) {
+          formRef.current.submit();
+        }
+      }, 100);
+
     } catch {
       setSubmitError("Network error while creating order.");
     }
@@ -157,18 +161,23 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
 
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !!payfastData}
           variant="brand"
           size="lg"
           className="display-kicker w-full"
         >
-          {isSubmitting ? "Processing" : "Proceed to Payment"}
+          {isSubmitting || payfastData ? "Processing Payment..." : "Proceed to Payment"}
         </Button>
-
-        <p className="text-xs text-text-muted">
-          This is a frontend-only mock flow. Real PayFast and order API integration comes next.
-        </p>
       </form>
+      
+      {/* Hidden PayFast Form */}
+      {payfastData && (
+        <form ref={formRef} action={payfastData.url} method="POST" className="hidden">
+          {Object.entries(payfastData.data).map(([name, value]) => (
+            <input key={name} type="hidden" name={name} value={value} />
+          ))}
+        </form>
+      )}
 
       <aside className="space-y-4 border border-border-dark bg-bg-recessed p-8">
         <p className="technical-label text-[10px] text-text-muted">Order Summary</p>

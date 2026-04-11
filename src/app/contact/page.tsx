@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ContactForm } from "./contact-form";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { Button } from "@/components/ui/button";
 
 type ContactPageProps = {
   searchParams: Promise<{ intent?: string; product?: string }>;
@@ -38,12 +39,14 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                 </article>
               </div>
 
-              <Link
-                href="https://wa.me/923001234567"
-                className="display-kicker inline-flex border border-brand bg-brand px-7 py-4 text-sm text-text-primary transition-colors hover:bg-brand-mid"
+              <Button
+                render={<Link href="https://wa.me/923001234567" />}
+                variant="brand"
+                size="lg"
+                className="display-kicker px-7 text-sm"
               >
                 OPEN WHATSAPP
-              </Link>
+              </Button>
             </article>
 
             <article className="space-y-4 border border-border-dark bg-bg-recessed p-8 md:p-10">

@@ -1,6 +1,6 @@
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { getProductBySlug } from "@/lib/mock-data";
+import { getProductBySlug } from "@/lib/data";
 import { CheckoutForm } from "./checkout-form";
 
 type CheckoutPageProps = {
@@ -16,7 +16,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
   const slug = params.slug ?? "";
   const background = params.background ?? "carbon-grid";
   const notes = params.notes ?? "";
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   return (
     <>

@@ -1,13 +1,6 @@
-import { Edit2, Eye } from "lucide-react";
+import { Edit2, Eye, Activity } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -16,69 +9,59 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAdminStats, listOrders, listProductsForAdmin } from "@/lib/mock-services";
-import type { ProductStatus } from "@/lib/types";
+import { getAdminStats, listOrders } from "@/lib/services";
+import { getProducts as listProductsForAdmin } from "@/lib/data";
+import { OrderStatusSelect } from "@/components/admin/order-status-select";
+import { ProductStatusToggle } from "@/components/admin/product-status-toggle";
+import { ExportCsvButton } from "@/components/admin/export-csv-button";
 
-function ProductStatusToggle({ status }: { status: ProductStatus }) {
-  const isAvailable = status === "available";
-  const isPreorder = status === "preorder";
-  const label = isAvailable ? "Available" : isPreorder ? "Pre-Order" : "Unavailable";
-
-  return (
-    <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.14em]">
-      <span className="relative block h-4 w-8 border border-border-dark bg-bg-recessed">
-        <span
-          className={`absolute top-0 h-full w-4 ${
-            isAvailable ? "right-0 bg-[#ffb3af]" : isPreorder ? "left-1/2 -translate-x-1/2 bg-[#ffb3af]" : "left-0 bg-[#544342]"
-          }`}
-        />
-      </span>
-      <span className={isAvailable ? "text-text-primary" : "text-text-muted"}>{label}</span>
-    </div>
-  );
-}
-
-export default function AdminDashboardPage() {
-  const stats = getAdminStats();
-  const orders = listOrders().slice(0, 5);
-  const products = listProductsForAdmin().slice(0, 4);
+export default async function AdminDashboardPage() {
+  const stats = await getAdminStats();
+  const orders = (await listOrders()).slice(0, 5);
+  const products = (await listProductsForAdmin()).slice(0, 4);
 
   return (
     <div className="space-y-10">
       <section className="grid gap-0 md:grid-cols-2 lg:grid-cols-4">
         <article className="border border-border-dark bg-bg-surface p-8">
-          <p className="technical-label text-[10px] text-text-muted">Total Orders</p>
+          <div className="flex items-start justify-between">
+            <p className="technical-label text-[10px] text-text-muted">Total Orders</p>
+            <span className="text-[10px] text-green-500">+12%</span>
+          </div>
           <p className="mt-4 text-4xl font-bold">{stats.totalOrders}</p>
         </article>
 
         <article className="border border-border-dark border-l-0 bg-bg-surface p-8">
-          <p className="technical-label text-[10px] text-text-muted">Pending Orders</p>
+          <div className="flex items-start justify-between">
+            <p className="technical-label text-[10px] text-text-muted">Pending Orders</p>
+            <span className="text-[10px] text-brand-mid">-3%</span>
+          </div>
           <p className="mt-4 text-4xl font-bold">{stats.pendingOrders}</p>
         </article>
 
         <article className="border border-border-dark border-l-0 bg-bg-surface p-8">
-          <p className="technical-label text-[10px] text-text-muted">Revenue This Month</p>
+          <div className="flex items-start justify-between">
+            <p className="technical-label text-[10px] text-text-muted">Revenue This Month</p>
+            <span className="text-[10px] text-green-500">+8%</span>
+          </div>
           <p className="mt-4 text-3xl font-bold">Rs. {stats.revenue.toLocaleString("en-PK")}</p>
         </article>
 
         <article className="border border-border-dark border-l-0 bg-bg-surface p-8">
-          <p className="technical-label text-[10px] text-text-muted">Frames In Production</p>
+          <div className="flex items-start justify-between">
+            <p className="technical-label text-[10px] text-text-muted">Frames In Production</p>
+          </div>
           <p className="mt-4 text-4xl font-bold">{stats.inProduction}</p>
+          <div className="mt-3 h-1 w-full bg-bg-recessed">
+            <div className="h-full bg-[#ffb3af]" style={{ width: "45%" }} />
+          </div>
         </article>
       </section>
 
       <section className="border border-border-dark bg-bg-surface">
         <div className="flex items-center justify-between border-b border-border-dark bg-bg-recessed px-6 py-4">
           <h2 className="technical-label text-xs text-text-primary">Live Order Pipeline</h2>
-          <Button
-            type="button"
-            disabled
-            variant="outline"
-            size="sm"
-            className="display-kicker text-[10px] text-text-muted"
-          >
-            Export CSV
-          </Button>
+          <ExportCsvButton orders={orders} />
         </div>
 
         <Table className="min-w-245">
@@ -111,18 +94,13 @@ export default function AdminDashboardPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-text-muted">
-                  <Select disabled defaultValue={order.orderStatus}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pending">pending</SelectItem>
-                      <SelectItem value="confirmed">confirmed</SelectItem>
-                      <SelectItem value="in_production">in_production</SelectItem>
-                      <SelectItem value="shipped">shipped</SelectItem>
-                      <SelectItem value="delivered">delivered</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <OrderStatusSelect
+                    orderId={order.id}
+                    currentStatus={order.orderStatus}
+                    customerEmail={order.customerEmail}
+                    orderNumber={order.orderNumber}
+                    productSlug={order.productSlug}
+                  />
                 </TableCell>
                 <TableCell className="text-text-muted">{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell className="text-right">
@@ -172,7 +150,7 @@ export default function AdminDashboardPage() {
                 <TableRow key={product.id}>
                   <TableCell className="text-[11px] font-semibold">{product.name}</TableCell>
                   <TableCell className="text-[11px] text-text-muted">
-                    <ProductStatusToggle status={product.status} />
+                    <ProductStatusToggle productId={product.id} status={product.status} />
                   </TableCell>
                   <TableCell className="text-[11px] text-text-muted">--</TableCell>
                   <TableCell className="text-[11px] text-text-muted">
@@ -193,7 +171,8 @@ export default function AdminDashboardPage() {
         </article>
 
         <article className="border border-brand-mid bg-brand p-8">
-          <h3 className="technical-label text-xl leading-tight text-text-primary">
+          <Activity className="mb-4 h-6 w-6 text-[#ffb3af]" strokeWidth={1.5} />
+          <h3 className="technical-label text-xl leading-tight text-text-primary italic">
             Precision
             <br />
             Engineered

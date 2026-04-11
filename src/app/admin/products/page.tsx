@@ -8,30 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { listProductsForAdmin } from "@/lib/mock-services";
-import type { ProductStatus } from "@/lib/types";
+import { getProducts as listProductsForAdmin } from "@/lib/data";
+import { ProductStatusToggle } from "@/components/admin/product-status-toggle";
 
-function ProductStatusToggle({ status }: { status: ProductStatus }) {
-  const isAvailable = status === "available";
-  const isPreorder = status === "preorder";
-  const label = isAvailable ? "Available" : isPreorder ? "Pre-Order" : "Unavailable";
-
-  return (
-    <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.14em]">
-      <span className="relative block h-4 w-8 border border-border-dark bg-bg-recessed">
-        <span
-          className={`absolute top-0 h-full w-4 ${
-            isAvailable ? "right-0 bg-[#ffb3af]" : isPreorder ? "left-1/2 -translate-x-1/2 bg-[#ffb3af]" : "left-0 bg-[#544342]"
-          }`}
-        />
-      </span>
-      <span className={isAvailable ? "text-text-primary" : "text-text-muted"}>{label}</span>
-    </div>
-  );
-}
-
-export default function AdminProductsPage() {
-  const products = listProductsForAdmin();
+export default async function AdminProductsPage() {
+  const products = await listProductsForAdmin();
 
   return (
     <section className="border border-border-dark bg-bg-surface">
@@ -68,7 +49,7 @@ export default function AdminProductsPage() {
               <TableCell className="text-xs text-text-muted">Rs. {product.price.toLocaleString("en-PK")}</TableCell>
               <TableCell className="text-xs text-text-muted">{product.deliveryDays} days</TableCell>
               <TableCell className="text-xs uppercase tracking-[0.2em] text-text-muted">
-                <ProductStatusToggle status={product.status} />
+                <ProductStatusToggle productId={product.id} status={product.status} />
               </TableCell>
               <TableCell className="text-text-muted">
                 <Button

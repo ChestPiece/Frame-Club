@@ -1,7 +1,15 @@
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
+import { login } from "./actions";
 
-export default function AdminLoginPage() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const { error } = await searchParams;
+
   return (
     <main className="grid min-h-screen bg-bg-base lg:grid-cols-[1.05fr_1fr]">
       <section className="flex items-center border-b border-border-dark bg-bg-recessed p-8 lg:border-b-0 lg:border-r lg:p-14">
@@ -11,7 +19,6 @@ export default function AdminLoginPage() {
           <p className="mt-6 text-sm leading-relaxed text-text-muted">
             Protected operational console for orders, status updates, and inventory control.
           </p>
-          <p className="mt-4 text-[10px] uppercase tracking-[0.16em] text-[#f5c4c1]">Auth wiring with Supabase is the next integration step.</p>
         </div>
       </section>
 
@@ -20,16 +27,20 @@ export default function AdminLoginPage() {
           <p className="technical-label text-[10px] text-text-muted">Sign In</p>
           <h2 className="display-kicker mt-3 text-5xl leading-none">OPERATOR LOGIN</h2>
 
-          <form className="mt-7 space-y-4">
-            <Input placeholder="ADMIN EMAIL" />
-            <Input type="password" placeholder="PASSWORD" />
+          <form action={login} className="mt-7 space-y-4">
+            <Input name="email" type="email" placeholder="ADMIN EMAIL" required />
+            <Input name="password" type="password" placeholder="PASSWORD" required />
 
-            <Link
-              href="/admin"
+            {error && (
+              <p className="text-xs text-[#ffb4ab]">{error}</p>
+            )}
+
+            <button
+              type="submit"
               className="display-kicker inline-flex w-full items-center justify-center border border-brand bg-brand px-5 py-4 text-sm text-text-primary transition-colors hover:bg-brand-mid"
             >
               ENTER ADMIN
-            </Link>
+            </button>
           </form>
         </article>
       </section>

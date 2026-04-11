@@ -2,13 +2,6 @@ import { Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Table,
   TableBody,
   TableCell,
@@ -16,18 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { listOrders } from "@/lib/mock-services";
+import { listOrders } from "@/lib/services";
+import { OrderStatusSelect } from "@/components/admin/order-status-select";
+import { ExportCsvButton } from "@/components/admin/export-csv-button";
 
-const orderStatusOptions = ["pending", "confirmed", "in_production", "shipped", "delivered"];
-
-export default function AdminOrdersPage() {
-  const orders = listOrders();
+export default async function AdminOrdersPage() {
+  const orders = await listOrders();
 
   return (
     <section className="border border-border-dark bg-bg-surface">
       <div className="flex items-center justify-between border-b border-border-dark bg-bg-recessed px-6 py-4">
         <h1 className="display-kicker text-5xl leading-none">ORDERS</h1>
-        <p className="technical-label text-[10px] text-text-muted">Newest First</p>
+        <div className="flex items-center gap-4">
+          <p className="technical-label text-[10px] text-text-muted">Newest First</p>
+          <ExportCsvButton orders={orders} />
+        </div>
       </div>
 
       <Table className="min-w-270">
@@ -69,19 +65,13 @@ export default function AdminOrdersPage() {
                 </Badge>
               </TableCell>
               <TableCell className="text-xs text-text-muted">
-                <Select disabled defaultValue={order.orderStatus}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {orderStatusOptions.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="mt-1 text-[10px] text-text-muted">Inline updates enabled in next phase</p>
+                <OrderStatusSelect
+                  orderId={order.id}
+                  currentStatus={order.orderStatus}
+                  customerEmail={order.customerEmail}
+                  orderNumber={order.orderNumber}
+                  productSlug={order.productSlug}
+                />
               </TableCell>
               <TableCell className="text-xs text-text-muted">{new Date(order.createdAt).toLocaleString()}</TableCell>
               <TableCell className="text-right">

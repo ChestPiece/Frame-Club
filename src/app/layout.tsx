@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter, Space_Grotesk } from "next/font/google";
+import { Bebas_Neue, Inter, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,7 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${bebasNeue.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", inter.variable, bebasNeue.variable, spaceGrotesk.variable, "font-sans", geist.variable)}
     >
       <body className="min-h-full flex flex-col bg-bg-base text-text-primary">
         {children}

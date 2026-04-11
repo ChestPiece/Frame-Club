@@ -34,9 +34,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn("h-full", "antialiased", inter.variable, bebasNeue.variable, spaceGrotesk.variable, "font-sans", geist.variable)}
     >
-      <body className="min-h-full flex flex-col bg-bg-base text-text-primary">
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-bg-base text-text-primary">
         {children}
       </body>
     </html>

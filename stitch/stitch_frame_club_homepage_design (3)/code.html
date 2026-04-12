@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE FRAME CLUB | Engineered Perfection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Space+Grotesk:wght@300;400;500;700&amp;family=Inter:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#313030",
+                    "on-surface": "#e5e2e1",
+                    "tertiary": "#b4c5fb",
+                    "primary-fixed-dim": "#ffb3af",
+                    "secondary": "#ffb4a9",
+                    "on-secondary-fixed": "#410000",
+                    "surface-container-low": "#1c1b1b",
+                    "surface-container-high": "#2a2a2a",
+                    "on-primary-container": "#be6966",
+                    "primary": "#ffb3af",
+                    "on-secondary-fixed-variant": "#8e130c",
+                    "error": "#ffb4ab",
+                    "surface": "#141313",
+                    "secondary-fixed-dim": "#ffb4a9",
+                    "surface-bright": "#3a3939",
+                    "inverse-surface": "#e5e2e1",
+                    "on-tertiary-fixed-variant": "#344573",
+                    "tertiary-container": "#001542",
+                    "tertiary-fixed": "#dae2ff",
+                    "error-container": "#93000a",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-lowest": "#0e0e0e",
+                    "background": "#141313",
+                    "surface-dim": "#141313",
+                    "primary-container": "#380306",
+                    "surface-tint": "#ffb3af",
+                    "on-tertiary-fixed": "#031945",
+                    "primary-fixed": "#ffdad7",
+                    "on-secondary-container": "#ff9a8b",
+                    "on-secondary": "#690001",
+                    "surface-variant": "#353434",
+                    "inverse-primary": "#934845",
+                    "surface-container-highest": "#353434",
+                    "on-error": "#690005",
+                    "on-background": "#e5e2e1",
+                    "on-primary-fixed-variant": "#763130",
+                    "outline-variant": "#544342",
+                    "secondary-fixed": "#ffdad5",
+                    "secondary-container": "#8e130c",
+                    "on-tertiary-container": "#6f80b2",
+                    "tertiary-fixed-dim": "#b4c5fb",
+                    "on-primary": "#591b1b",
+                    "on-primary-fixed": "#3d0608",
+                    "outline": "#a18c8a",
+                    "on-surface-variant": "#d9c1bf",
+                    "surface-container": "#201f1f",
+                    "on-tertiary": "#1c2e5b"
+            },
+            "borderRadius": {
+                    "none": "0px",
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Bebas Neue", "sans-serif"],
+                    "technical": ["Space Grotesk", "sans-serif"],
+                    "body": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #030303;
+            color: #F5F5F5;
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-container selection:text-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 rounded-none border-b border-[#494542] bg-[#1A1614] flex justify-between items-center px-6 md:px-12 h-20">
+<div class="text-2xl font-black tracking-widest text-[#F5F5F5] uppercase font-headline">
+            THE FRAME CLUB
+        </div>
+<div class="hidden md:flex gap-10">
+<a class="font-headline uppercase tracking-[0.2em] text-[#F5F5F5] border-b-2 border-[#380306] pb-1 transition-opacity active:opacity-80" href="#">GALLERY</a>
+<a class="font-headline uppercase tracking-[0.2em] text-[#888888] pb-1 hover:text-[#F5F5F5] transition-colors duration-200" href="#">CUSTOM</a>
+<a class="font-headline uppercase tracking-[0.2em] text-[#888888] pb-1 hover:text-[#F5F5F5] transition-colors duration-200" href="#">EXHIBITS</a>
+<a class="font-headline uppercase tracking-[0.2em] text-[#888888] pb-1 hover:text-[#F5F5F5] transition-colors duration-200" href="#">STORY</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="hidden md:block font-headline uppercase tracking-[0.2em] text-[#888888] hover:text-[#F5F5F5] transition-colors">CART</button>
+<button class="bg-primary-container text-[#F5F5F5] font-headline tracking-[0.1em] px-6 py-2 hover:bg-secondary-container transition-colors">JOIN CLUB</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#030303]">
+<!-- Red Radial Glow -->
+<div class="absolute bottom-0 left-0 w-[800px] h-[800px] bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-[#380306]/40 via-transparent to-transparent -translate-x-1/4 translate-y-1/4 pointer-events-none"></div>
+<div class="container mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-12 items-center relative z-10">
+<div class="space-y-8">
+<h1 class="font-headline text-6xl md:text-9xl leading-[0.9] tracking-tight">
+                    YOUR FAVOURITE <span class="text-primary-fixed-dim">CAR.</span><br/>
+                    FRAMED. <span class="text-on-secondary-fixed-variant">FOREVER.</span>
+</h1>
+<p class="font-technical text-lg md:text-xl text-on-surface-variant max-w-md tracking-tight leading-relaxed">
+                    Custom diecast frames for the car obsessed. Nationwide delivery across Pakistan. Precision engineered to protect your passion.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 pt-4">
+<button class="bg-primary-container text-[#F5F5F5] font-headline text-xl tracking-widest px-10 py-5 hover:bg-secondary-container transition-all group flex items-center gap-3">
+                        ORDER YOUR FRAME — RS. 5,000
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="relative">
+<div class="aspect-[4/5] bg-surface-container-lowest border border-outline-variant/20 p-8 shadow-[0_0_100px_rgba(56,3,6,0.1)]">
+<img alt="Framed Porsche 911" class="w-full h-full object-cover grayscale brightness-75 hover:grayscale-0 transition-all duration-700" data-alt="A silver Porsche 911 diecast car mounted inside a premium deep black museum-grade frame on a dark minimalist surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAme7Zk_vRcGc1jUCXV0Eoy_Et9PBZKipe5gK_zLgMp6J-HJeV4yY2Z3k5tda5WED26Lf8PM0ZAP7w0rLURejEgHpTX6Yz2Ea7l3M-sr8RANNMlFpwjF6-xuMQTFRReorivOCA5CX2qIZq7kwETqLvoNb_fomSOBM79gPYrnWoZA8zTZnoVT0D3emouqgaNH4KJg3sRftzM4KwDdJngYM0QYav7V3qdBMTe1pAl03JK3AaiuVDJGke-e7QyMXSQrJSIzDs2UHGEvIG"/>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-[#1A1614] p-4 font-technical text-xs tracking-widest uppercase border-l-2 border-primary-container">
+                    Model 01: The Silver Legend
+                </div>
+</div>
+</div>
+</section>
+<!-- What Is This -->
+<section class="py-32 bg-[#0F0F0F] relative">
+<div class="container mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-20 items-start">
+<div class="sticky top-32">
+<h2 class="font-headline text-5xl md:text-7xl leading-none">
+                    NOT A POSTER.<br/>
+                    NOT A TOY.<br/>
+<span class="text-primary-fixed-dim">SOMETHING BETTER.</span>
+</h2>
+</div>
+<div class="space-y-12">
+<p class="font-technical text-xl text-on-surface leading-relaxed">
+                    The Frame Club was born from a simple obsession: why do we keep our most beautiful diecast models in dusty boxes? We've engineered a bespoke framing solution that transforms 1:64 scale precision into gallery-grade wall art.
+                </p>
+<div class="grid grid-cols-1 gap-8">
+<div class="flex gap-6 items-start">
+<span class="font-headline text-4xl text-primary-container">01</span>
+<div>
+<h4 class="font-headline text-2xl mb-2">ARCHIVAL PROTECTION</h4>
+<p class="text-muted_text text-sm font-body">Museum-grade acrylic and dust-sealed enclosures keep your model in showroom condition for decades.</p>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<span class="font-headline text-4xl text-primary-container">02</span>
+<div>
+<h4 class="font-headline text-2xl mb-2">TECHNICAL TYPOGRAPHY</h4>
+<p class="text-muted_text text-sm font-body">Each frame features laser-printed technical specifications and history of your specific vehicle model.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="py-32 bg-[#030303]">
+<div class="container mx-auto px-6 md:px-12">
+<div class="flex justify-between items-end mb-16">
+<h2 class="font-headline text-5xl md:text-7xl">THE PROCESS</h2>
+<span class="font-technical text-sm tracking-[0.3em] uppercase mb-4 text-[#888888]">Three Steps to Perfection</span>
+</div>
+<div class="grid md:grid-cols-3 gap-0">
+<div class="bg-[#1A1614] p-12 border border-outline-variant/10 aspect-square flex flex-col justify-between group">
+<span class="material-symbols-outlined text-4xl text-primary-fixed-dim">directions_car</span>
+<div>
+<h3 class="font-headline text-3xl mb-4">PICK YOUR CAR</h3>
+<p class="font-body text-on-surface-variant text-sm">Select from our curated vault of Hot Wheels and Matchbox models, or send us your own personal piece.</p>
+</div>
+</div>
+<div class="bg-surface-container-high p-12 border border-outline-variant/10 aspect-square flex flex-col justify-between group">
+<span class="material-symbols-outlined text-4xl text-primary-fixed-dim">tune</span>
+<div>
+<h3 class="font-headline text-3xl mb-4">CUSTOMISE IT</h3>
+<p class="font-body text-on-surface-variant text-sm">Choose your backing design, highlight specific performance metrics, and pick your frame finish.</p>
+</div>
+</div>
+<div class="bg-[#1A1614] p-12 border border-outline-variant/10 aspect-square flex flex-col justify-between group">
+<span class="material-symbols-outlined text-4xl text-primary-fixed-dim">local_shipping</span>
+<div>
+<h3 class="font-headline text-3xl mb-4">WE BUILD &amp; SHIP</h3>
+<p class="font-body text-on-surface-variant text-sm">Hand-assembled in our workshop and shipped in impact-resistant crates anywhere in Pakistan.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Collection -->
+<section class="py-32 bg-[#0F0F0F]">
+<div class="container mx-auto px-6 md:px-12">
+<div class="mb-16 text-center md:text-left">
+<h2 class="font-headline text-5xl md:text-7xl">VAULT FAVORITES</h2>
+</div>
+<div class="grid md:grid-cols-3 gap-12">
+<!-- Card 1 -->
+<div class="bg-[#0F0F0F] border border-[#494542] group">
+<div class="aspect-square overflow-hidden bg-surface-container-lowest">
+<img alt="GTR Frame" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-100" data-alt="A dark blue Nissan GTR diecast car mounted in a black frame with technical blueprint graphics in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8BxI5KzNz8zi76jZqrcWrSdp7fJnpIA28DuYjEY0GL175_x1UnKjqhcysKlg_diafVWQkmxSchiDNOU24sz7v5zGE2L0tdCLXxVJV70BLn2epdX_fQfD7Ku64Vzs46lbRwiiwUUtAvMcu8D7NusorPsyGAhjDbganjqBWrgRYPzYhC1sET1R_rOZg8cNnuvAB7oVLiPD_TAzf8DHlkQZ5SKmT0G1ugm1zJulISLTynlXn5Nv5hAZ0hjL2TDn4V2Uq_B0cYZ0nDmsW"/>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline text-3xl">GTR SKYLINE R34</h3>
+<span class="font-technical text-primary-fixed-dim">RS. 5,000</span>
+</div>
+<p class="font-body text-sm text-[#888888] mb-6 uppercase tracking-widest">Midnight Blue / Carbon Backing</p>
+<button class="w-full border border-[#494542] py-4 font-headline tracking-widest hover:bg-[#F5F5F5] hover:text-[#030303] transition-all">VIEW SPECS</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-[#0F0F0F] border border-[#494542] group">
+<div class="aspect-square overflow-hidden bg-surface-container-lowest">
+<img alt="Ferrari Frame" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-100" data-alt="A bright red Ferrari diecast toy car centered in a premium minimalist frame with sharp white studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu0hA_HG-EgarrMhtRh-RNiRosf-G6LD0OiH9Gz77JUPbhyB-txOuZ7odhE4AAhseCJmySQzDV8Ji-MQTuk8vvZC5v-FLqqLJNnDBye0o2OoR_91LDTCxzCzvTszmn1rtaHhrVXIQbSrNkTnVahKMZEuUnSMgB85Sr2jT8wsC0JBRyUkX5pkQRMRKF0TcDriwYl6LWRGaBG1eSjBABqVZY1nLESwtplw1Yw_PEm59tajhbKlB8a2FqwCG3I1Yb-QwluwO98LAvq9MM"/>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline text-3xl">FERRARI F40</h3>
+<span class="font-technical text-primary-fixed-dim">RS. 5,000</span>
+</div>
+<p class="font-body text-sm text-[#888888] mb-6 uppercase tracking-widest">Rosso Corsa / White Matte</p>
+<button class="w-full border border-[#494542] py-4 font-headline tracking-widest hover:bg-[#F5F5F5] hover:text-[#030303] transition-all">VIEW SPECS</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-[#0F0F0F] border border-[#494542] group">
+<div class="aspect-square overflow-hidden bg-surface-container-lowest">
+<img alt="Defender Frame" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-100" data-alt="A vintage green Land Rover Defender diecast model in a rugged wood-textured frame background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1BYHryN0F9CPqePSUNomSTvPvYkiSKNLfrG4H_z9zW-uESyWvQQ_TI6l7gjTWugant166NcOR4be3Vq4hl08Hyon-ztcDdQa4iA6wtHGjXBneh_F3zDYMPtbAmCInX78N03UbArfXoLec7DOL0wzTwU-7z9aQ7bc5UvhmWUq-hnORm3_x14qJXowQhe2LlbARacP04tUli8WZGXmL3AmhbpjNOJjFyMVB1J-wgvXHRCUUS5T5il5XXr68N7PjDBmyM17lyTNDckze"/>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline text-3xl">DEFENDER 90</h3>
+<span class="font-technical text-primary-fixed-dim">RS. 5,000</span>
+</div>
+<p class="font-body text-sm text-[#888888] mb-6 uppercase tracking-widest">Heritage Green / Topo Map</p>
+<button class="w-full border border-[#494542] py-4 font-headline tracking-widest hover:bg-[#F5F5F5] hover:text-[#030303] transition-all">VIEW SPECS</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Customisation -->
+<section class="py-32 bg-[#030303] border-y border-outline-variant/10">
+<div class="container mx-auto px-6 md:px-12">
+<h2 class="font-headline text-5xl md:text-8xl mb-24 text-center">BUILT AROUND YOUR <span class="text-primary-container">OBSESSION.</span></h2>
+<div class="grid md:grid-cols-3 gap-0 border border-outline-variant/20">
+<div class="p-12 border-r border-outline-variant/20">
+<h4 class="font-headline text-2xl mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">layers</span>
+                        BACKGROUND DESIGN
+                    </h4>
+<ul class="space-y-4 font-technical text-sm text-[#888888] uppercase tracking-widest">
+<li>— Technical Blueprints</li>
+<li>— Race Track Topography</li>
+<li>— Minimalist Solid Tones</li>
+<li>— Custom Photographic Prints</li>
+</ul>
+</div>
+<div class="p-12 border-r border-outline-variant/20 bg-surface-container-low">
+<h4 class="font-headline text-2xl mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">garage</span>
+                        CAR MODEL
+                    </h4>
+<ul class="space-y-4 font-technical text-sm text-[#888888] uppercase tracking-widest">
+<li>— 1:64 Scale Specialization</li>
+<li>— Matchbox / Hot Wheels</li>
+<li>— Tomica Premium Selection</li>
+<li>— Send-Your-Own Service</li>
+</ul>
+</div>
+<div class="p-12">
+<h4 class="font-headline text-2xl mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+                        PRINTED SPECS
+                    </h4>
+<ul class="space-y-4 font-technical text-sm text-[#888888] uppercase tracking-widest">
+<li>— BHP &amp; Performance Data</li>
+<li>— Production History</li>
+<li>— Custom Owner Tags</li>
+<li>— Limited Edition Numbering</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Proof -->
+<section class="py-32 bg-[#0F0F0F]">
+<div class="container mx-auto px-6 md:px-12">
+<div class="mb-16">
+<h2 class="font-headline text-5xl md:text-7xl">50+ FRAMES DELIVERED. <br/><span class="text-primary-fixed-dim">ZERO COMPLAINTS.</span></h2>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="bg-[#1A1614] p-10 flex flex-col gap-8 border-l-2 border-primary-container">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body italic text-on-surface">"The quality of the frame exceeded my expectations. It looks like something you'd find in a luxury car dealership lounge."</p>
+<div class="font-technical text-xs tracking-widest text-[#888888] uppercase">— Ahmed R., Lahore</div>
+</div>
+<div class="bg-[#1A1614] p-10 flex flex-col gap-8 border-l-2 border-primary-container">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body italic text-on-surface">"Finally a way to display my R34 collection properly. The packing was bulletproof for shipping to Karachi."</p>
+<div class="font-technical text-xs tracking-widest text-[#888888] uppercase">— Hamza K., Karachi</div>
+</div>
+<div class="bg-[#1A1614] p-10 flex flex-col gap-8 border-l-2 border-primary-container">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body italic text-on-surface">"The custom technical data sheet background is a game changer. Every car guy needs one of these."</p>
+<div class="font-technical text-xs tracking-widest text-[#888888] uppercase">— Zaid S., Islamabad</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 bg-gradient-to-r from-[#380306] to-[#8E130C] text-center">
+<div class="container mx-auto px-6">
+<h2 class="font-headline text-5xl md:text-8xl mb-10 tracking-tighter">READY TO FRAME YOUR OBSESSION?</h2>
+<button class="bg-[#F5F5F5] text-[#030303] font-headline text-2xl tracking-[0.2em] px-16 py-6 hover:bg-black hover:text-[#F5F5F5] transition-all">START YOUR CUSTOM BUILD</button>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full rounded-none border-t border-[#494542] bg-[#030303] flex flex-col md:flex-row justify-between items-center px-6 md:px-12 py-10 gap-6">
+<div class="text-lg font-bold text-[#F5F5F5] font-headline tracking-widest">
+            THE FRAME CLUB
+        </div>
+<div class="flex gap-8">
+<a class="font-technical text-[10px] uppercase tracking-[0.15em] text-[#888888] hover:text-[#F5F5F5] transition-colors" href="#">PRIVACY</a>
+<a class="font-technical text-[10px] uppercase tracking-[0.15em] text-[#888888] hover:text-[#F5F5F5] transition-colors" href="#">TERMS</a>
+<a class="font-technical text-[10px] uppercase tracking-[0.15em] text-[#888888] hover:text-[#F5F5F5] transition-colors" href="#">SHIPPING</a>
+<a class="font-technical text-[10px] uppercase tracking-[0.15em] text-[#888888] hover:text-[#F5F5F5] transition-colors" href="#">CONTACT</a>
+</div>
+<div class="font-technical text-[10px] uppercase tracking-[0.15em] text-[#F5F5F5]">
+            © 2024 THE FRAME CLUB. ENGINEERED PERFECTION.
+        </div>
+</footer>
+</body></html>

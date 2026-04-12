@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Frame Club - Admin Core</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Space+Grotesk:wght@300;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#dae2ff",
+                        "surface-container": "#201f1f",
+                        "on-tertiary-fixed": "#031945",
+                        "inverse-primary": "#934845",
+                        "surface": "#141313",
+                        "primary-container": "#380306",
+                        "surface-bright": "#3a3939",
+                        "on-tertiary-container": "#6f80b2",
+                        "tertiary-fixed-dim": "#b4c5fb",
+                        "on-primary-fixed": "#3d0608",
+                        "outline-variant": "#544342",
+                        "on-secondary-fixed-variant": "#8e130c",
+                        "primary": "#ffb3af",
+                        "surface-variant": "#353434",
+                        "on-tertiary": "#1c2e5b",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-dim": "#141313",
+                        "on-secondary-container": "#ff9a8b",
+                        "secondary-fixed": "#ffdad5",
+                        "background": "#141313",
+                        "on-tertiary-fixed-variant": "#344573",
+                        "on-surface-variant": "#d9c1bf",
+                        "on-secondary-fixed": "#410000",
+                        "surface-tint": "#ffb3af",
+                        "surface-container-low": "#1c1b1b",
+                        "on-primary": "#591b1b",
+                        "tertiary": "#b4c5fb",
+                        "primary-fixed-dim": "#ffb3af",
+                        "on-primary-fixed-variant": "#763130",
+                        "on-error": "#690005",
+                        "secondary": "#ffb4a9",
+                        "on-surface": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "inverse-on-surface": "#313030",
+                        "secondary-container": "#8e130c",
+                        "on-secondary": "#690001",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#ffb4a9",
+                        "surface-container-highest": "#353434",
+                        "primary-fixed": "#ffdad7",
+                        "on-background": "#e5e2e1",
+                        "outline": "#a18c8a",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#001542",
+                        "on-primary-container": "#be6966",
+                        "surface-container-lowest": "#0e0e0e"
+                    },
+                    "borderRadius": {
+                        "none": "0px",
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #141313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0e0e0e; }
+        ::-webkit-scrollbar-thumb { background: #380306; }
+    </style>
+</head>
+<body class="antialiased">
+<!-- Predicted SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] z-50 bg-[#0E0E0E] flex flex-col h-full py-8 px-0 border-r border-[#494542]">
+<div class="px-6 mb-12">
+<h1 class="text-xl font-black tracking-tighter text-[#F5F5F5] font-['Space_Grotesk']">THE FRAME CLUB</h1>
+<p class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[10px] text-[#888888] mt-1">ADMIN CORE</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-4 transition-colors duration-100 ease-linear text-[#F5F5F5] bg-[#380306] border-l-[3px] border-[#8E130C]" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="dashboard">dashboard</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-xs">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-4 transition-colors duration-100 ease-linear text-[#888888] hover:text-[#F5F5F5] hover:bg-[#1C1B1B]" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-xs">Orders</span>
+</a>
+<a class="flex items-center px-6 py-4 transition-colors duration-100 ease-linear text-[#888888] hover:text-[#F5F5F5] hover:bg-[#1C1B1B]" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-xs">Products</span>
+</a>
+<a class="flex items-center px-6 py-4 transition-colors duration-100 ease-linear text-[#888888] hover:text-[#F5F5F5] hover:bg-[#1C1B1B]" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="group">group</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-xs">Customers</span>
+</a>
+<a class="flex items-center px-6 py-4 transition-colors duration-100 ease-linear text-[#888888] hover:text-[#F5F5F5] hover:bg-[#1C1B1B]" href="#">
+<span class="material-symbols-outlined mr-4" data-icon="settings">settings</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-xs">Settings</span>
+</a>
+</nav>
+<div class="px-6 pt-8 mt-auto">
+<div class="flex items-center gap-3 p-3 bg-[#1C1B1B]">
+<div class="w-8 h-8 bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]" data-icon="shield_person">shield_person</span>
+</div>
+<div>
+<p class="text-[10px] font-bold tracking-widest uppercase">System Admin</p>
+<p class="text-[9px] text-[#888888]">v2.4.1 Active</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Predicted TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] z-40 bg-[#141313]/60 backdrop-blur-md border-b border-[#494542] flex justify-between items-center h-16 px-10">
+<div class="flex items-center">
+<span class="font-['Inter'] text-sm tracking-tight font-bold text-[#F5F5F5]">ADMIN CORE</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined text-[#888888] hover:text-[#F5F5F5] cursor-pointer transition-all duration-200" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-[#8E130C]"></span>
+</div>
+<div class="flex items-center gap-3 border-l border-[#494542] pl-6">
+<span class="text-xs font-medium text-[#888888]">Superuser Mode</span>
+<span class="material-symbols-outlined text-[#FFB3AF]" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[240px] pt-16 min-h-screen bg-[#141313]">
+<div class="p-10 space-y-10">
+<!-- Stat Cards Section -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 border-collapse">
+<!-- Card 1 -->
+<div class="bg-[#0F0F0F] border border-[#494542] p-8 flex flex-col gap-4">
+<span class="text-[10px] font-bold tracking-[0.2em] uppercase text-[#888888]">Total Orders</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold font-['Inter'] text-[#F5F5F5]">1,248</span>
+<span class="text-[10px] text-[#8E130C] font-bold">+12%</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-[#0F0F0F] border border-[#494542] border-l-0 p-8 flex flex-col gap-4">
+<span class="text-[10px] font-bold tracking-[0.2em] uppercase text-[#888888]">Pending Orders</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold font-['Inter'] text-[#F5F5F5]">42</span>
+<span class="text-[10px] text-[#FFB3AF] font-bold">Action Needed</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-[#0F0F0F] border border-[#494542] border-l-0 p-8 flex flex-col gap-4">
+<span class="text-[10px] font-bold tracking-[0.2em] uppercase text-[#888888]">Revenue This Month</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold font-['Inter'] text-[#F5F5F5]">Rs. 6.2M</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-[#0F0F0F] border border-[#494542] border-l-0 p-8 flex flex-col gap-4">
+<span class="text-[10px] font-bold tracking-[0.2em] uppercase text-[#888888]">Frames In Production</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold font-['Inter'] text-[#F5F5F5]">18</span>
+<div class="w-12 h-1.5 bg-[#1C1B1B] ml-4">
+<div class="bg-[#8E130C] h-full w-[65%]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Orders Table Section -->
+<section class="bg-[#0F0F0F] border border-[#494542]">
+<div class="p-6 bg-[#1A1614] border-b border-[#494542] flex justify-between items-center">
+<h2 class="text-xs font-bold tracking-[0.3em] uppercase">Live Order Pipeline</h2>
+<div class="flex gap-4">
+<button class="px-4 py-2 bg-[#1C1B1B] border border-[#494542] text-[10px] uppercase tracking-widest hover:bg-[#353434] transition-colors">Export CSV</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#1A1614] text-[#888888] font-bold text-[10px] uppercase tracking-widest border-b border-[#494542]">
+<th class="p-4 pl-8">Order ID</th>
+<th class="p-4">Customer</th>
+<th class="p-4">Car Model</th>
+<th class="p-4">Customization</th>
+<th class="p-4 text-center">Payment</th>
+<th class="p-4">Order Status</th>
+<th class="p-4">Date</th>
+<th class="p-4 pr-8 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-[11px] font-medium tracking-tight">
+<!-- Row 1 -->
+<tr class="bg-[#0F0F0F] hover:bg-[#1C1B1B] transition-colors border-b border-[#494542]/20">
+<td class="p-4 pl-8 font-bold text-[#F5F5F5]">#FC-8821</td>
+<td class="p-4">Hamza K.</td>
+<td class="p-4">Porsche 911 GT2 RS</td>
+<td class="p-4 text-[#888888]">Midnight Blue / Carbon</td>
+<td class="p-4">
+<div class="flex justify-center">
+<span class="px-2 py-1 bg-[#380306] text-[#FFB3AF] text-[9px] uppercase tracking-tighter font-bold">Paid</span>
+</div>
+</td>
+<td class="p-4">
+<select class="bg-transparent border-0 text-[11px] font-bold text-[#FFB3AF] focus:ring-0 p-0 cursor-pointer uppercase">
+<option>In Production</option>
+<option>Awaiting Materials</option>
+<option>Quality Control</option>
+<option>Shipped</option>
+</select>
+</td>
+<td class="p-4 text-[#888888]">Oct 24, 2024</td>
+<td class="p-4 pr-8 text-right">
+<button class="text-[#F5F5F5] hover:text-[#FFB3AF] transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-[#030303] hover:bg-[#1C1B1B] transition-colors border-b border-[#494542]/20">
+<td class="p-4 pl-8 font-bold text-[#F5F5F5]">#FC-8820</td>
+<td class="p-4">Sarah J.</td>
+<td class="p-4">Ferrari F40</td>
+<td class="p-4 text-[#888888]">Rosso Corsa / Alcantara</td>
+<td class="p-4">
+<div class="flex justify-center">
+<span class="px-2 py-1 bg-[#380306] text-[#FFB3AF] text-[9px] uppercase tracking-tighter font-bold">Paid</span>
+</div>
+</td>
+<td class="p-4">
+<select class="bg-transparent border-0 text-[11px] font-bold text-[#888888] focus:ring-0 p-0 cursor-pointer uppercase">
+<option>Quality Control</option>
+<option>In Production</option>
+<option>Shipped</option>
+</select>
+</td>
+<td class="p-4 text-[#888888]">Oct 23, 2024</td>
+<td class="p-4 pr-8 text-right">
+<button class="text-[#F5F5F5] hover:text-[#FFB3AF] transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="bg-[#0F0F0F] hover:bg-[#1C1B1B] transition-colors border-b border-[#494542]/20">
+<td class="p-4 pl-8 font-bold text-[#F5F5F5]">#FC-8819</td>
+<td class="p-4">Ali Raza</td>
+<td class="p-4">Lamborghini Revuelto</td>
+<td class="p-4 text-[#888888]">Giallo Auge / Forged</td>
+<td class="p-4">
+<div class="flex justify-center">
+<span class="px-2 py-1 bg-[#1C1B1B] text-[#888888] text-[9px] uppercase tracking-tighter font-bold">Pending</span>
+</div>
+</td>
+<td class="p-4">
+<select class="bg-transparent border-0 text-[11px] font-bold text-[#888888] focus:ring-0 p-0 cursor-pointer uppercase">
+<option>Awaiting Payment</option>
+<option>In Production</option>
+</select>
+</td>
+<td class="p-4 text-[#888888]">Oct 22, 2024</td>
+<td class="p-4 pr-8 text-right">
+<button class="text-[#F5F5F5] hover:text-[#FFB3AF] transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Products Table Section (Bento Inspired Grid Integration) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+<section class="lg:col-span-2 bg-[#0F0F0F] border border-[#494542]">
+<div class="p-6 bg-[#1A1614] border-b border-[#494542] flex justify-between items-center">
+<h2 class="text-xs font-bold tracking-[0.3em] uppercase">Inventory Management</h2>
+<button class="text-[10px] text-[#FFB3AF] font-bold uppercase tracking-widest">+ Add Frame</button>
+</div>
+<table class="w-full text-left">
+<thead>
+<tr class="bg-[#1A1614] text-[#888888] font-bold text-[10px] uppercase tracking-widest">
+<th class="p-4 pl-8">Car Model</th>
+<th class="p-4">Status</th>
+<th class="p-4 text-center">Orders</th>
+<th class="p-4 pr-8 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-[11px] uppercase tracking-tight">
+<tr class="border-b border-[#494542]/20 hover:bg-[#1C1B1B]">
+<td class="p-4 pl-8 font-bold text-[#F5F5F5]">McLaren P1</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-4 bg-[#380306] relative cursor-pointer">
+<div class="absolute right-0 top-0 w-4 h-4 bg-[#FFB3AF]"></div>
+</div>
+<span class="text-[#F5F5F5] font-bold">Available</span>
+</div>
+</td>
+<td class="p-4 text-center text-[#888888]">142</td>
+<td class="p-4 pr-8 text-right">
+<span class="material-symbols-outlined cursor-pointer hover:text-[#FFB3AF]" data-icon="edit">edit</span>
+</td>
+</tr>
+<tr class="border-b border-[#494542]/20 hover:bg-[#1C1B1B]">
+<td class="p-4 pl-8 font-bold text-[#F5F5F5]">Bugatti Chiron</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-4 bg-[#1C1B1B] relative cursor-pointer">
+<div class="absolute left-0 top-0 w-4 h-4 bg-[#544342]"></div>
+</div>
+<span class="text-[#888888]">Pre-Order</span>
+</div>
+</td>
+<td class="p-4 text-center text-[#888888]">89</td>
+<td class="p-4 pr-8 text-right">
+<span class="material-symbols-outlined cursor-pointer hover:text-[#FFB3AF]" data-icon="edit">edit</span>
+</td>
+</tr>
+<tr class="border-b border-[#494542]/20 hover:bg-[#1C1B1B]">
+<td class="p-4 pl-8 font-bold text-[#F5F5F5]">Nissan Skyline GT-R</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-4 bg-[#380306] relative cursor-pointer">
+<div class="absolute right-0 top-0 w-4 h-4 bg-[#FFB3AF]"></div>
+</div>
+<span class="text-[#F5F5F5] font-bold">Available</span>
+</div>
+</td>
+<td class="p-4 text-center text-[#888888]">312</td>
+<td class="p-4 pr-8 text-right">
+<span class="material-symbols-outlined cursor-pointer hover:text-[#FFB3AF]" data-icon="edit">edit</span>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<!-- Side Widget Card -->
+<div class="flex flex-col gap-6">
+<div class="bg-primary-container p-8 border border-[#8E130C] flex flex-col justify-between aspect-square lg:aspect-auto h-full">
+<div>
+<h3 class="text-xl font-black italic tracking-tighter text-[#F5F5F5] font-['Space_Grotesk'] leading-tight">PRECISION <br/>ENGINEERED <br/>METRICS</h3>
+<p class="text-[10px] text-[#FFB3AF] mt-4 uppercase tracking-[0.2em] leading-relaxed">System performance is optimal. All machine interfaces reporting green. Next dispatch scheduled for 1800hrs.</p>
+</div>
+<div class="mt-12 flex justify-between items-end">
+<span class="text-4xl font-black text-[#F5F5F5]">99.8%</span>
+<span class="material-symbols-outlined text-4xl text-[#FFB3AF]" data-icon="precision_manufacturing">precision_manufacturing</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Details -->
+<footer class="flex justify-between items-center py-6 border-t border-[#494542]/20 text-[9px] text-[#544342] uppercase tracking-[0.3em]">
+<div>© 2024 THE FRAME CLUB | LOGISTICS MODULE 4.1.0</div>
+<div class="flex gap-4">
+<span class="text-[#888888]">SERVER: FRA-02</span>
+<span class="text-[#888888]">Uptime: 99.99%</span>
+</div>
+</footer>
+</div>
+</main>
+</body></html>

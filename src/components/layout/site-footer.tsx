@@ -1,6 +1,15 @@
-import Link from "next/link";
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { COPY } from "@/lib/copy-constants";
+import { TransitionLink } from "@/components/layout/page-transition";
+
+const footerNavItems = [
+  { href: "/shop", label: "Collection" },
+  { href: "/about", label: "Story" },
+  { href: "/contact", label: "Contact" },
+  { href: "/admin/login", label: "Admin" },
+];
 
 export function SiteFooter() {
   return (
@@ -9,38 +18,17 @@ export function SiteFooter() {
         <p className="display-kicker text-2xl text-text-primary">THE FRAME CLUB</p>
 
         <nav className="flex flex-wrap gap-6 text-[10px] uppercase tracking-[0.2em] text-text-muted">
-          <Button
-            render={<Link href="/shop" />}
-            variant="ghost"
-            size="sm"
-            className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
-          >
-            Collection
-          </Button>
-          <Button
-            render={<Link href="/about" />}
-            variant="ghost"
-            size="sm"
-            className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
-          >
-            Story
-          </Button>
-          <Button
-            render={<Link href="/contact" />}
-            variant="ghost"
-            size="sm"
-            className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
-          >
-            Contact
-          </Button>
-          <Button
-            render={<Link href="/admin/login" />}
-            variant="ghost"
-            size="sm"
-            className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
-          >
-            Admin
-          </Button>
+          {footerNavItems.map((item) => (
+            <Button
+              key={item.href}
+              render={<TransitionLink href={item.href} />}
+              variant="ghost"
+              size="sm"
+              className="display-kicker border-transparent px-0 py-0 text-[10px] text-text-muted hover:bg-transparent hover:text-text-primary"
+            >
+              {item.label}
+            </Button>
+          ))}
         </nav>
 
         <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted">

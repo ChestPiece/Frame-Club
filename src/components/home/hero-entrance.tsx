@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { createTimeline } from "animejs";
+import { useGSAP } from "@gsap/react";
+import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 
 type HeroEntranceProps = {
   children: React.ReactNode;
@@ -95,6 +97,30 @@ export function HeroEntrance({ children, className }: HeroEntranceProps) {
       timeline.pause();
     };
   }, []);
+
+  // Hero image parallax — image plate drifts up at ~30% scroll rate
+  useGSAP(
+    () => {
+      const imagePlate = ref.current?.querySelector(
+        '[data-hero-animate="image-plate"]'
+      );
+      if (!imagePlate) return;
+
+      gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.to(imagePlate, {
+          y: -80,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+      });
+    },
+    { scope: ref, dependencies: [] }
+  );
 
   return (
     <div ref={ref} className={className}>

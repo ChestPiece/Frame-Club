@@ -1,5 +1,6 @@
 import type { ProductStatus } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
+import { PulsingDot } from "@/components/shared/pulsing-dot";
 
 type StatusBadgeProps = {
   status: ProductStatus;
@@ -19,8 +20,9 @@ const LABELS: Record<ProductStatus, string> = {
 
 export function StatusBadge({ status }: StatusBadgeProps) {
   return (
-    <Badge variant={VARIANTS[status]}>
-      {LABELS[status]}
-    </Badge>
+    <div className="flex items-center gap-2">
+      {status === "available" && <PulsingDot />}
+      <Badge variant={VARIANTS[status]}>{LABELS[status]}</Badge>
+    </div>
   );
 }

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Bebas_Neue, Inter, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { SiteLoader } from "@/components/layout/site-loader";
+import { TransitionProvider } from "@/components/layout/page-transition";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -41,7 +43,10 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", inter.variable, bebasNeue.variable, spaceGrotesk.variable, "font-sans", geist.variable)}
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-bg-base text-text-primary">
-        {children}
+        <SiteLoader />
+        <TransitionProvider>
+          {children}
+        </TransitionProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { animate } from "animejs";
+import { animate, type AnimationParams } from "animejs";
 import { useScrollAnimate } from "@/hooks/use-scroll-animate";
 
 type ScrollRevealProps = {
@@ -23,17 +23,14 @@ export function ScrollReveal({
 }: ScrollRevealProps) {
   const animateFn = React.useCallback(
     (el: HTMLElement) => {
-      const animationParams: Record<string, unknown> = {
+      const animationParams: AnimationParams = {
         opacity: [0, 1],
         translateY: [translateY, 0],
         duration,
         delay,
         ease: "outExpo",
+        ...(typeof scaleFrom === "number" ? { scale: [scaleFrom, 1] } : {}),
       };
-
-      if (typeof scaleFrom === "number") {
-        animationParams.scale = [scaleFrom, 1];
-      }
 
       animate(el, animationParams);
     },

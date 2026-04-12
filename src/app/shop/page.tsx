@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { CardReveal } from "@/components/shared/card-reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getProducts } from "@/lib/data";
@@ -70,7 +71,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         </section>
 
         <section className="frame-container grid gap-8 py-16 md:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => {
+          {products.map((product, index) => {
             const ctaLabel =
               product.status === "available"
                 ? "Order Now"
@@ -79,13 +80,13 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                   : "Notify Me";
 
             return (
-              // ARCHITECTURE CONSTRAINT: The outer Link wraps the entire card.
-              // Do NOT add render={<Link />} to any Button inside this card.
-              // That creates nested <a> elements and hydration failures.
+              <CardReveal key={product.id} index={index}>
+              {/* ARCHITECTURE CONSTRAINT: The outer Link wraps the entire card.
+                  Do NOT add render={<Link />} to any Button inside this card.
+                  That creates nested <a> elements and hydration failures. */}
               <Link
                 href={`/shop/${product.slug}`}
-                key={product.id}
-                className={`group flex flex-col border border-border-dark bg-bg-surface hover:border-brand transition-colors duration-300 ${
+                className={`group flex h-full flex-col border border-border-dark bg-bg-surface hover:border-brand transition-colors duration-300 ${
                   product.status === "unavailable" ? "opacity-70" : "opacity-100"
                 }`}
               >
@@ -143,6 +144,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                   </div>
                 </div>
               </Link>
+              </CardReveal>
             );
           })}
         </section>

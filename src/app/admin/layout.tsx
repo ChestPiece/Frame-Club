@@ -69,7 +69,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     size="lg"
                     isActive={active}
                     tooltip={item.label}
-                    className={`display-kicker h-11 border-l-[3px] border-transparent px-4 text-[10px] tracking-[0.2em] ${
+                    className={`technical-label h-11 border-l-[3px] border-transparent px-4 text-[10px] tracking-[0.2em] ${
                       active
                         ? "border-brand-mid bg-brand text-text-primary"
                         : "bg-transparent text-text-muted hover:bg-bg-surface hover:text-text-primary"

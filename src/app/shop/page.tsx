@@ -37,22 +37,15 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         <section className="border-b border-border-dark bg-[#0a0a0a] py-16">
           <div className="frame-container flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="technical-label text-[10px] text-[#ffb3af] tracking-widest">Premium Archive</p>
-              <h1 className="display-kicker mt-4 text-7xl leading-none md:text-9xl">THE COLLECTION</h1>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <p className="technical-label text-[10px] text-text-muted uppercase">Sort By:</p>
-              <div className="border border-border-dark bg-[#141313] px-6 py-3">
-                <p className="technical-label text-[10px] text-text-primary uppercase tracking-widest">Newest First</p>
-              </div>
+              <p className="display-kicker text-[10px] text-brand uppercase tracking-[0.3em] mb-2">DROP ARCHIVE</p>
+              <h1 className="display-kicker mt-4 text-7xl leading-none md:display-fluid">THE COLLECTION</h1>
             </div>
           </div>
         </section>
 
-        <section className="border-b border-border-dark/60 bg-[#050505]">
-          <div className="frame-container overflow-x-auto py-6">
-            <div className="flex min-w-max gap-4">
+        <section className="border-b border-border-dark/60 bg-[#030303]">
+          <div className="frame-container py-6">
+            <div className="flex flex-wrap gap-4">
               {statusOptions.map((option) => {
                 const isActive = option.value === status || (!option.value && !status);
                 const href = option.value ? `/shop?status=${option.value}` : "/shop";
@@ -86,6 +79,9 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                   : "Notify Me";
 
             return (
+              // ARCHITECTURE CONSTRAINT: The outer Link wraps the entire card.
+              // Do NOT add render={<Link />} to any Button inside this card.
+              // That creates nested <a> elements and hydration failures.
               <Link
                 href={`/shop/${product.slug}`}
                 key={product.id}
@@ -94,7 +90,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 }`}
               >
                 <div className="relative overflow-hidden bg-[#0A0A0A]">
-                  <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <div className="relative aspect-4/3 w-full overflow-hidden">
                     <Image
                       src={product.images[0]}
                       alt={product.name}
@@ -102,19 +98,24 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0"
                     />
+                    <div className="absolute top-4 right-4 rotate-12 border border-brand text-brand px-2 py-1 text-[10px] uppercase tracking-widest bg-[#1A1614]/80 backdrop-blur-sm z-10">
+                      MADE TO ORDER
+                    </div>
                   </div>
 
-                  <div className="absolute right-4 top-4">
+                  <div className="absolute left-4 top-4 z-20">
                     <StatusBadge status={product.status} />
                   </div>
                 </div>
 
-                <div className="flex flex-1 flex-col p-8">
+                <div className="flex flex-1 flex-col p-8 border-t-2 border-t-transparent transition-colors group-hover:border-t-brand">
                   <h2 className="display-kicker text-4xl leading-none">{product.name}</h2>
                   <p className="mt-3 text-xs uppercase tracking-[0.2em] text-text-muted">{product.brand}</p>
 
                   <div className="mt-auto pt-10">
-                    <p className="text-2xl font-semibold text-text-primary">Rs. {product.price.toLocaleString("en-PK")}</p>
+                    <span className="bg-brand text-text-primary px-3 py-1 text-xs display-kicker inline-block">
+                      Rs. {product.price.toLocaleString("en-PK")}
+                    </span>
 
                     {product.status === "preorder" ? (
                       <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-[#ffb3af]">
@@ -125,7 +126,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                     <div className="mt-8">
                       {product.status === "unavailable" ? (
                         <Button
-                          render={<Link href={`/contact?intent=notify&product=${product.slug}`} />}
                           variant="muted"
                           className="display-kicker w-full justify-center py-6 text-sm"
                         >
@@ -133,7 +133,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                         </Button>
                       ) : (
                         <Button
-                          render={<Link href={`/shop/${product.slug}`} />}
                           variant="brand"
                           className="display-kicker w-full justify-center py-6 text-sm"
                         >

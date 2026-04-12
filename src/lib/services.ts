@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { Resend } from "resend";
 import type {
   ContactSubmission,
   NotifySubscription,
@@ -33,6 +34,10 @@ type CreateNotifyInput = {
   email: string;
   productSlug: string;
 };
+
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@frameclub.pk";
+const FROM_EMAIL = "Frame Club <orders@frameclub.pk>";
 
 function makeOrderNumber() {
   return `FC-${Math.floor(Math.random() * 900000 + 100000)}`;
@@ -153,11 +158,14 @@ export async function getAdminStats() {
   };
 }
 
-export async function applyWebhook(input: WebhookInput) {
-  const supabase = await createClient();
+export async function applyWebhook(
+  input: WebhookInput,
+  options?: { supabaseClient?: any }
+) {
+  const supabase = options?.supabaseClient ?? (await createClient());
   const { data: current, error: fetchError } = await supabase
     .from("orders")
-    .select("order_status")
+    .select("order_status, payment_status")
     .eq("id", input.orderId)
     .single();
 
@@ -186,15 +194,97 @@ export async function applyWebhook(input: WebhookInput) {
     return { error: "UPDATE_FAILED" as const };
   }
 
-  return { data: updated as any as OrderRecord };
+  return {
+    data: updated as any as OrderRecord,
+    previousPaymentStatus: current.payment_status as PaymentStatus,
+  };
 }
 
 export async function createContactSubmission(input: CreateContactInput) {
-  // Can add a contacts table later, or send email directly
-  return { id: "mock_id" };
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("contact_submissions")
+    .insert({
+      name: input.name,
+      email: input.email,
+      message: input.message,
+    })
+    .select()
+    .single();
+
+  if (!error && data) {
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      message: data.message,
+      createdAt: data.created_at,
+    } as ContactSubmission;
+  }
+
+  console.error("Contact submission persistence failed:", error);
+
+  if (resend) {
+    await resend.emails
+      .send({
+        from: FROM_EMAIL,
+        to: ADMIN_EMAIL,
+        subject: "New contact form submission",
+        text: `Name: ${input.name}\nEmail: ${input.email}\n\nMessage:\n${input.message}`,
+      })
+      .catch((emailError) => {
+        console.error("Contact submission fallback email failed:", emailError);
+      });
+  }
+
+  return {
+    id: crypto.randomUUID(),
+    name: input.name,
+    email: input.email,
+    message: input.message,
+    createdAt: new Date().toISOString(),
+  } satisfies ContactSubmission;
 }
 
 export async function createNotifySubscription(input: CreateNotifyInput) {
-  // Can add notify_subscriptions table later
-  return { id: "mock_id" };
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("notify_subscriptions")
+    .insert({
+      email: input.email,
+      product_slug: input.productSlug,
+    })
+    .select()
+    .single();
+
+  if (!error && data) {
+    return {
+      id: data.id,
+      email: data.email,
+      productSlug: data.product_slug,
+      createdAt: data.created_at,
+    } as NotifySubscription;
+  }
+
+  console.error("Notify subscription persistence failed:", error);
+
+  if (resend) {
+    await resend.emails
+      .send({
+        from: FROM_EMAIL,
+        to: ADMIN_EMAIL,
+        subject: "New notify-me request",
+        text: `Email: ${input.email}\nProduct slug: ${input.productSlug}`,
+      })
+      .catch((emailError) => {
+        console.error("Notify subscription fallback email failed:", emailError);
+      });
+  }
+
+  return {
+    id: crypto.randomUUID(),
+    email: input.email,
+    productSlug: input.productSlug,
+    createdAt: new Date().toISOString(),
+  } satisfies NotifySubscription;
 }

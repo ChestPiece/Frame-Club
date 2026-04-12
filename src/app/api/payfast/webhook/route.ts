@@ -3,8 +3,18 @@ import { applyWebhook } from "@/lib/services";
 import { verifyPayFastSignature } from "@/lib/payfast";
 import { getProductBySlug } from "@/lib/data";
 import { sendAdminNotification, sendOrderConfirmation } from "@/lib/emails/send";
+import { createServiceClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
+  let serviceClient;
+
+  try {
+    serviceClient = await createServiceClient();
+  } catch (error) {
+    console.error("Webhook configuration error:", error);
+    return new NextResponse("Webhook Configuration Error", { status: 500 });
+  }
+
   const formData = await request.formData().catch(() => null);
 
   if (!formData) {
@@ -34,6 +44,8 @@ export async function POST(request: Request) {
   const result = await applyWebhook({
     orderId,
     paymentStatus,
+  }, {
+    supabaseClient: serviceClient,
   });
 
   if ("error" in result || !result.data) {
@@ -42,9 +54,11 @@ export async function POST(request: Request) {
   }
 
   const order = result.data;
+  const shouldSendPaymentEmails =
+    paymentStatus === "paid" && result.previousPaymentStatus !== "paid";
 
   // Send emails if payment is complete
-  if (paymentStatus === "paid") {
+  if (shouldSendPaymentEmails) {
     const product = await getProductBySlug(order.productSlug);
     const productName = product?.name || order.productSlug;
 

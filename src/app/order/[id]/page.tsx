@@ -30,7 +30,7 @@ export default async function OrderConfirmationPage({ params }: OrderConfirmatio
             <h1 className="display-kicker mt-4 text-6xl leading-none md:text-8xl">ORDER RECEIVED</h1>
 
             <p className="mt-6 max-w-2xl text-sm text-text-muted">
-              Your request has been captured. This frontend phase simulates payment confirmation and order storage.
+              Your payment has been received and your request is now in our production queue.
             </p>
 
             <div className="mt-8 inline-flex border border-[#2e6f4f] bg-[#173628] px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-[#9bf0ba]">
@@ -60,7 +60,7 @@ export default async function OrderConfirmationPage({ params }: OrderConfirmatio
                 <span className="text-text-muted">Notes:</span> {order.customization.notes || "None"}
               </p>
               <p>
-                <span className="text-text-muted">Payment status:</span> {order.paymentStatus} (mocked)
+                <span className="text-text-muted">Payment status:</span> {order.paymentStatus}
               </p>
             </div>
 

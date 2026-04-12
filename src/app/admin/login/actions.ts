@@ -3,16 +3,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
+function assertSupabaseAuthConfigured() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    throw new Error('Supabase auth is not configured.')
+  }
+}
+
 export async function login(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    // If running locally without Supabase setup, just simulate success for dev
-    console.log("No Supabase URL found. Simulating login for dev.")
-    redirect('/admin')
+  if (!email || !password) {
+    redirect('/admin/login?error=' + encodeURIComponent('Email and password are required.'))
   }
 
+  assertSupabaseAuthConfigured()
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -29,9 +34,8 @@ export async function login(formData: FormData) {
 }
 
 export async function logout() {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    redirect('/admin/login')
-  }
+  assertSupabaseAuthConfigured()
+
   const supabase = await createClient()
   await supabase.auth.signOut()
   redirect('/admin/login')

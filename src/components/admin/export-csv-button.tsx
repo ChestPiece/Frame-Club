@@ -1,8 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import type { OrderRecord } from '@/lib/types'
 
-export function ExportCsvButton({ orders }: { orders: any[] }) {
+function escapeCsvValue(value: unknown) {
+  return `"${String(value ?? '').replace(/"/g, '""')}"`
+}
+
+export function ExportCsvButton({ orders }: { orders: OrderRecord[] }) {
   const handleExport = () => {
     if (!orders || orders.length === 0) return
 
@@ -26,21 +31,23 @@ export function ExportCsvButton({ orders }: { orders: any[] }) {
     const csvContent = [
       headers.join(','),
       ...orders.map(order => {
+        const customization = `Background: ${order.customization.background}, Notes: ${order.customization.notes || ''}`
+
         return [
-          order.id,
-          order.orderNumber,
-          `"${order.customerName.replace(/"/g, '""')}"`,
-          `"${order.customerEmail.replace(/"/g, '""')}"`,
-          `"${order.customerPhone.replace(/"/g, '""')}"`,
-          `"${order.customerAddress.replace(/"/g, '""')}"`,
-          `"${order.customerCity.replace(/"/g, '""')}"`,
-          `"${order.productSlug.replace(/"/g, '""')}"`,
-          `"Background: ${order.customization.background}, Notes: ${order.customization.notes || ''}"`,
-          order.price,
-          order.paymentStatus,
-          order.orderStatus,
-          `"${(order.notes || '').replace(/"/g, '""')}"`,
-          new Date(order.createdAt).toISOString()
+          escapeCsvValue(order.id),
+          escapeCsvValue(order.orderNumber),
+          escapeCsvValue(order.customerName),
+          escapeCsvValue(order.customerEmail),
+          escapeCsvValue(order.customerPhone),
+          escapeCsvValue(order.customerAddress),
+          escapeCsvValue(order.customerCity),
+          escapeCsvValue(order.productSlug),
+          escapeCsvValue(customization),
+          escapeCsvValue(order.price),
+          escapeCsvValue(order.paymentStatus),
+          escapeCsvValue(order.orderStatus),
+          escapeCsvValue(order.customization.notes || ''),
+          escapeCsvValue(new Date(order.createdAt).toISOString())
         ].join(',')
       })
     ].join('\n')

@@ -5,8 +5,22 @@ import { revalidatePath } from 'next/cache'
 import type { OrderStatus, ProductStatus } from '@/lib/types'
 import { sendStatusUpdate } from '@/lib/emails/send'
 
-export async function updateOrderStatus(orderId: string, status: OrderStatus, customerEmail: string, orderNumber: string, productSlug: string) {
+async function isAuthenticated() {
   const supabase = await createClient()
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+
+  return { supabase, isAuthed: Boolean(user) && !error }
+}
+
+export async function updateOrderStatus(orderId: string, status: OrderStatus, customerEmail: string, orderNumber: string, productSlug: string) {
+  const { supabase, isAuthed } = await isAuthenticated()
+
+  if (!isAuthed) {
+    return { success: false, error: 'Unauthorized' }
+  }
 
   const { data, error } = await supabase
     .from('orders')
@@ -56,7 +70,11 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus, cu
 }
 
 export async function updateProductStatus(productId: string, status: ProductStatus) {
-  const supabase = await createClient()
+  const { supabase, isAuthed } = await isAuthenticated()
+
+  if (!isAuthed) {
+    return { success: false, error: 'Unauthorized' }
+  }
 
   const { error } = await supabase
     .from('products')

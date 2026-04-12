@@ -27,7 +27,7 @@ export default async function OrderConfirmationPage({ params }: OrderConfirmatio
         <section className="frame-container">
           <article className="mx-auto max-w-4xl border border-border-dark bg-bg-surface p-8 md:p-12">
             <p className="technical-label text-[10px] text-text-muted">Order Confirmation</p>
-            <h1 className="display-kicker mt-4 text-6xl leading-none md:text-8xl">ORDER RECEIVED</h1>
+            <h1 className="display-kicker mt-4 text-4xl leading-none sm:text-5xl md:text-8xl">ORDER RECEIVED</h1>
 
             <p className="mt-6 max-w-2xl text-sm text-text-muted">
               Your request has been captured. This frontend phase simulates payment confirmation and order storage.
@@ -60,7 +60,7 @@ export default async function OrderConfirmationPage({ params }: OrderConfirmatio
                 <span className="text-text-muted">Notes:</span> {order.customization.notes || "None"}
               </p>
               <p>
-                <span className="text-text-muted">Payment status:</span> {order.paymentStatus} (mocked)
+                <span className="text-text-muted">Payment status:</span> {order.paymentStatus}{process.env.PAYFAST_SANDBOX === "true" ? " (sandbox)" : ""}
               </p>
             </div>
 

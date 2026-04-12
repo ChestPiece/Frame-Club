@@ -5,3 +5,5 @@ export const COPY = {
   trustLine: "Nationwide Delivery 🇵🇰 | Secure Payment | Handcrafted to Order",
   finalCtaHeading: "READY TO FRAME YOUR OBSESSION?",
 } as const;
+
+export const WHATSAPP_LINK = "https://wa.me/923001234567";

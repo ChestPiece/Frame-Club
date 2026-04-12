@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { getProductBySlug, getRelatedProducts } from "@/lib/data";
+import { WHATSAPP_LINK } from "@/lib/copy-constants";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -62,7 +63,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 />
               </article>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {product.images.map((image, index) => (
                   <article
                     key={`${image}-${index}`}
@@ -89,7 +90,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <section className="lg:col-span-4">
               <div className="mb-8">
                 <p className="technical-label text-[10px] text-text-muted">{product.brand}</p>
-                <h1 className="display-kicker mt-3 text-6xl leading-none md:text-8xl">{product.name}</h1>
+                <h1 className="display-kicker mt-3 text-4xl leading-none sm:text-5xl md:text-8xl">{product.name}</h1>
                 <p className="mt-2 text-xs uppercase tracking-[0.22em] text-text-muted">Model Years: {product.years}</p>
                 <div className="mt-4 flex items-center gap-4">
                   <StatusBadge status={product.status} />
@@ -102,7 +103,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
                 <div>
                   <p className="technical-label text-[10px] text-text-muted">Background Design</p>
-                  <RadioGroup name="background" defaultValue={product.backgrounds[0]?.value} className="mt-3 flex gap-3">
+                  <RadioGroup name="background" defaultValue={product.backgrounds[0]?.value} className="mt-3 flex flex-wrap gap-3">
                     {product.backgrounds.map((background) => (
                       <RadioGroupItem
                         key={background.value}
@@ -162,7 +163,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   ) : null}
 
                   <Button
-                    render={<Link href="https://wa.me/923001234567" />}
+                    render={<Link href={WHATSAPP_LINK} />}
                     variant="outline"
                     size="lg"
                     className="display-kicker w-full text-lg"
@@ -183,9 +184,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         <section className="bg-bg-recessed py-24">
           <div className="frame-container">
-            <h2 className="display-kicker text-5xl leading-none md:text-6xl">THE SPECS</h2>
+            <h2 className="display-kicker text-4xl leading-none sm:text-5xl md:text-6xl">THE SPECS</h2>
 
-            <div className="mt-10 grid grid-cols-2 gap-px border border-border-dark/20 bg-border-dark/20 md:grid-cols-5">
+            <div className="mt-10 grid grid-cols-2 gap-px border border-border-dark/20 bg-border-dark/20 sm:grid-cols-3 md:grid-cols-5">
               {product.specs.map((spec) => (
                 <article key={spec.label} className="bg-bg-base p-7">
                   <p className="technical-label text-[10px] text-text-muted">{spec.label}</p>
@@ -197,9 +198,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </section>
 
         <section className="frame-container py-20">
-          <h2 className="display-kicker text-5xl leading-none md:text-6xl">YOU MIGHT ALSO LIKE</h2>
+          <h2 className="display-kicker text-4xl leading-none sm:text-5xl md:text-6xl">YOU MIGHT ALSO LIKE</h2>
 
-          <div className="mt-10 grid gap-8 md:grid-cols-3">
+          <div className="mt-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
             {related.map((item) => (
               <article key={item.id} className="group">
                 <div className="relative mb-5 aspect-4/5 overflow-hidden bg-bg-recessed">

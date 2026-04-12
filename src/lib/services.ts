@@ -1,4 +1,6 @@
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import type { Json, Tables } from "@/lib/supabase/database.types";
 import type {
   ContactSubmission,
   NotifySubscription,
@@ -34,17 +36,71 @@ type CreateNotifyInput = {
   productSlug: string;
 };
 
+type OrderRow = Tables<"orders">;
+
 function makeOrderNumber() {
   return `FC-${Math.floor(Math.random() * 900000 + 100000)}`;
 }
 
+function parseCustomization(value: Json | null): OrderRecord["customization"] {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    const background = value.background;
+    const notes = value.notes;
+    return {
+      background: typeof background === "string" ? background : "",
+      notes: typeof notes === "string" ? notes : "",
+    };
+  }
+
+  return { background: "", notes: "" };
+}
+
+function parsePaymentStatus(value: string | null): PaymentStatus {
+  if (value === "paid" || value === "failed" || value === "pending") {
+    return value;
+  }
+  return "pending";
+}
+
+function parseOrderStatus(value: string | null): OrderStatus {
+  if (
+    value === "pending" ||
+    value === "confirmed" ||
+    value === "in_production" ||
+    value === "shipped" ||
+    value === "delivered"
+  ) {
+    return value;
+  }
+  return "pending";
+}
+
+function toOrderRecord(row: OrderRow): OrderRecord {
+  return {
+    id: row.id,
+    orderNumber: row.order_number,
+    customerName: row.customer_name,
+    customerEmail: row.customer_email,
+    customerPhone: row.customer_phone,
+    customerAddress: row.customer_address,
+    customerCity: row.customer_city,
+    productId: row.product_id ?? "",
+    productSlug: row.product_slug ?? "",
+    price: row.price,
+    customization: parseCustomization(row.customization),
+    paymentStatus: parsePaymentStatus(row.payment_status),
+    orderStatus: parseOrderStatus(row.order_status),
+    createdAt: row.created_at ?? new Date().toISOString(),
+  };
+}
+
 export async function createOrder(input: CreateOrderInput) {
   const supabase = await createClient();
-  
+
   // Get product
   const { data: product, error: productError } = await supabase
     .from("products")
-    .select("id, price")
+    .select("id, price, slug")
     .eq("slug", input.productSlug)
     .single();
 
@@ -66,6 +122,7 @@ export async function createOrder(input: CreateOrderInput) {
       customer_address: input.customerAddress,
       customer_city: input.customerCity,
       product_id: product.id,
+      product_slug: product.slug,
       customization: {
         background: input.background,
         notes: input.notes ?? "",
@@ -82,49 +139,36 @@ export async function createOrder(input: CreateOrderInput) {
     return { error: "ORDER_CREATION_FAILED" as const };
   }
 
-  // Need to map product_id to productSlug for return type since OrderRecord requires productSlug
-  // Alternatively we can use join query
-  return { 
-    data: {
-      ...order,
-      productSlug: input.productSlug
-    } as any as OrderRecord 
-  };
+  return { data: toOrderRecord(order) };
 }
 
 export async function getOrderById(id: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("orders")
-    .select("*, products(slug)")
+    .select("*")
     .eq("id", id)
     .single();
 
   if (error || !data) return null;
 
-  return {
-    ...data,
-    productSlug: data.products?.slug
-  } as any as OrderRecord;
+  return toOrderRecord(data);
 }
 
 export async function listOrders() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("orders")
-    .select("*, products(slug)")
+    .select("*")
     .order("created_at", { ascending: false });
 
   if (error || !data) return [];
 
-  return data.map(order => ({
-    ...order,
-    productSlug: order.products?.slug
-  })) as any as OrderRecord[];
+  return data.map(toOrderRecord);
 }
 
 export async function getAdminStats() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data: orders, error } = await supabase.from("orders").select("*");
 
   if (error || !orders) {
@@ -154,7 +198,7 @@ export async function getAdminStats() {
 }
 
 export async function applyWebhook(input: WebhookInput) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data: current, error: fetchError } = await supabase
     .from("orders")
     .select("order_status")
@@ -169,7 +213,7 @@ export async function applyWebhook(input: WebhookInput) {
     input.paymentStatus === "paid"
       ? current.order_status === "pending"
         ? "confirmed"
-        : current.order_status
+        : parseOrderStatus(current.order_status)
       : "pending";
 
   const { data: updated, error: updateError } = await supabase
@@ -186,15 +230,60 @@ export async function applyWebhook(input: WebhookInput) {
     return { error: "UPDATE_FAILED" as const };
   }
 
-  return { data: updated as any as OrderRecord };
+  return { data: toOrderRecord(updated) };
 }
 
 export async function createContactSubmission(input: CreateContactInput) {
-  // Can add a contacts table later, or send email directly
-  return { id: "mock_id" };
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("contact_submissions")
+    .insert({
+      name: input.name,
+      email: input.email,
+      message: input.message,
+    })
+    .select("*")
+    .single();
+
+  if (error || !data) {
+    throw new Error("Failed to save contact submission.");
+  }
+
+  const submission: ContactSubmission = {
+    id: data.id,
+    name: data.name,
+    email: data.email,
+    message: data.message,
+    createdAt: data.created_at ?? new Date().toISOString(),
+  };
+
+  return submission;
 }
 
 export async function createNotifySubscription(input: CreateNotifyInput) {
-  // Can add notify_subscriptions table later
-  return { id: "mock_id" };
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("notify_subscriptions")
+    .upsert(
+      {
+        email: input.email,
+        product_slug: input.productSlug,
+      },
+      { onConflict: "email,product_slug" }
+    )
+    .select("*")
+    .single();
+
+  if (error || !data) {
+    throw new Error("Failed to save notify subscription.");
+  }
+
+  const subscription: NotifySubscription = {
+    id: data.id,
+    email: data.email,
+    productSlug: data.product_slug,
+    createdAt: data.created_at ?? new Date().toISOString(),
+  };
+
+  return subscription;
 }

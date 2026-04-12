@@ -1,8 +1,10 @@
-import React from "react";
+ "use client";
+
+import * as React from "react";
 
 export function SiteTicker() {
   return (
-    <div className="flex overflow-hidden bg-brand text-text-primary whitespace-nowrap py-1.5 border-b border-border-dark relative z-50 w-full">
+    <div className="relative z-50 flex w-full overflow-hidden whitespace-nowrap bg-brand py-1.5 text-text-primary">
       <div className="flex animate-marquee display-kicker text-xs tracking-[0.2em] uppercase">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="flex items-center shrink-0">

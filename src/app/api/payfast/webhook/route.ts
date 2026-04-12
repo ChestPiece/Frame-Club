@@ -48,8 +48,7 @@ export async function POST(request: Request) {
     const product = await getProductBySlug(order.productSlug);
     const productName = product?.name || order.productSlug;
 
-    // We can fire these off concurrently
-    Promise.all([
+    await Promise.all([
       sendOrderConfirmation(order, productName),
       sendAdminNotification(order, productName)
     ]).catch(console.error);

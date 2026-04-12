@@ -8,9 +8,7 @@ export async function login(formData: FormData) {
   const password = formData.get('password') as string
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    // If running locally without Supabase setup, just simulate success for dev
-    console.log("No Supabase URL found. Simulating login for dev.")
-    redirect('/admin')
+    redirect('/admin/login?error=' + encodeURIComponent('Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL in your environment.'))
   }
 
   const supabase = await createClient()
@@ -30,7 +28,7 @@ export async function login(formData: FormData) {
 
 export async function logout() {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    redirect('/admin/login')
+    redirect('/admin/login?error=' + encodeURIComponent('Supabase is not configured.'))
   }
   const supabase = await createClient()
   await supabase.auth.signOut()

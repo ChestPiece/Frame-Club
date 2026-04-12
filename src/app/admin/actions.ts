@@ -1,12 +1,13 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 import type { OrderStatus, ProductStatus } from '@/lib/types'
 import { sendStatusUpdate } from '@/lib/emails/send'
+import { getOrderById } from '@/lib/services'
 
-export async function updateOrderStatus(orderId: string, status: OrderStatus, customerEmail: string, orderNumber: string, productSlug: string) {
-  const supabase = await createClient()
+export async function updateOrderStatus(orderId: string, status: OrderStatus, _customerEmail: string, _orderNumber: string, productSlug: string) {
+  const supabase = createAdminClient()
 
   const { data, error } = await supabase
     .from('orders')
@@ -21,7 +22,6 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus, cu
   }
 
   // Trigger email notification
-  // We need to fetch the actual product name, or just use the slug for now
   const { data: product } = await supabase
     .from('products')
     .select('name')
@@ -30,25 +30,10 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus, cu
     
   const productName = product?.name || productSlug
 
-  // Format order record for the email template
-  const orderRecord = {
-    id: data.id,
-    orderNumber: data.order_number,
-    customerName: data.customer_name,
-    customerEmail: data.customer_email,
-    customerPhone: data.customer_phone,
-    customerAddress: data.customer_address,
-    customerCity: data.customer_city,
-    productId: data.product_id,
-    productSlug: productSlug,
-    customization: data.customization,
-    price: data.price,
-    paymentStatus: data.payment_status,
-    orderStatus: data.order_status,
-    createdAt: data.created_at,
+  const orderRecord = await getOrderById(orderId)
+  if (orderRecord) {
+    await sendStatusUpdate(orderRecord, productName)
   }
-
-  await sendStatusUpdate(orderRecord as any, productName)
 
   revalidatePath('/admin')
   revalidatePath('/admin/orders')
@@ -56,7 +41,7 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus, cu
 }
 
 export async function updateProductStatus(productId: string, status: ProductStatus) {
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   const { error } = await supabase
     .from('products')

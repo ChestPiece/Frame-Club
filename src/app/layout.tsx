@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter, Space_Grotesk, Geist } from "next/font/google";
+import { Bebas_Neue, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
+import { GSAPProvider } from "@/components/providers/gsap-provider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -14,11 +14,13 @@ const bebasNeue = Bebas_Neue({
   variable: "--font-bebas",
   weight: "400",
   subsets: ["latin"],
+  preload: false,
 });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-technical",
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -38,10 +40,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("h-full", "antialiased", inter.variable, bebasNeue.variable, spaceGrotesk.variable, "font-sans", geist.variable)}
+      className={cn("h-full", "antialiased", inter.variable, bebasNeue.variable, spaceGrotesk.variable, "font-sans")}
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-bg-base text-text-primary">
-        {children}
+        <GSAPProvider>
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        </GSAPProvider>
       </body>
     </html>
   );

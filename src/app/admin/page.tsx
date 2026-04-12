@@ -16,9 +16,28 @@ import { ProductStatusToggle } from "@/components/admin/product-status-toggle";
 import { ExportCsvButton } from "@/components/admin/export-csv-button";
 
 export default async function AdminDashboardPage() {
-  const stats = await getAdminStats();
-  const orders = (await listOrders()).slice(0, 5);
-  const products = (await listProductsForAdmin()).slice(0, 4);
+  let stats: Awaited<ReturnType<typeof getAdminStats>>;
+  let orders: Awaited<ReturnType<typeof listOrders>>;
+  let products: Awaited<ReturnType<typeof listProductsForAdmin>>;
+
+  try {
+    [stats, orders, products] = await Promise.all([
+      getAdminStats(),
+      listOrders(),
+      listProductsForAdmin(),
+    ]);
+    orders = orders.slice(0, 5);
+    products = products.slice(0, 4);
+  } catch {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <div className="border border-border-dark bg-bg-surface p-10 text-center">
+          <p className="display-kicker text-2xl text-text-primary">Failed to load dashboard data.</p>
+          <p className="mt-3 text-sm text-text-muted">Check your Supabase connection and refresh the page.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10">

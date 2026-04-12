@@ -14,7 +14,20 @@ import { OrderStatusSelect } from "@/components/admin/order-status-select";
 import { ExportCsvButton } from "@/components/admin/export-csv-button";
 
 export default async function AdminOrdersPage() {
-  const orders = await listOrders();
+  let orders: Awaited<ReturnType<typeof listOrders>>;
+
+  try {
+    orders = await listOrders();
+  } catch {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <div className="border border-border-dark bg-bg-surface p-10 text-center">
+          <p className="display-kicker text-2xl text-text-primary">Failed to load orders.</p>
+          <p className="mt-3 text-sm text-text-muted">Check your Supabase connection and refresh the page.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="border border-border-dark bg-bg-surface">

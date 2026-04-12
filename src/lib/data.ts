@@ -1,67 +1,76 @@
 import { createClient } from "@/lib/supabase/server";
-import { PRODUCTS } from "@/lib/mock-data";
+import type { Tables } from "@/lib/supabase/database.types";
 import type { Product, ProductStatus } from "@/lib/types";
 
+type ProductRow = Tables<"products">;
+type CustomizationRow = Tables<"customization_options">;
+
+function toProduct(row: ProductRow, backgrounds: CustomizationRow[] = []): Product {
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    brand: row.brand,
+    description: row.description ?? "",
+    images: row.images ?? [],
+    price: row.price,
+    status: (row.status as ProductStatus) ?? "available",
+    deliveryDays: row.delivery_days ?? 7,
+    years: row.years ?? "",
+    specs: Array.isArray(row.specs) ? row.specs as Product["specs"] : [],
+    backgrounds: backgrounds.map((bg) => ({
+      label: bg.label,
+      value: bg.value,
+      swatch: bg.swatch ?? bg.value,
+    })),
+  };
+}
+
 export async function getProducts(status?: ProductStatus): Promise<Product[]> {
-  try {
-    const supabase = await createClient();
-    let query = supabase.from("products").select("*").order("created_at", { ascending: false });
+  const supabase = await createClient();
+  let query = supabase.from("products").select("*").order("created_at", { ascending: false });
 
-    if (status) {
-      query = query.eq("status", status);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    
-    // Fallback to mock data if table is empty (useful for local dev without DB seeded)
-    if (!data || data.length === 0) {
-      if (!status) return PRODUCTS;
-      return PRODUCTS.filter((product) => product.status === status);
-    }
-
-    // Map to Product type, assuming DB schema matches
-    return data as any as Product[];
-  } catch (e) {
-    console.warn("Failed to fetch products from Supabase, falling back to mock data", e);
-    if (!status) return PRODUCTS;
-    return PRODUCTS.filter((product) => product.status === status);
+  if (status) {
+    query = query.eq("status", status);
   }
+
+  const { data, error } = await query;
+  if (error) {
+    throw new Error(`Failed to fetch products: ${error.message}`);
+  }
+
+  return (data ?? []).map((row) => toProduct(row));
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.from("products").select("*").eq("slug", slug).single();
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select("*").eq("slug", slug).single();
 
-    if (error && error.code !== 'PGRST116') throw error;
-    
-    if (data) {
-      // Need to fetch backgrounds for this product
-      const { data: backgrounds } = await supabase.from("customization_options").select("*").eq("product_id", data.id).eq("type", "background_design");
-      
-      return {
-        ...data,
-        backgrounds: backgrounds || []
-      } as any as Product;
-    }
-  } catch (e) {
-    console.warn(`Failed to fetch product ${slug} from Supabase, falling back to mock data`, e);
+  if (error) {
+    if (error.code === "PGRST116") return undefined;
+    throw new Error(`Failed to fetch product ${slug}: ${error.message}`);
   }
-  
-  return PRODUCTS.find((product) => product.slug === slug);
+
+  const { data: backgrounds, error: backgroundError } = await supabase
+    .from("customization_options")
+    .select("*")
+    .eq("product_id", data.id)
+    .eq("type", "background_design");
+
+  if (backgroundError) {
+    throw new Error(`Failed to fetch backgrounds for ${slug}: ${backgroundError.message}`);
+  }
+
+  return toProduct(data, backgrounds ?? []);
 }
 
 export async function getRelatedProducts(slug: string): Promise<Product[]> {
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.from("products").select("*").neq("slug", slug).limit(3);
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select("*").neq("slug", slug).limit(3);
 
-    if (error) throw error;
-    if (data && data.length > 0) return data as any as Product[];
-  } catch (e) {
-    console.warn(`Failed to fetch related products for ${slug}, falling back to mock data`);
+  if (error) {
+    throw new Error(`Failed to fetch related products for ${slug}: ${error.message}`);
   }
-  
-  return PRODUCTS.filter((product) => product.slug !== slug).slice(0, 3);
+
+  return (data ?? []).map((row) => toProduct(row));
 }

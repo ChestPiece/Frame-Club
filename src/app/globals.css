@@ -129,6 +129,22 @@ body {
   padding: 0;
 }
 
+#smooth-wrapper {
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+#smooth-content {
+  overflow: visible;
+  width: 100%;
+}
+
 body {
   background: var(--bg-base);
   color: var(--text-primary);
@@ -153,13 +169,25 @@ select {
 
 .frame-container {
   margin-inline: auto;
-  max-width: 1280px;
-  padding-inline: 1.5rem;
+  max-width: 1440px;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .frame-container {
+    padding-inline: 2rem;
+  }
 }
 
 @media (min-width: 768px) {
   .frame-container {
-    padding-inline: 3rem;
+    padding-inline: 4rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .frame-container {
+    padding-inline: 5rem;
   }
 }
 
@@ -260,10 +288,25 @@ select {
 }
 
 .display-fluid {
-  font-size: clamp(3rem, 8vw, 9rem);
+  font-size: clamp(1.75rem, 5.5vw, 6rem);
 }
 .display-fluid-lg {
-  font-size: clamp(4rem, 12vw, 12rem);
+  font-size: clamp(2rem, 7vw, 8rem);
+}
+.display-section {
+  font-size: clamp(1.5rem, 4vw, 4rem);
+}
+
+.nav-link-underline {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 2px;
+  width: 100%;
+  background: var(--brand-mid);
+  transform: scaleX(0);
+  transform-origin: right center;
 }
 
 @keyframes fade-up {
@@ -292,4 +335,26 @@ select {
   animation: marquee 20s linear infinite;
   display: flex;
   min-width: max-content;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-animate-section]:not([data-animate-section="hero"]),
+  [data-animate-item],
+  [data-animate-heading] {
+    opacity: 0;
+  }
+
+  [data-animate="hero-accent"],
+  [data-animate="hero-label"],
+  [data-animate="hero-subcopy"],
+  [data-animate="hero-cta"],
+  [data-animate="hero-image"],
+  [data-animate="hero-heading"] {
+    opacity: 0;
+  }
+}
+
+.gsap-hidden {
+  visibility: hidden;
+  opacity: 0;
 }

@@ -1,15 +1,21 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { StatusBadge } from "@/components/shared/status-badge";
+import { CatalogProductCard } from "@/components/shop/catalog-product-card";
+import { PageScrollAnimations } from "@/components/shared/page-scroll-animations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getProducts } from "@/lib/data";
+import {
+  applyCatalogQuery,
+  catalogSortOptions,
+  getCatalogBrands,
+  normalizeCatalogQuery,
+} from "@/lib/catalog";
 import type { ProductStatus } from "@/lib/types";
 
 type ShopPageProps = {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; q?: string; brand?: string; sort?: string }>;
 };
 
 const statusOptions: Array<{ label: string; value?: ProductStatus }> = [
@@ -21,34 +27,46 @@ const statusOptions: Array<{ label: string; value?: ProductStatus }> = [
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams;
-  const status =
-    params.status === "available" ||
-    params.status === "preorder" ||
-    params.status === "unavailable"
-      ? params.status
-      : undefined;
+  const query = normalizeCatalogQuery(params);
+  const baseProducts = await getProducts(query.status);
+  const products = applyCatalogQuery(baseProducts, query);
+  const brands = getCatalogBrands(baseProducts);
 
-  const products = await getProducts(status);
+  function buildStatusHref(nextStatus?: ProductStatus) {
+    const nextParams = new URLSearchParams();
+    if (nextStatus) nextParams.set("status", nextStatus);
+    if (query.q) nextParams.set("q", query.q);
+    if (query.brand) nextParams.set("brand", query.brand);
+    if (query.sort && query.sort !== "newest") nextParams.set("sort", query.sort);
+
+    const value = nextParams.toString();
+    return value ? `/shop?${value}` : "/shop";
+  }
 
   return (
     <>
       <SiteHeader />
-      <main className="pb-16 bg-bg-base">
-        <section className="border-b border-border-dark bg-[#0a0a0a] py-16">
+      <main className="pb-16 pt-30 bg-bg-base">
+        <PageScrollAnimations config="shop">
+        <section data-animate-page="shop" className="border-b border-border-dark bg-[#0a0a0a] py-16">
           <div className="frame-container flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="display-kicker text-[10px] text-brand uppercase tracking-[0.3em] mb-2">DROP ARCHIVE</p>
-              <h1 className="display-kicker mt-4 text-7xl leading-none md:display-fluid">THE COLLECTION</h1>
+              <h1 className="display-kicker mt-4 display-section leading-none">THE COLLECTION</h1>
+              <p className="mt-4 text-sm text-text-muted">
+                {products.length} frame{products.length === 1 ? "" : "s"} found
+                {query.q ? ` for "${query.q}"` : ""}.
+              </p>
             </div>
           </div>
         </section>
 
         <section className="border-b border-border-dark/60 bg-[#030303]">
-          <div className="frame-container py-6">
+          <div className="frame-container space-y-8 py-6">
             <div className="flex flex-wrap gap-4">
               {statusOptions.map((option) => {
-                const isActive = option.value === status || (!option.value && !status);
-                const href = option.value ? `/shop?status=${option.value}` : "/shop";
+                const isActive = option.value === query.status || (!option.value && !query.status);
+                const href = buildStatusHref(option.value);
 
                 return (
                   <Button
@@ -66,95 +84,85 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 );
               })}
             </div>
+
+            <form action="/shop" method="get" className="grid gap-4 md:grid-cols-[1.4fr_1fr_1fr_auto]">
+              {query.status ? <Input type="hidden" name="status" value={query.status} /> : null}
+
+              <Input
+                name="q"
+                defaultValue={query.q ?? ""}
+                placeholder="Search by car, brand, or description"
+                className="border border-border-dark bg-bg-surface"
+              />
+
+              <select
+                name="brand"
+                defaultValue={query.brand ?? ""}
+                className="h-11 sm:h-10 border border-border-dark bg-bg-surface px-3 text-sm text-text-primary"
+              >
+                <option value="">All Brands</option>
+                {brands.map((brand) => (
+                  <option key={brand} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                name="sort"
+                defaultValue={query.sort}
+                className="h-11 sm:h-10 border border-border-dark bg-bg-surface px-3 text-sm text-text-primary"
+              >
+                {catalogSortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+
+              <Button type="submit" variant="brand" className="display-kicker px-6">
+                Apply
+              </Button>
+            </form>
           </div>
         </section>
 
-        <section className="frame-container grid gap-8 py-16 md:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => {
-            const ctaLabel =
-              product.status === "available"
-                ? "Order Now"
-                : product.status === "preorder"
-                  ? "Pre-Order Now"
-                  : "Notify Me";
-
-            return (
-              // ARCHITECTURE CONSTRAINT: The outer Link wraps the entire card.
-              // Do NOT add render={<Link />} to any Button inside this card.
-              // That creates nested <a> elements and hydration failures.
-              <Link
-                href={`/shop/${product.slug}`}
-                key={product.id}
-                className={`group flex flex-col border border-border-dark bg-bg-surface hover:border-brand transition-colors duration-300 ${
-                  product.status === "unavailable" ? "opacity-70" : "opacity-100"
-                }`}
-              >
-                <div className="relative overflow-hidden bg-[#0A0A0A]">
-                  <div className="relative aspect-4/3 w-full overflow-hidden">
-                    <Image
-                      src={product.images[0]}
-                      alt={product.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0"
-                    />
-                    <div className="absolute top-4 right-4 rotate-12 border border-brand text-brand px-2 py-1 text-[10px] uppercase tracking-widest bg-[#1A1614]/80 backdrop-blur-sm z-10">
-                      MADE TO ORDER
-                    </div>
-                  </div>
-
-                  <div className="absolute left-4 top-4 z-20">
-                    <StatusBadge status={product.status} />
-                  </div>
-                </div>
-
-                <div className="flex flex-1 flex-col p-8 border-t-2 border-t-transparent transition-colors group-hover:border-t-brand">
-                  <h2 className="display-kicker text-4xl leading-none">{product.name}</h2>
-                  <p className="mt-3 text-xs uppercase tracking-[0.2em] text-text-muted">{product.brand}</p>
-
-                  <div className="mt-auto pt-10">
-                    <span className="bg-brand text-text-primary px-3 py-1 text-xs display-kicker inline-block">
-                      Rs. {product.price.toLocaleString("en-PK")}
-                    </span>
-
-                    {product.status === "preorder" ? (
-                      <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-[#ffb3af]">
-                        Est. delivery {product.deliveryDays}-{product.deliveryDays + 3} working days
-                      </p>
-                    ) : null}
-
-                    <div className="mt-8">
-                      {product.status === "unavailable" ? (
-                        <Button
-                          variant="muted"
-                          className="display-kicker w-full justify-center py-6 text-sm"
-                        >
-                          {ctaLabel}
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="brand"
-                          className="display-kicker w-full justify-center py-6 text-sm"
-                        >
-                          {ctaLabel}
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+        <section className="frame-container grid grid-cols-1 gap-8 py-16 sm:grid-cols-2 lg:grid-cols-3" data-animate-page="shop">
+          {products.map((product) => (
+            <CatalogProductCard key={product.id} product={product} />
+          ))}
         </section>
 
-        <section className="border-t border-border-dark/30 bg-[#0E0E0E] py-32">
+        {products.length === 0 ? (
+          <section className="frame-container pb-16">
+            <div className="border border-border-dark bg-bg-surface p-10 text-center">
+              <p className="display-kicker text-3xl text-text-primary">No frames match your filters.</p>
+              <p className="mt-3 text-sm text-text-muted">
+                Try removing a brand filter or clearing search to explore the full catalog.
+              </p>
+              <div className="mt-6">
+                <Button render={<Link href="/shop" />} variant="outline" className="display-kicker">
+                  Reset Filters
+                </Button>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        <section className="frame-container pb-16">
+          <div className="border border-border-dark bg-bg-recessed px-5 py-4 text-xs uppercase tracking-[0.18em] text-text-muted">
+            Showing {products.length} / {baseProducts.length} {query.status ? `${query.status} ` : ""}products
+          </div>
+        </section>
+
+        <section data-animate-page="shop" className="border-t border-border-dark/30 bg-[#0E0E0E] py-32">
           <div className="frame-container max-w-4xl text-center">
-            <h2 className="display-kicker text-5xl leading-none md:text-7xl">JOIN THE INNER CIRCLE</h2>
-            <p className="mx-auto mt-6 max-w-2xl text-xs uppercase tracking-[0.26em] text-text-muted">
+            <h2 data-animate-item className="display-kicker display-section leading-none">JOIN THE INNER CIRCLE</h2>
+            <p data-animate-item className="mx-auto mt-6 max-w-2xl text-xs uppercase tracking-[0.26em] text-text-muted">
               Early access to limited releases and mechanical updates. No clutter. Just permanence.
             </p>
 
-            <form className="mx-auto mt-16 flex max-w-3xl flex-col gap-6 md:flex-row" action="/api/notify" method="post">
+            <form data-animate-item className="mx-auto mt-16 flex max-w-3xl flex-col gap-6 md:flex-row" action="/api/notify" method="post">
               <Input
                 type="email"
                 name="email"
@@ -173,6 +181,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             </form>
           </div>
         </section>
+        </PageScrollAnimations>
       </main>
       <SiteFooter />
     </>

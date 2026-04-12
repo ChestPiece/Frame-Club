@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
@@ -10,6 +11,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { SiteTicker } from "@/components/layout/site-ticker";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const navItems = [
@@ -26,9 +28,10 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border-dark bg-[#1a1614]/95 backdrop-blur-xl">
-      <div className="frame-container flex h-20 items-center justify-between gap-4">
-        <Link href="/" className="display-kicker text-2xl leading-none text-text-primary md:text-3xl">
+    <header className="sticky top-0 z-40 flex flex-col border-b border-border-dark bg-[#1a1614]/95 backdrop-blur-xl">
+      <div className="frame-container flex h-20 w-full items-center justify-between gap-4">
+        <Link href="/" className="flex items-center gap-2 display-kicker text-xl leading-none text-text-primary md:text-3xl">
+          <Image src="/FrameClub.png" alt="The Frame Club Logo" width={32} height={32} className="object-contain" />
           THE FRAME CLUB
         </Link>
 
@@ -62,7 +65,8 @@ export function SiteHeader() {
             size="sm"
             className="display-kicker px-4 py-2 md:px-6 md:text-sm"
           >
-            ORDER NOW
+            <span className="md:hidden">ORDER</span>
+            <span className="hidden md:inline">ORDER NOW</span>
           </Button>
 
           <Sheet>
@@ -97,6 +101,7 @@ export function SiteHeader() {
           </Sheet>
         </div>
       </div>
+      <SiteTicker />
     </header>
   );
 }

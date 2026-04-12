@@ -24,6 +24,9 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "The Frame Club",
   description: "Where Speed Meets Art",
+  icons: {
+    icon: "/FrameClub.png",
+  },
 };
 
 export default function RootLayout({

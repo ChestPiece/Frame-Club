@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { COPY } from "@/lib/copy-constants";
 
 export function SiteFooter() {
   return (
@@ -49,7 +50,7 @@ export function SiteFooter() {
 
       <div className="border-t border-border-dark/60">
         <div className="frame-container py-5 text-center text-[10px] uppercase tracking-[0.18em] text-text-muted">
-          Nationwide Delivery Pakistan | Secure Payment | Handcrafted to Order
+          {COPY.trustLine}
         </div>
       </div>
     </footer>

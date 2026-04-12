@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { animate } from "animejs";
+import { gsap } from "@/lib/gsap-config";
 
 export function PulsingDot() {
   const dotRef = useRef<HTMLSpanElement>(null);
@@ -9,19 +9,20 @@ export function PulsingDot() {
   useEffect(() => {
     if (!dotRef.current) return;
 
-    const anim = animate(dotRef.current, {
-      boxShadow: [
-        "0 0 0px 0px rgba(155, 240, 186, 0)",
-        "0 0 0px 4px rgba(155, 240, 186, 0.25)",
-        "0 0 0px 0px rgba(155, 240, 186, 0)",
-      ],
-      duration: 2500,
-      loop: true,
-      ease: "inOutSine",
-    });
+    const anim = gsap.fromTo(
+      dotRef.current,
+      { boxShadow: "0 0 0px 0px rgba(155, 240, 186, 0)" },
+      {
+        boxShadow: "0 0 0px 4px rgba(155, 240, 186, 0.25)",
+        duration: 1.25,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      }
+    );
 
     return () => {
-      anim.cancel();
+      anim.kill();
     };
   }, []);
 

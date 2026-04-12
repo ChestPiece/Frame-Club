@@ -2,9 +2,7 @@
 
 import { useRef, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
-import { animate } from "animejs";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
-
 
 const steps = [
   {
@@ -13,11 +11,13 @@ const steps = [
   },
   {
     label: "CUSTOMISE IT",
-    description: "Choose your background style and share notes for the build.",
+    description:
+      "Choose your background style and share notes for the build.",
   },
   {
     label: "WE BUILD & SHIP",
-    description: "We source, build, and ship your frame nationwide across Pakistan.",
+    description:
+      "We source, build, and ship your frame nationwide across Pakistan.",
   },
 ];
 
@@ -26,31 +26,31 @@ export function HowItWorksSection() {
   const cardRefs = useRef<HTMLElement[]>([]);
   const ghostRefs = useRef<HTMLDivElement[]>([]);
 
-  const setCardRef = (el: HTMLElement | null, index: number) => {
+  const setCardRef = useCallback((el: HTMLElement | null, index: number) => {
     if (el) cardRefs.current[index] = el;
-  };
+  }, []);
 
-  const setGhostRef = (el: HTMLDivElement | null, index: number) => {
+  const setGhostRef = useCallback((el: HTMLDivElement | null, index: number) => {
     if (el) ghostRefs.current[index] = el;
-  };
+  }, []);
 
   const handleCardEnter = useCallback((index: number) => {
     if (!ghostRefs.current[index]) return;
-    animate(ghostRefs.current[index], {
-      opacity: [0.03, 0.07],
-      scale: [1, 1.04],
-      duration: 350,
-      ease: "outExpo",
+    gsap.to(ghostRefs.current[index], {
+      opacity: 0.07,
+      scale: 1.04,
+      duration: 0.35,
+      ease: "expo.out",
     });
   }, []);
 
   const handleCardLeave = useCallback((index: number) => {
     if (!ghostRefs.current[index]) return;
-    animate(ghostRefs.current[index], {
-      opacity: [0.07, 0.03],
-      scale: [1.04, 1],
-      duration: 300,
-      ease: "inExpo",
+    gsap.to(ghostRefs.current[index], {
+      opacity: 0.03,
+      scale: 1,
+      duration: 0.3,
+      ease: "expo.in",
     });
   }, []);
 
@@ -72,10 +72,10 @@ export function HowItWorksSection() {
             start: "top 75%",
             once: true,
           },
-        },
+        }
       );
     },
-    { scope: sectionRef },
+    { scope: sectionRef }
   );
 
   return (
@@ -97,7 +97,9 @@ export function HowItWorksSection() {
             onMouseEnter={() => handleCardEnter(index)}
             onMouseLeave={() => handleCardLeave(index)}
             className={`relative min-h-[280px] md:min-h-0 md:aspect-square overflow-hidden border border-border-dark/30 p-8 md:p-10 flex flex-col justify-end group ${
-              index === 1 ? "bg-bg-elevated border-t-2 border-t-brand" : "bg-[#1A1614]"
+              index === 1
+                ? "bg-bg-elevated border-t-2 border-t-brand"
+                : "bg-[#1A1614]"
             }`}
             style={{ opacity: 0 }}
           >
@@ -109,8 +111,12 @@ export function HowItWorksSection() {
               0{index + 1}
             </div>
             <div className="relative z-10 mt-auto">
-              <h3 className="display-kicker mb-4 text-3xl leading-none">{step.label}</h3>
-              <p className="text-sm text-text-muted leading-relaxed">{step.description}</p>
+              <h3 className="display-kicker mb-4 text-3xl leading-none">
+                {step.label}
+              </h3>
+              <p className="text-sm text-text-muted leading-relaxed">
+                {step.description}
+              </p>
             </div>
           </article>
         ))}

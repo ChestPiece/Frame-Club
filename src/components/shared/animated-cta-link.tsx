@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useCallback } from "react";
-import { animate } from "animejs";
+import { gsap } from "@/lib/gsap-config";
 
 type AnimatedCTALinkProps = {
   href: string;
@@ -10,25 +10,21 @@ type AnimatedCTALinkProps = {
   className?: string;
 };
 
-export function AnimatedCTALink({ href, children, className = "" }: AnimatedCTALinkProps) {
+export function AnimatedCTALink({
+  href,
+  children,
+  className = "",
+}: AnimatedCTALinkProps) {
   const fillRef = useRef<HTMLSpanElement>(null);
 
   const handleMouseEnter = useCallback(() => {
     if (!fillRef.current) return;
-    animate(fillRef.current, {
-      scaleX: [0, 1],
-      duration: 280,
-      ease: "outExpo",
-    });
+    gsap.to(fillRef.current, { scaleX: 1, duration: 0.28, ease: "expo.out" });
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     if (!fillRef.current) return;
-    animate(fillRef.current, {
-      scaleX: [1, 0],
-      duration: 220,
-      ease: "inExpo",
-    });
+    gsap.to(fillRef.current, { scaleX: 0, duration: 0.22, ease: "expo.in" });
   }, []);
 
   return (

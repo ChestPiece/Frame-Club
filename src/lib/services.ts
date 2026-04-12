@@ -197,17 +197,23 @@ export async function getAdminStats() {
   };
 }
 
-export async function applyWebhook(input: WebhookInput) {
-  const supabase = createAdminClient();
+export async function applyWebhook(
+  input: WebhookInput,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  options?: { supabaseClient?: any }
+) {
+  const supabase = options?.supabaseClient ?? createAdminClient();
   const { data: current, error: fetchError } = await supabase
     .from("orders")
-    .select("order_status")
+    .select("order_status, payment_status")
     .eq("id", input.orderId)
     .single();
 
   if (fetchError || !current) {
     return { error: "ORDER_NOT_FOUND" as const };
   }
+
+  const previousPaymentStatus = parsePaymentStatus(current.payment_status);
 
   const nextOrderStatus: OrderStatus =
     input.paymentStatus === "paid"
@@ -230,7 +236,7 @@ export async function applyWebhook(input: WebhookInput) {
     return { error: "UPDATE_FAILED" as const };
   }
 
-  return { data: toOrderRecord(updated) };
+  return { data: toOrderRecord(updated), previousPaymentStatus };
 }
 
 export async function createContactSubmission(input: CreateContactInput) {

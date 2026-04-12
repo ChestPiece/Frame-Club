@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { createTimeline } from "animejs";
 import { gsap } from "@/lib/gsap-config";
 
 const DIAGNOSTICS = [
@@ -13,8 +12,6 @@ const DIAGNOSTICS = [
 ];
 
 export function SiteLoader() {
-  // null = not yet determined (server render + initial hydration)
-  // true = show loader, false = skip
   const [shouldShow, setShouldShow] = React.useState<boolean | null>(null);
   const [done, setDone] = React.useState(false);
 
@@ -23,7 +20,6 @@ export function SiteLoader() {
   const progressBarRef = React.useRef<HTMLDivElement>(null);
   const lineRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
-  // SSR-safe: check sessionStorage only after hydration
   React.useEffect(() => {
     const seen = sessionStorage.getItem("fc-loader-shown");
     if (seen) {
@@ -37,16 +33,14 @@ export function SiteLoader() {
   React.useEffect(() => {
     if (!shouldShow) return;
 
-    // Skip animation entirely for users who prefer reduced motion
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setDone(true);
       return;
     }
 
-    const tl = createTimeline({
-      autoplay: false,
+    const tl = gsap.timeline({
+      paused: true,
       onComplete: () => {
-        // Brief pause, then GSAP wipes the overlay away to the left
         setTimeout(() => {
           if (!overlayRef.current) return;
           gsap.fromTo(
@@ -63,41 +57,30 @@ export function SiteLoader() {
       },
     });
 
-    // Logo slides in from left
     if (logoRef.current) {
-      tl.add(logoRef.current, {
-        opacity: [0, 1],
-        translateX: [-24, 0],
-        duration: 600,
-        ease: "outExpo",
-      });
+      tl.fromTo(
+        logoRef.current,
+        { opacity: 0, x: -24 },
+        { opacity: 1, x: 0, duration: 0.6, ease: "expo.out" }
+      );
     }
 
-    // Diagnostic lines stagger in at absolute time positions
     lineRefs.current.forEach((el, i) => {
       if (!el) return;
-      tl.add(
+      tl.fromTo(
         el,
-        {
-          opacity: [0, 1],
-          translateX: [12, 0],
-          duration: 280,
-          ease: "outExpo",
-        },
-        350 + i * 180
+        { opacity: 0, x: 12 },
+        { opacity: 1, x: 0, duration: 0.28, ease: "expo.out" },
+        0.35 + i * 0.18
       );
     });
 
-    // Progress bar fills after all lines are in
     if (progressBarRef.current) {
-      tl.add(
+      tl.fromTo(
         progressBarRef.current,
-        {
-          width: ["0%", "100%"],
-          duration: 650,
-          ease: "linear",
-        },
-        1050
+        { width: "0%" },
+        { width: "100%", duration: 0.65, ease: "none" },
+        1.05
       );
     }
 
@@ -108,7 +91,6 @@ export function SiteLoader() {
     };
   }, [shouldShow]);
 
-  // Return null on server, on returning visitors, and after animation completes
   if (shouldShow === null || !shouldShow || done) return null;
 
   return (
@@ -117,7 +99,6 @@ export function SiteLoader() {
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#030303]"
       aria-hidden="true"
     >
-      {/* Logo lockup */}
       <div
         ref={logoRef}
         className="flex items-center gap-3 mb-14"
@@ -136,7 +117,6 @@ export function SiteLoader() {
         </span>
       </div>
 
-      {/* Diagnostic readout */}
       <div className="w-full max-w-xs space-y-3 px-6">
         {DIAGNOSTICS.map((line, i) => (
           <div
@@ -157,7 +137,6 @@ export function SiteLoader() {
         ))}
       </div>
 
-      {/* Progress bar */}
       <div className="mt-10 w-full max-w-xs px-6">
         <div className="h-px w-full bg-[#1C1B1B]">
           <div

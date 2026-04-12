@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { createTimeline, stagger } from "animejs";
+import { gsap } from "@/lib/gsap-config";
 import { TransitionLink } from "@/components/layout/page-transition";
 
 export type NavItem = {
@@ -22,7 +22,6 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
   const ctaWrapperRef = React.useRef<HTMLDivElement>(null);
   const isAnimating = React.useRef(false);
 
-  // ESC key to close
   React.useEffect(() => {
     if (!isOpen) return;
     const handleEsc = (e: KeyboardEvent) => {
@@ -32,7 +31,6 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
     return () => document.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
 
-  // Body scroll lock
   React.useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
@@ -40,13 +38,16 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
     };
   }, [isOpen]);
 
-  // Animate open/close
   React.useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay || isAnimating.current) return;
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const validItems = itemWrapperRefs.current.filter(Boolean) as HTMLDivElement[];
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const validItems = itemWrapperRefs.current.filter(
+      Boolean
+    ) as HTMLDivElement[];
 
     if (isOpen) {
       overlay.style.display = "flex";
@@ -62,43 +63,30 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         return;
       }
 
-      const tl = createTimeline({
-        autoplay: false,
+      const tl = gsap.timeline({
+        paused: true,
         onComplete: () => {
           isAnimating.current = false;
         },
       });
 
-      tl.add(overlay, {
-        opacity: [0, 1],
-        duration: 200,
-        ease: "outQuad",
-      });
+      tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" });
 
       if (validItems.length > 0) {
-        tl.add(
+        tl.fromTo(
           validItems,
-          {
-            translateY: [60, 0],
-            opacity: [0, 1],
-            delay: stagger(80),
-            duration: 500,
-            ease: "outExpo",
-          },
-          "-=50"
+          { y: 60, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: "expo.out", stagger: 0.08 },
+          "-=0.05"
         );
       }
 
       if (ctaWrapperRef.current) {
-        tl.add(
+        tl.fromTo(
           ctaWrapperRef.current,
-          {
-            opacity: [0, 1],
-            translateY: [20, 0],
-            duration: 400,
-            ease: "outExpo",
-          },
-          "-=300"
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" },
+          "-=0.3"
         );
       }
 
@@ -113,8 +101,8 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         return;
       }
 
-      const tl = createTimeline({
-        autoplay: false,
+      const tl = gsap.timeline({
+        paused: true,
         onComplete: () => {
           overlay.style.display = "none";
           isAnimating.current = false;
@@ -122,36 +110,26 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
       });
 
       if (ctaWrapperRef.current) {
-        tl.add(ctaWrapperRef.current, {
-          opacity: [1, 0],
-          translateY: [0, 20],
-          duration: 180,
-          ease: "inExpo",
+        tl.to(ctaWrapperRef.current, {
+          opacity: 0,
+          y: 20,
+          duration: 0.18,
+          ease: "expo.in",
         });
       }
 
       if (validItems.length > 0) {
-        tl.add(
+        tl.to(
           [...validItems].reverse(),
-          {
-            opacity: [1, 0],
-            translateY: [0, 30],
-            delay: stagger(40),
-            duration: 180,
-            ease: "inExpo",
-          },
-          "-=100"
+          { opacity: 0, y: 30, duration: 0.18, ease: "expo.in", stagger: 0.04 },
+          "-=0.1"
         );
       }
 
-      tl.add(
+      tl.to(
         overlay,
-        {
-          opacity: [1, 0],
-          duration: 150,
-          ease: "outQuad",
-        },
-        "-=50"
+        { opacity: 0, duration: 0.15, ease: "power2.out" },
+        "-=0.05"
       );
 
       tl.play();
@@ -167,9 +145,10 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
       aria-modal="true"
       aria-label="Navigation menu"
     >
-      {/* Header row: close button */}
       <div className="flex items-center justify-between px-6 py-6 border-b border-border-dark/40">
-        <span className="display-kicker text-sm text-text-muted tracking-[0.2em]">NAVIGATION</span>
+        <span className="display-kicker text-sm text-text-muted tracking-[0.2em]">
+          NAVIGATION
+        </span>
         <button
           onClick={onClose}
           className="p-2 text-text-muted hover:text-text-primary transition-colors"
@@ -189,7 +168,6 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         </button>
       </div>
 
-      {/* Nav items */}
       <nav className="flex flex-1 flex-col justify-center">
         {navItems.map((item, i) => (
           <div
@@ -219,7 +197,6 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         ))}
       </nav>
 
-      {/* ORDER NOW CTA */}
       <div
         ref={ctaWrapperRef}
         className="px-6 pb-8 pt-6"

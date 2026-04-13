@@ -27,7 +27,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
               alt={product.name}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0"
+              className="object-contain p-5 sm:p-8 grayscale transition-all duration-700 group-hover:grayscale-0"
             />
             <div className="absolute right-4 top-4 z-10 rotate-12 border border-brand bg-[#1A1614]/80 px-2 py-1 text-[10px] uppercase tracking-widest text-brand backdrop-blur-sm">
               MADE TO ORDER

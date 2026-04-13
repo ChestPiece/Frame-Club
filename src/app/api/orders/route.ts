@@ -1,6 +1,8 @@
 import { fail, ok } from "@/lib/api-envelope";
+import { createOrderAccessToken } from "@/lib/order-access-token";
 import { createOrder } from "@/lib/services";
 import { generatePayFastSignature, getPayFastUrl, payfastConfig } from "@/lib/payfast";
+import { isNonEmpty } from "@/lib/utils";
 
 type OrderPayload = {
   customerName?: string;
@@ -12,10 +14,6 @@ type OrderPayload = {
   background?: string;
   notes?: string;
 };
-
-function isNonEmpty(value: unknown): value is string {
-  return typeof value === "string" && value.trim().length > 0;
-}
 
 export async function POST(request: Request) {
   const payload = (await request.json().catch(() => null)) as OrderPayload | null;
@@ -59,10 +57,12 @@ export async function POST(request: Request) {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
+  const orderAccessToken = createOrderAccessToken(order.id);
+
   const payfastData: Record<string, string> = {
     merchant_id: payfastConfig.merchantId,
     merchant_key: payfastConfig.merchantKey,
-    return_url: `${siteUrl}/order/${order.id}`,
+    return_url: `${siteUrl}/order/${order.id}?token=${encodeURIComponent(orderAccessToken)}`,
     cancel_url: `${siteUrl}/checkout?slug=${order.productSlug}&cancel=true`,
     notify_url: `${siteUrl}/api/payfast/webhook`,
     name_first: payload.customerName.split(" ")[0] || payload.customerName,
@@ -79,6 +79,7 @@ export async function POST(request: Request) {
   return ok(
     {
       order,
+      orderAccessToken,
       payfastUrl: getPayFastUrl(),
       payfastData,
     },

@@ -1,15 +1,12 @@
 import { fail, ok } from "@/lib/api-envelope";
 import { createContactSubmission } from "@/lib/services";
+import { isNonEmpty } from "@/lib/utils";
 
 type ContactPayload = {
   name?: string;
   email?: string;
   message?: string;
 };
-
-function isNonEmpty(value: unknown): value is string {
-  return typeof value === "string" && value.trim().length > 0;
-}
 
 export async function POST(request: Request) {
   const payload = (await request.json().catch(() => null)) as ContactPayload | null;

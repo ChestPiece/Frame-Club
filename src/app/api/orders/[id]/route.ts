@@ -16,6 +16,11 @@ export async function GET(_request: Request, context: RouteContext) {
     return fail("UNAUTHORIZED", "Authentication required.", 401);
   }
 
+  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+  if (adminEmail && user.email?.toLowerCase() !== adminEmail) {
+    return fail("FORBIDDEN", "Admin access required.", 403);
+  }
+
   const { id } = await context.params;
   const order = await getOrderById(id);
 

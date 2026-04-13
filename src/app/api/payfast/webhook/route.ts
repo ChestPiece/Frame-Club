@@ -36,14 +36,39 @@ export async function POST(request: Request) {
 
   const paymentStatus = data.payment_status === "COMPLETE" ? "paid" : "failed";
   const orderId = data.m_payment_id;
+  const paymentId = data.pf_payment_id || data.payment_id || "";
 
   if (!orderId) {
     return new NextResponse("Missing m_payment_id", { status: 400 });
   }
 
+  const { data: currentOrder, error: orderError } = await serviceClient
+    .from("orders")
+    .select("price")
+    .eq("id", orderId)
+    .single();
+
+  if (orderError || !currentOrder) {
+    return new NextResponse("Order Not Found", { status: 404 });
+  }
+
+  const paidAmountRaw = data.amount_gross || data.amount || "";
+  const paidAmount = Number(paidAmountRaw);
+  const expectedAmount = Number(currentOrder.price);
+
+  if (!Number.isFinite(paidAmount) || Math.abs(paidAmount - expectedAmount) > 0.01) {
+    console.error("PayFast amount mismatch", {
+      orderId,
+      paidAmountRaw,
+      expectedAmount,
+    });
+    return new NextResponse("Amount Mismatch", { status: 400 });
+  }
+
   const result = await applyWebhook({
     orderId,
     paymentStatus,
+    paymentId,
   }, {
     supabaseClient: serviceClient,
   });

@@ -1,17 +1,24 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
 import { Button } from "@/components/ui/button";
 import { getProductBySlug } from "@/lib/data";
+import { verifyOrderAccessToken } from "@/lib/order-access-token";
 import { getOrderById } from "@/lib/services";
 
 type OrderConfirmationProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ token?: string }>;
 };
 
-export default async function OrderConfirmationPage({ params }: OrderConfirmationProps) {
+export default async function OrderConfirmationPage({ params, searchParams }: OrderConfirmationProps) {
   const { id } = await params;
+  const { token } = await searchParams;
+
+  if (!verifyOrderAccessToken(id, token)) {
+    notFound();
+  }
+
   const order = await getOrderById(id);
 
   if (!order) {
@@ -19,23 +26,34 @@ export default async function OrderConfirmationPage({ params }: OrderConfirmatio
   }
 
   const product = await getProductBySlug(order.productSlug);
+  const isPaymentFailed = order.paymentStatus === "failed";
+  const retryHref = `/checkout?orderId=${id}`;
 
   return (
     <>
-      <SiteHeader />
-      <main className="pb-24 pt-14">
+      <main id="main-content" className="pb-24 pt-14">
         <section className="frame-container">
           <article className="mx-auto max-w-4xl border border-border-dark bg-bg-surface p-8 md:p-12">
             <p className="technical-label text-[10px] text-text-muted">Order Confirmation</p>
-            <h1 className="display-kicker mt-4 text-4xl leading-none sm:text-5xl md:text-8xl">ORDER RECEIVED</h1>
+            <h1 className="display-kicker mt-4 text-4xl leading-none sm:text-5xl md:text-8xl">
+              {isPaymentFailed ? "PAYMENT ISSUE" : "ORDER CONFIRMED"}
+            </h1>
 
             <p className="mt-6 max-w-2xl text-sm text-text-muted">
-              Your request has been captured. This frontend phase simulates payment confirmation and order storage.
+              {isPaymentFailed
+                ? "Your payment could not be processed. Please try again or contact us."
+                : "Thank you for your order. We've received your payment and your custom frame is now in the queue. You'll receive an email confirmation shortly."}
             </p>
 
-            <div className="mt-8 inline-flex border border-[#2e6f4f] bg-[#173628] px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-[#9bf0ba]">
-              Payment Pipeline: Captured
-            </div>
+            {isPaymentFailed ? (
+              <div className="mt-8 inline-flex border border-[#6f2e2e] bg-[#281717] px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-[#f09b9b]">
+                Payment Failed
+              </div>
+            ) : (
+              <div className="mt-8 inline-flex border border-[#2e6f4f] bg-[#173628] px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-[#9bf0ba]">
+                Payment Pipeline: Captured
+              </div>
+            )}
 
             <div className="mt-6 grid gap-3 border border-border-dark/60 bg-bg-recessed p-7 text-sm">
               <p>
@@ -65,9 +83,14 @@ export default async function OrderConfirmationPage({ params }: OrderConfirmatio
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
+              {isPaymentFailed ? (
+                <Button render={<Link href={retryHref} />} variant="brand" className="display-kicker">
+                  TRY AGAIN
+                </Button>
+              ) : null}
               <Button
                 render={<Link href="/shop" />}
-                variant="brand"
+                variant={isPaymentFailed ? "outline" : "brand"}
                 className="display-kicker"
               >
                 ORDER ANOTHER FRAME

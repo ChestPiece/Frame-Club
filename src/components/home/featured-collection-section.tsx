@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { AnimatedCTALink } from "@/components/shared/animated-cta-link";
+import { EmptyState } from "@/components/shared/empty-state";
 import type { Product } from "@/lib/types";
 
 
@@ -56,52 +57,61 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
         </p>
       </div>
 
-      <div ref={gridRef} className="grid gap-12 md:grid-cols-3">
-        {products.map((product, index) => (
-          <article
-            key={product.id}
-            ref={(el) => setCardRef(el, index)}
-            className="group bg-[#0F0F0F] border border-[#494542]"
-            style={{ opacity: 0 }}
-          >
-            <div
-              suppressHydrationWarning
-              className="relative aspect-square w-full overflow-hidden bg-[#0E0E0E]"
+      {products.length === 0 ? (
+        <EmptyState
+          label="THE COLLECTION"
+          title="COMING SOON"
+          description="New frames are being added. Follow us on Instagram for updates."
+          cta={{ label: "VISIT INSTAGRAM", href: "https://instagram.com/frameclub__" }}
+        />
+      ) : (
+        <div ref={gridRef} className="grid gap-12 md:grid-cols-3">
+          {products.map((product, index) => (
+            <article
+              key={product.id}
+              ref={(el) => setCardRef(el, index)}
+              className="group bg-[#0F0F0F] border border-[#494542]"
+              style={{ opacity: 0 }}
             >
-              <Image
-                src={product.images[0]}
-                alt={product.name}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover grayscale scale-110 transition-all duration-500 group-hover:scale-100 group-hover:grayscale-0"
-              />
-            </div>
-
-            <div className="p-8">
-              <div className="mb-4 flex items-start justify-between gap-3">
-                <h3 className="display-kicker text-3xl leading-none">{product.name}</h3>
-                <span className="technical-label text-[10px] text-[#ffb3af]">
-                  Rs. {product.price.toLocaleString("en-PK")}
-                </span>
-              </div>
-
-              <p className="mb-6 text-xs uppercase tracking-[0.2em] text-text-muted">
-                {product.brand}
-              </p>
-              <div className="mb-6">
-                <StatusBadge status={product.status} />
-              </div>
-
-              <AnimatedCTALink
-                href={`/shop/${product.slug}`}
-                className="w-full border border-[#494542] py-4 text-center display-kicker tracking-widest"
+              <div
+                suppressHydrationWarning
+                className="relative aspect-square w-full overflow-hidden bg-[#0E0E0E]"
               >
-                VIEW SPECS
-              </AnimatedCTALink>
-            </div>
-          </article>
-        ))}
-      </div>
+                <Image
+                  src={product.images[0]}
+                  alt={product.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-contain p-4 md:p-6 grayscale transition-all duration-500 group-hover:grayscale-0"
+                />
+              </div>
+
+              <div className="p-8">
+                <div className="mb-4 flex items-start justify-between gap-3">
+                  <h3 className="display-kicker text-3xl leading-none">{product.name}</h3>
+                  <span className="technical-label text-[10px] text-[#ffb3af]">
+                    Rs. {product.price.toLocaleString("en-PK")}
+                  </span>
+                </div>
+
+                <p className="mb-6 text-xs uppercase tracking-[0.2em] text-text-muted">
+                  {product.brand}
+                </p>
+                <div className="mb-6">
+                  <StatusBadge status={product.status} />
+                </div>
+
+                <AnimatedCTALink
+                  href={`/shop/${product.slug}`}
+                  className="w-full border border-[#494542] py-4 text-center display-kicker tracking-widest"
+                >
+                  VIEW SPECS
+                </AnimatedCTALink>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

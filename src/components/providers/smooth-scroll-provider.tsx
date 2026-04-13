@@ -3,6 +3,7 @@
 import * as React from "react";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { ScrollTrigger } from "@/lib/gsap-config";
 
 type SmoothScrollProviderProps = {
   children: React.ReactNode;
@@ -25,7 +26,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
 
     const mm = gsap.matchMedia();
 
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+    mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+      wrapperRef.current?.setAttribute("data-smooth", "active");
       ScrollSmoother.create({
         wrapper: wrapperRef.current!,
         content: contentRef.current!,
@@ -36,13 +38,17 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         effects: false,
         smoothTouch: 0.1,
       });
+      // Ensure ScrollTrigger measurements are recalculated after smoother bootstraps.
+      requestAnimationFrame(() => ScrollTrigger.refresh());
 
       return () => {
         ScrollSmoother.get()?.kill();
+        wrapperRef.current?.removeAttribute("data-smooth");
       };
     });
 
     return () => {
+      wrapperRef.current?.removeAttribute("data-smooth");
       mm.revert();
     };
   }, [isMounted]);

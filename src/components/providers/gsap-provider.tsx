@@ -22,6 +22,7 @@ if (typeof window !== "undefined") {
     ScrambleTextPlugin,
     TextPlugin
   );
+  ScrollTrigger.normalizeScroll(true);
 }
 
 export function GSAPProvider({ children }: { children: React.ReactNode }) {

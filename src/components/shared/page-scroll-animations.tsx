@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { useGSAP } from "@gsap/react";
 
 type PageScrollAnimationsProps = {

@@ -1,148 +1,120 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
+import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap-config";
 
-const DIAGNOSTICS = [
-  { label: "FRAME DATABASE", status: "OK" },
-  { label: "CUSTOMISATION ENGINE", status: "READY" },
-  { label: "PAYMENT GATEWAY", status: "SECURE" },
-  { label: "BUILD NO. FC-2025-001", status: "LOADED" },
-];
+export const SITE_LOADER_DONE_EVENT = "frameclub:site-loader-done";
+const SITE_LOADER_DONE_FLAG = "__frameClubLoaderDone";
+
+declare global {
+  interface Window {
+    __frameClubLoaderDone?: boolean;
+  }
+}
 
 export function SiteLoader() {
-  const [shouldShow, setShouldShow] = React.useState<boolean | null>(null);
-  const [done, setDone] = React.useState(false);
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const labelRef = React.useRef<HTMLParagraphElement>(null);
+  const headlineRef = React.useRef<HTMLParagraphElement>(null);
+  const barContainerRef = React.useRef<HTMLDivElement>(null);
+  const barRef = React.useRef<HTMLDivElement>(null);
 
-  const overlayRef = React.useRef<HTMLDivElement>(null);
-  const logoRef = React.useRef<HTMLDivElement>(null);
-  const progressBarRef = React.useRef<HTMLDivElement>(null);
-  const lineRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+  useGSAP(
+    () => {
+      const el = rootRef.current;
+      const label = labelRef.current;
+      const headline = headlineRef.current;
+      const barContainer = barContainerRef.current;
+      const bar = barRef.current;
+      if (!el || !label || !headline || !barContainer || !bar) return;
+      if (typeof window === "undefined") return;
 
-  React.useEffect(() => {
-    const seen = sessionStorage.getItem("fc-loader-shown");
-    if (seen) {
-      setShouldShow(false);
-      return;
-    }
-    sessionStorage.setItem("fc-loader-shown", "1");
-    setShouldShow(true);
-  }, []);
+      const hideLoader = () => {
+        gsap.set(el, { autoAlpha: 0, pointerEvents: "none" });
+      };
 
-  React.useEffect(() => {
-    if (!shouldShow) return;
+      const markDoneAndDispatch = () => {
+        window[SITE_LOADER_DONE_FLAG] = true;
+        window.dispatchEvent(new Event(SITE_LOADER_DONE_EVENT));
+      };
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setDone(true);
-      return;
-    }
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        hideLoader();
+        markDoneAndDispatch();
+        return;
+      }
 
-    const tl = gsap.timeline({
-      paused: true,
-      onComplete: () => {
-        setTimeout(() => {
-          if (!overlayRef.current) return;
-          gsap.fromTo(
-            overlayRef.current,
-            { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" },
-            {
-              clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)",
-              duration: 0.65,
-              ease: "power4.inOut",
-              onComplete: () => setDone(true),
-            }
-          );
-        }, 300);
-      },
-    });
+      gsap.set(el, {
+        autoAlpha: 1,
+        pointerEvents: "auto",
+        clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+      });
+      gsap.set([label, headline, barContainer], { autoAlpha: 0 });
+      gsap.set(bar, { scaleX: 0, transformOrigin: "left center" });
 
-    if (logoRef.current) {
-      tl.fromTo(
-        logoRef.current,
-        { opacity: 0, x: -24 },
-        { opacity: 1, x: 0, duration: 0.6, ease: "expo.out" }
-      );
-    }
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.out" },
+        onComplete: () => {
+          gsap.set(el, {
+            autoAlpha: 0,
+            pointerEvents: "none",
+            clearProps: "clipPath",
+          });
+          markDoneAndDispatch();
+        },
+      });
 
-    lineRefs.current.forEach((el, i) => {
-      if (!el) return;
-      tl.fromTo(
-        el,
-        { opacity: 0, x: 12 },
-        { opacity: 1, x: 0, duration: 0.28, ease: "expo.out" },
-        0.35 + i * 0.18
-      );
-    });
+      tl.addLabel("intro")
+        .to(label, { autoAlpha: 1, y: 0, duration: 0.4 }, "intro")
+        .to(headline, { autoAlpha: 1, y: 0, duration: 0.5 }, "intro+=0.15")
+        .to(barContainer, { autoAlpha: 1, duration: 0.3 }, "intro+=0.4")
+        .addLabel("load", "+=0.2")
+        .to(bar, { scaleX: 1, duration: 0.9, ease: "power2.inOut" }, "load")
+        .addLabel("exit", "+=0.15")
+        .to(
+          el,
+          {
+            clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
+            duration: 0.5,
+            ease: "power4.inOut",
+          },
+          "exit"
+        );
 
-    if (progressBarRef.current) {
-      tl.fromTo(
-        progressBarRef.current,
-        { width: "0%" },
-        { width: "100%", duration: 0.65, ease: "none" },
-        1.05
-      );
-    }
-
-    tl.play();
-
-    return () => {
-      tl.pause();
-    };
-  }, [shouldShow]);
-
-  if (shouldShow === null || !shouldShow || done) return null;
+      return () => {
+        tl.kill();
+      };
+    },
+    { scope: rootRef }
+  );
 
   return (
     <div
-      ref={overlayRef}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#030303]"
+      ref={rootRef}
+      className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-bg-recessed px-6 text-center will-change-[clip-path]"
       aria-hidden="true"
     >
-      <div
-        ref={logoRef}
-        className="flex items-center gap-3 mb-14"
-        style={{ opacity: 0 }}
-      >
-        <Image
-          src="/FrameClub.png"
-          alt="The Frame Club"
-          width={36}
-          height={36}
-          className="object-contain"
-          priority
-        />
-        <span className="display-kicker text-2xl text-text-primary tracking-[0.18em]">
-          THE FRAME CLUB
-        </span>
-      </div>
-
-      <div className="w-full max-w-xs space-y-3 px-6">
-        {DIAGNOSTICS.map((line, i) => (
+      <div className="flex flex-col items-center justify-center gap-4">
+        <p
+          ref={labelRef}
+          className="technical-label translate-y-2 text-[10px] uppercase tracking-[0.35em] text-text-muted"
+        >
+          Frame Club Pakistan
+        </p>
+        <p
+          ref={headlineRef}
+          className="display-kicker translate-y-4 text-4xl tracking-[0.12em] text-text-primary sm:text-5xl md:text-6xl"
+        >
+          WHERE SPEED MEETS ART
+        </p>
+        <div
+          ref={barContainerRef}
+          className="mt-8 h-[2px] w-48 overflow-hidden bg-border-dark sm:w-56"
+        >
           <div
-            key={line.label}
-            ref={(el) => {
-              lineRefs.current[i] = el;
-            }}
-            className="flex items-center justify-between"
-            style={{ opacity: 0 }}
-          >
-            <span className="technical-label text-[9px] text-text-muted tracking-[0.16em]">
-              {line.label}
-            </span>
-            <span className="technical-label text-[9px] text-brand-bright tracking-[0.16em]">
-              {line.status}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-10 w-full max-w-xs px-6">
-        <div className="h-px w-full bg-[#1C1B1B]">
-          <div
-            ref={progressBarRef}
-            className="h-full bg-brand-mid"
-            style={{ width: "0%" }}
+            ref={barRef}
+            className="h-full w-full origin-left scale-x-0 bg-brand-bright will-change-transform"
           />
         </div>
       </div>

@@ -4,11 +4,9 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
-import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -16,13 +14,20 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { FullscreenNav } from "@/components/layout/fullscreen-nav";
 import { SiteTicker } from "@/components/layout/site-ticker";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const navItems = [
   { href: "/shop", label: "Collection" },
   { href: "/about", label: "Story" },
   { href: "/contact", label: "Contact" },
+];
+
+const mobileNavItems = [
+  { href: "/#collection-section", label: "Explore", number: "01" },
+  { href: "/shop", label: "Collection", number: "02" },
+  { href: "/about", label: "Story", number: "03" },
+  { href: "/contact", label: "Contact", number: "04" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -35,10 +40,14 @@ export function SiteHeader() {
   const navRowRef = React.useRef<HTMLDivElement | null>(null);
   const logoRef = React.useRef<HTMLAnchorElement | null>(null);
   const tickerWrapRef = React.useRef<HTMLDivElement | null>(null);
-  const sheetContentRef = React.useRef<HTMLDivElement | null>(null);
+  const mobileToggleRef = React.useRef<HTMLButtonElement | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const [headerReady, setHeaderReady] = React.useState(false);
   const exploreActive = pathname === "/";
+
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
 
   const handleExploreClick = React.useCallback(
     (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -183,21 +192,24 @@ export function SiteHeader() {
 
   useGSAP(
     () => {
-      if (!mobileNavOpen || !sheetContentRef.current) return;
+      if (!mobileToggleRef.current) return;
 
-      gsap.fromTo(
-        "[data-mobile-nav-item]",
-        { x: 24, autoAlpha: 0 },
-        {
-          x: 0,
-          autoAlpha: 1,
-          duration: 0.35,
-          ease: "power3.out",
-          stagger: 0.07,
-        }
-      );
+      const [topBar, midBar, bottomBar] = gsap.utils.toArray<HTMLElement>("[data-hamburger-bar]");
+      if (!topBar || !midBar || !bottomBar) return;
+
+      const tl = gsap.timeline({ defaults: { duration: 0.28, ease: "power2.out" } });
+      if (mobileNavOpen) {
+        tl.to(topBar, { y: 6, rotation: 45 }, 0)
+          .to(midBar, { autoAlpha: 0, scaleX: 0, duration: 0.2 }, 0)
+          .to(bottomBar, { y: -6, rotation: -45 }, 0);
+        return;
+      }
+
+      tl.to(topBar, { y: 0, rotation: 0 }, 0)
+        .to(midBar, { autoAlpha: 1, scaleX: 1, duration: 0.2 }, 0)
+        .to(bottomBar, { y: 0, rotation: 0 }, 0);
     },
-    { scope: sheetContentRef, dependencies: [mobileNavOpen] }
+    { scope: mobileToggleRef, dependencies: [mobileNavOpen] }
   );
 
   return (
@@ -276,58 +288,35 @@ export function SiteHeader() {
             <span className="hidden md:inline">ORDER NOW</span>
           </Button>
 
-          <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-            <SheetTrigger
-              render={<Button variant="ghost" size="icon" className="md:hidden" aria-label="Open navigation menu" />}
-            >
-              <Menu className="h-5 w-5" strokeWidth={1.5} />
-            </SheetTrigger>
-            <SheetContent
-              ref={sheetContentRef}
-              side="right"
-              className="w-full max-w-sm border-l border-border-dark bg-bg-recessed"
-            >
-              <SheetTitle className="display-kicker text-3xl" data-mobile-nav-item>
-                NAVIGATION
-              </SheetTitle>
-              <nav className="mt-5 flex flex-col gap-3">
-                <Button
-                  render={<Link href="/#collection-section" onClick={handleExploreClick} />}
-                  variant="outline"
-                  data-mobile-nav-item
-                  className="display-kicker w-full justify-start"
-                >
-                  Explore
-                </Button>
-                {navItems.map((item) => {
-                  const active = isActive(pathname, item.href);
-
-                  return (
-                    <Button
-                      key={item.href}
-                      render={<Link href={item.href} />}
-                      variant={active ? "brand" : "outline"}
-                      data-mobile-nav-item
-                      className="display-kicker w-full justify-start"
-                    >
-                      {item.label}
-                    </Button>
-                  );
-                })}
-
-                <Button
-                  render={<Link href="/shop" />}
-                  variant="brand"
-                  data-mobile-nav-item
-                  className="display-kicker mt-2 w-full"
-                >
-                  ORDER NOW
-                </Button>
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <Button
+            ref={mobileToggleRef}
+            variant="ghost"
+            size="icon"
+            className="relative md:hidden"
+            aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileNavOpen}
+            onClick={() => setMobileNavOpen((previous) => !previous)}
+          >
+            <span className="sr-only">Toggle navigation</span>
+            <span
+              data-hamburger-bar
+              className="absolute h-[1.5px] w-5 bg-text-primary"
+              style={{ transform: "translateY(-6px)" }}
+            />
+            <span data-hamburger-bar className="absolute h-[1.5px] w-5 bg-text-primary" />
+            <span
+              data-hamburger-bar
+              className="absolute h-[1.5px] w-5 bg-text-primary"
+              style={{ transform: "translateY(6px)" }}
+            />
+          </Button>
         </div>
       </div>
+      <FullscreenNav
+        isOpen={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+        navItems={mobileNavItems}
+      />
     </header>
   );
 }

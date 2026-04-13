@@ -8,7 +8,6 @@ const footerNavItems = [
   { href: "/shop", label: "Collection" },
   { href: "/about", label: "Story" },
   { href: "/contact", label: "Contact" },
-  { href: "/admin/login", label: "Admin" },
 ];
 
 export function SiteFooter() {

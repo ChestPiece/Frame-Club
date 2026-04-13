@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { productDiecastImages } from "@/lib/diecast-assets";
 import type { Tables } from "@/lib/supabase/database.types";
 import type { Product, ProductStatus } from "@/lib/types";
 
@@ -12,7 +13,8 @@ function toProduct(row: ProductRow, backgrounds: CustomizationRow[] = []): Produ
     name: row.name,
     brand: row.brand,
     description: row.description ?? "",
-    images: row.images ?? [],
+    // Temporary: local diecast shots until per-product media is in Supabase
+    images: productDiecastImages(),
     price: row.price,
     status: (row.status as ProductStatus) ?? "available",
     deliveryDays: row.delivery_days ?? 7,
@@ -27,19 +29,25 @@ function toProduct(row: ProductRow, backgrounds: CustomizationRow[] = []): Produ
 }
 
 export async function getProducts(status?: ProductStatus): Promise<Product[]> {
-  const supabase = await createClient();
-  let query = supabase.from("products").select("*").order("created_at", { ascending: false });
+  try {
+    const supabase = await createClient();
+    let query = supabase.from("products").select("*").order("created_at", { ascending: false });
 
-  if (status) {
-    query = query.eq("status", status);
+    if (status) {
+      query = query.eq("status", status);
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      console.error("Failed to fetch products:", error.message);
+      return [];
+    }
+
+    return (data ?? []).map((row) => toProduct(row));
+  } catch (error) {
+    console.error("Failed to fetch products:", error);
+    return [];
   }
-
-  const { data, error } = await query;
-  if (error) {
-    throw new Error(`Failed to fetch products: ${error.message}`);
-  }
-
-  return (data ?? []).map((row) => toProduct(row));
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {

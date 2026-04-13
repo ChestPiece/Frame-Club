@@ -1,5 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import type { Json, Tables } from "@/lib/supabase/database.types";
 import type {
   ContactSubmission,
@@ -23,6 +22,7 @@ type CreateOrderInput = {
 type WebhookInput = {
   orderId: string;
   paymentStatus: PaymentStatus;
+  paymentId?: string;
 };
 
 type CreateContactInput = {
@@ -143,7 +143,7 @@ export async function createOrder(input: CreateOrderInput) {
 }
 
 export async function getOrderById(id: string) {
-  const supabase = createAdminClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("orders")
     .select("*")
@@ -156,7 +156,7 @@ export async function getOrderById(id: string) {
 }
 
 export async function listOrders() {
-  const supabase = createAdminClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("orders")
     .select("*")
@@ -168,7 +168,7 @@ export async function listOrders() {
 }
 
 export async function getAdminStats() {
-  const supabase = createAdminClient();
+  const supabase = await createServiceClient();
   const { data: orders, error } = await supabase.from("orders").select("*");
 
   if (error || !orders) {
@@ -202,7 +202,7 @@ export async function applyWebhook(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: { supabaseClient?: any }
 ) {
-  const supabase = options?.supabaseClient ?? createAdminClient();
+  const supabase = options?.supabaseClient ?? (await createServiceClient());
   const { data: current, error: fetchError } = await supabase
     .from("orders")
     .select("order_status, payment_status")
@@ -227,6 +227,7 @@ export async function applyWebhook(
     .update({
       payment_status: input.paymentStatus,
       order_status: nextOrderStatus,
+      payfast_payment_id: input.paymentId ?? null,
     })
     .eq("id", input.orderId)
     .select()

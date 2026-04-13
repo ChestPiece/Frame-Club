@@ -56,18 +56,18 @@ export function FinalCTASection() {
         ))}
       </h2>
 
-      <p className="mx-auto mt-5 max-w-2xl text-sm text-[#f7dcda] mb-10">
+      <p className="mx-auto mt-5 max-w-2xl text-sm text-text-muted mb-10">
         Rs. 5,000. Fully customised. Delivered nationwide. Takes 2 minutes to order.
       </p>
 
       <AnimatedCTALink
         href="/shop"
-        className="inline-block bg-[#810c0c] text-[#F5F5F5] display-kicker text-2xl tracking-[0.2em] w-full md:w-auto px-8 md:px-16 py-4 md:py-6"
+        className="inline-block bg-[#810c0c] text-[#F5F5F5] shadow-[0_0_60px_rgba(56,3,6,0.3)] display-kicker text-2xl tracking-[0.2em] w-full md:w-auto px-8 md:px-16 py-4 md:py-6"
       >
         ORDER NOW
       </AnimatedCTALink>
 
-      <p className="mt-12 text-[10px] uppercase tracking-[0.3em] text-[#f1c0bc] display-kicker">
+      <p className="mt-12 text-[10px] uppercase tracking-[0.3em] text-text-muted display-kicker">
         NATIONWIDE DELIVERY · SECURE PAYMENT · HANDCRAFTED TO ORDER
       </p>
     </div>

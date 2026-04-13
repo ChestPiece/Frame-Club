@@ -129,7 +129,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        <main className="p-8">{children}</main>
+        <main id="main-content" className="p-8">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

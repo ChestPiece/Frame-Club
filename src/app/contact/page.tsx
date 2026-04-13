@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ContactForm } from "./contact-form";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
 import { PageScrollAnimations } from "@/components/shared/page-scroll-animations";
 import { Button } from "@/components/ui/button";
 import { WHATSAPP_LINK } from "@/lib/copy-constants";
@@ -16,8 +15,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
 
   return (
     <>
-      <SiteHeader />
-      <main className="pb-24 pt-30">
+      <main id="main-content" className="pb-24 pt-30">
         <PageScrollAnimations config="contact">
         <section data-animate-page="contact" className="border-b border-border-dark bg-bg-surface py-14">
           <div className="frame-container grid gap-8 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr]">

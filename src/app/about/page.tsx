@@ -1,12 +1,10 @@
 import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
 import { PageScrollAnimations } from "@/components/shared/page-scroll-animations";
 
 export default function AboutPage() {
   return (
     <>
-      <SiteHeader />
-      <main className="pb-24 pt-30">
+      <main id="main-content" className="pb-24 pt-30">
         <PageScrollAnimations config="about">
         <section data-animate-page="about" className="relative overflow-hidden border-b border-border-dark bg-bg-surface py-20">
           <div className="pointer-events-none absolute -right-28 top-0 h-80 w-80 bg-[radial-gradient(circle_at_top_right,rgba(56,3,6,0.35),transparent_70%)]" />

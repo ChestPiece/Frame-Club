@@ -1,26 +1,27 @@
-import type { Metadata } from "next";
-import { Bebas_Neue, Inter, Space_Grotesk } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { GSAPProvider } from "@/components/providers/gsap-provider";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteLoader } from "@/components/layout/site-loader";
+import { AppReveal } from "@/components/layout/app-reveal";
+import { TransitionProvider } from "@/components/layout/page-transition";
 
 const inter = Inter({
-  variable: "--font-inter",
+  variable: "--font-body",
   subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas",
+  variable: "--font-display",
   weight: "400",
   subsets: ["latin"],
-  preload: false,
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-technical",
-  subsets: ["latin"],
-  preload: false,
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -29,6 +30,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/FrameClub.png",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -40,11 +47,23 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("h-full", "antialiased", inter.variable, bebasNeue.variable, spaceGrotesk.variable, "font-sans")}
+      className={cn("h-full", "antialiased", inter.variable, bebasNeue.variable, "font-sans")}
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-bg-base text-text-primary">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-9999 focus:bg-brand focus:px-4 focus:py-2 focus:text-text-primary display-kicker"
+        >
+          Skip to main content
+        </a>
         <GSAPProvider>
-          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          <TransitionProvider>
+            <SiteLoader />
+            <AppReveal>
+              <SiteHeader />
+              <SmoothScrollProvider>{children}</SmoothScrollProvider>
+            </AppReveal>
+          </TransitionProvider>
         </GSAPProvider>
       </body>
     </html>

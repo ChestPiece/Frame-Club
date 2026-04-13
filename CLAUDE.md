@@ -14,7 +14,7 @@ Tagline: Where Speed Meets Art
 
 ## Tech Stack
 
-- **Framework:** Next.js 14 (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Database + Auth:** Supabase
 - **UI Components:** shadcn/ui (customized to match brand — override defaults aggressively)
 - **Styling:** Tailwind CSS + CSS custom properties

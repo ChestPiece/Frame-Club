@@ -3,7 +3,8 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { Layers, CarFront, FileText } from "lucide-react";
-import { gsap, ScrollTrigger } from "@/lib/gsap-config";
+import { gsap } from "@/lib/gsap-config";
+import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 
 
 export function CustomisationSection() {
@@ -11,6 +12,7 @@ export function CustomisationSection() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const obsessionRef = useRef<HTMLSpanElement>(null);
   const articleRefs = useRef<HTMLElement[]>([]);
+  const scrollTriggerReady = useScrollTriggerReady();
 
   const setArticleRef = (el: HTMLElement | null, index: number) => {
     if (el) articleRefs.current[index] = el;
@@ -18,8 +20,11 @@ export function CustomisationSection() {
 
   useGSAP(
     () => {
-      // Headline letter-spacing + OBSESSION color scrub
-      gsap.matchMedia().add("(min-width: 768px)", () => {
+      if (!scrollTriggerReady) return;
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 768px)", () => {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -38,9 +43,13 @@ export function CustomisationSection() {
           { color: "#C0392B", ease: "none", duration: 1 },
           0,
         );
+
+        return () => {
+          tl.scrollTrigger?.kill();
+          tl.kill();
+        };
       });
 
-      // Feature columns stagger in
       if (articleRefs.current.length > 0) {
         gsap.fromTo(
           articleRefs.current,
@@ -59,8 +68,10 @@ export function CustomisationSection() {
           },
         );
       }
+
+      return () => mm.revert();
     },
-    { scope: sectionRef },
+    { scope: sectionRef, dependencies: [scrollTriggerReady] },
   );
 
   return (

@@ -33,9 +33,13 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         return;
       }
 
-      // Leave: brand-red panel sweeps in from left edge
+      const overlay = overlayRef.current;
+      if (!overlay) return;
+
+      gsap.killTweensOf(overlay);
+
       gsap.fromTo(
-        overlayRef.current,
+        overlay,
         { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)" },
         {
           clipPath: "polygon(0 0, 110% 0, 110% 100%, 0 100%)",
@@ -45,10 +49,10 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
             enteringRef.current = true;
             router.push(href);
           },
-        }
+        },
       );
     },
-    [pathname, router]
+    [pathname, router],
   );
 
   // Enter: panel exits to the right when new pathname resolves
@@ -56,12 +60,17 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     if (!enteringRef.current) return;
     enteringRef.current = false;
 
-    gsap.to(overlayRef.current, {
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+
+    gsap.killTweensOf(overlay);
+
+    gsap.to(overlay, {
       clipPath: "polygon(110% 0, 110% 0, 110% 100%, 110% 100%)",
       duration: 0.45,
       ease: "power4.inOut",
       onComplete: () => {
-        gsap.set(overlayRef.current, {
+        gsap.set(overlay, {
           clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)",
         });
       },

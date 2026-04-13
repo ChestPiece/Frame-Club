@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap-config";
+import { gsap } from "@/lib/gsap-config";
+import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { AnimatedCTALink } from "@/components/shared/animated-cta-link";
 
 
@@ -12,9 +13,12 @@ const headlineWords = ["READY", "TO", "FRAME", "YOUR", "OBSESSION?"];
 export function FinalCTASection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
+  const scrollTriggerReady = useScrollTriggerReady();
 
   useGSAP(
     () => {
+      if (!scrollTriggerReady) return;
+
       const words = headlineRef.current?.querySelectorAll("[data-word]");
       if (!words || words.length === 0) return;
 
@@ -35,7 +39,7 @@ export function FinalCTASection() {
         },
       );
     },
-    { scope: sectionRef },
+    { scope: sectionRef, dependencies: [scrollTriggerReady] },
   );
 
   return (

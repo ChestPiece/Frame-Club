@@ -1,4 +1,6 @@
 import { Edit2 } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button";
 import {
   Table,

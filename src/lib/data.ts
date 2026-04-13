@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/server";
 import { productDiecastImages } from "@/lib/diecast-assets";
 import type { Tables } from "@/lib/supabase/database.types";
 import type { Product, ProductStatus } from "@/lib/types";
@@ -30,7 +30,7 @@ function toProduct(row: ProductRow, backgrounds: CustomizationRow[] = []): Produ
 
 export async function getProducts(status?: ProductStatus): Promise<Product[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     let query = supabase.from("products").select("*").order("created_at", { ascending: false });
 
     if (status) {
@@ -51,7 +51,7 @@ export async function getProducts(status?: ProductStatus): Promise<Product[]> {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase.from("products").select("*").eq("slug", slug).single();
 
   if (error) {
@@ -73,7 +73,7 @@ export async function getProductBySlug(slug: string): Promise<Product | undefine
 }
 
 export async function getRelatedProducts(slug: string): Promise<Product[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase.from("products").select("*").neq("slug", slug).limit(3);
 
   if (error) {

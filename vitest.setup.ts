@@ -1,4 +1,18 @@
+import React from "react";
 import { vi } from "vitest";
+
+vi.mock("@/components/providers/scroll-trigger-environment", () => ({
+  ScrollTriggerEnvironmentProvider: ({ children }: { children: React.ReactNode }) =>
+    React.createElement(React.Fragment, null, children),
+  useScrollTriggerEnvironment: () => ({
+    scrollLayoutReady: true,
+    appShellVisible: true,
+    animationsReady: true,
+    setScrollLayoutReady: vi.fn(),
+    setAppShellVisible: vi.fn(),
+  }),
+  useScrollTriggerReady: () => true,
+}));
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,

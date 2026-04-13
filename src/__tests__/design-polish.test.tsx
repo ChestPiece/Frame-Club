@@ -94,6 +94,9 @@ vi.mock("@/lib/gsap-config", () => ({
   gsap: {
     fromTo: vi.fn(() => ({ kill: vi.fn() })),
     to: vi.fn(() => ({ kill: vi.fn() })),
+    killTweensOf: vi.fn(),
+    set: vi.fn(),
+    timeline: vi.fn(() => ({ add: vi.fn(), play: vi.fn(), kill: vi.fn() })),
   },
   ScrollTrigger: {},
 }));

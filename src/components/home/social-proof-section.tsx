@@ -2,7 +2,8 @@
 
 import { useRef, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap-config";
+import { gsap } from "@/lib/gsap-config";
+import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 
 type Testimonial = {
   quote: string;
@@ -18,6 +19,7 @@ export function SocialProofSection({ testimonials }: SocialProofSectionProps) {
   const gridRef = useRef<HTMLDivElement>(null);
   const counterSpanRef = useRef<HTMLSpanElement>(null);
   const cardRefs = useRef<HTMLElement[]>([]);
+  const scrollTriggerReady = useScrollTriggerReady();
 
   const setCardRef = useCallback((el: HTMLElement | null, index: number) => {
     if (el) cardRefs.current[index] = el;
@@ -25,6 +27,8 @@ export function SocialProofSection({ testimonials }: SocialProofSectionProps) {
 
   useGSAP(
     () => {
+      if (!scrollTriggerReady) return;
+
       // Counter animation
       if (counterSpanRef.current) {
         const counter = { value: 0 };
@@ -66,7 +70,7 @@ export function SocialProofSection({ testimonials }: SocialProofSectionProps) {
         );
       }
     },
-    { scope: sectionRef }
+    { scope: sectionRef, dependencies: [scrollTriggerReady, testimonials] }
   );
 
   return (

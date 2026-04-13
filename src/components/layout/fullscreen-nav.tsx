@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap-config";
 
 export type NavItem = {
@@ -20,7 +21,6 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
   const overlayRef = React.useRef<HTMLDivElement>(null);
   const itemWrapperRefs = React.useRef<(HTMLDivElement | null)[]>([]);
   const ctaWrapperRef = React.useRef<HTMLDivElement>(null);
-  const isAnimating = React.useRef(false);
 
   React.useEffect(() => {
     if (!isOpen) return;
@@ -38,74 +38,59 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
     };
   }, [isOpen]);
 
-  React.useEffect(() => {
-    const overlay = overlayRef.current;
-    if (!overlay || isAnimating.current) return;
+  useGSAP(
+    () => {
+      const overlay = overlayRef.current;
+      if (!overlay) return;
 
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    const validItems = itemWrapperRefs.current.filter(
-      Boolean
-    ) as HTMLDivElement[];
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const validItems = itemWrapperRefs.current.filter(Boolean) as HTMLDivElement[];
 
-    if (isOpen) {
-      overlay.style.display = "flex";
-      isAnimating.current = true;
+      if (isOpen) {
+        overlay.style.display = "flex";
 
-      if (prefersReduced) {
-        overlay.style.opacity = "1";
-        validItems.forEach((el) => {
-          el.style.opacity = "1";
-        });
-        if (ctaWrapperRef.current) ctaWrapperRef.current.style.opacity = "1";
-        isAnimating.current = false;
+        if (prefersReduced) {
+          gsap.set(overlay, { opacity: 1 });
+          validItems.forEach((el) => {
+            gsap.set(el, { opacity: 1 });
+          });
+          if (ctaWrapperRef.current) gsap.set(ctaWrapperRef.current, { opacity: 1 });
+          return;
+        }
+
+        const tl = gsap.timeline();
+        tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" });
+
+        if (validItems.length > 0) {
+          tl.fromTo(
+            validItems,
+            { y: 60, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, ease: "expo.out", stagger: 0.08 },
+            "-=0.05",
+          );
+        }
+
+        if (ctaWrapperRef.current) {
+          tl.fromTo(
+            ctaWrapperRef.current,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" },
+            "-=0.3",
+          );
+        }
+
         return;
       }
 
-      const tl = gsap.timeline({
-        paused: true,
-        onComplete: () => {
-          isAnimating.current = false;
-        },
-      });
-
-      tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" });
-
-      if (validItems.length > 0) {
-        tl.fromTo(
-          validItems,
-          { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: "expo.out", stagger: 0.08 },
-          "-=0.05"
-        );
-      }
-
-      if (ctaWrapperRef.current) {
-        tl.fromTo(
-          ctaWrapperRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" },
-          "-=0.3"
-        );
-      }
-
-      tl.play();
-    } else {
-      isAnimating.current = true;
-
       if (prefersReduced) {
-        overlay.style.opacity = "0";
+        gsap.set(overlay, { opacity: 0 });
         overlay.style.display = "none";
-        isAnimating.current = false;
         return;
       }
 
       const tl = gsap.timeline({
-        paused: true,
         onComplete: () => {
           overlay.style.display = "none";
-          isAnimating.current = false;
         },
       });
 
@@ -122,24 +107,19 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         tl.to(
           [...validItems].reverse(),
           { opacity: 0, y: 30, duration: 0.18, ease: "expo.in", stagger: 0.04 },
-          "-=0.1"
+          "-=0.1",
         );
       }
 
-      tl.to(
-        overlay,
-        { opacity: 0, duration: 0.15, ease: "power2.out" },
-        "-=0.05"
-      );
-
-      tl.play();
-    }
-  }, [isOpen]);
+      tl.to(overlay, { opacity: 0, duration: 0.15, ease: "power2.out" }, "-=0.05");
+    },
+    { scope: overlayRef, dependencies: [isOpen], revertOnUpdate: true },
+  );
 
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-90 flex-col bg-[#0E0E0E]"
+      className="fixed inset-0 z-90 flex flex-col bg-[#0E0E0E]"
       style={{ display: "none", opacity: 0 }}
       role="dialog"
       aria-modal="true"

@@ -2,7 +2,8 @@
 
 import { useRef, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap-config";
+import { gsap } from "@/lib/gsap-config";
+import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 
 const steps = [
   {
@@ -25,6 +26,7 @@ export function HowItWorksSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<HTMLElement[]>([]);
   const ghostRefs = useRef<HTMLDivElement[]>([]);
+  const scrollTriggerReady = useScrollTriggerReady();
 
   const setCardRef = useCallback((el: HTMLElement | null, index: number) => {
     if (el) cardRefs.current[index] = el;
@@ -35,8 +37,10 @@ export function HowItWorksSection() {
   }, []);
 
   const handleCardEnter = useCallback((index: number) => {
-    if (!ghostRefs.current[index]) return;
-    gsap.to(ghostRefs.current[index], {
+    const ghost = ghostRefs.current[index];
+    if (!ghost) return;
+    gsap.killTweensOf(ghost);
+    gsap.to(ghost, {
       opacity: 0.07,
       scale: 1.04,
       duration: 0.35,
@@ -45,8 +49,10 @@ export function HowItWorksSection() {
   }, []);
 
   const handleCardLeave = useCallback((index: number) => {
-    if (!ghostRefs.current[index]) return;
-    gsap.to(ghostRefs.current[index], {
+    const ghost = ghostRefs.current[index];
+    if (!ghost) return;
+    gsap.killTweensOf(ghost);
+    gsap.to(ghost, {
       opacity: 0.03,
       scale: 1,
       duration: 0.3,
@@ -56,7 +62,7 @@ export function HowItWorksSection() {
 
   useGSAP(
     () => {
-      if (cardRefs.current.length === 0) return;
+      if (!scrollTriggerReady || cardRefs.current.length === 0) return;
 
       gsap.fromTo(
         cardRefs.current,
@@ -75,7 +81,7 @@ export function HowItWorksSection() {
         }
       );
     },
-    { scope: sectionRef }
+    { scope: sectionRef, dependencies: [scrollTriggerReady] }
   );
 
   return (

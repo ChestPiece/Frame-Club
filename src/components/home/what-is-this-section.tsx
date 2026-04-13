@@ -2,18 +2,24 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap-config";
+import { gsap } from "@/lib/gsap-config";
+import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { ScrollReveal } from "@/components/home/scroll-reveal";
 
 
 export function WhatIsThisSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
+  const scrollTriggerReady = useScrollTriggerReady();
 
   useGSAP(
     () => {
-      gsap.matchMedia().add("(min-width: 768px)", () => {
-        gsap.to(headlineRef.current, {
+      if (!scrollTriggerReady) return;
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 768px)", () => {
+        const tween = gsap.to(headlineRef.current, {
           yPercent: -15,
           ease: "none",
           scrollTrigger: {
@@ -23,9 +29,16 @@ export function WhatIsThisSection() {
             scrub: 1.5,
           },
         });
+
+        return () => {
+          tween.scrollTrigger?.kill();
+          tween.kill();
+        };
       });
+
+      return () => mm.revert();
     },
-    { scope: sectionRef },
+    { scope: sectionRef, dependencies: [scrollTriggerReady] },
   );
 
   return (

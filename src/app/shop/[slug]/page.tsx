@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,9 +35,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
-      <SiteHeader />
-
-      <main className="pb-24">
+      <main id="main-content" className="pb-24">
         <section className="frame-container py-12">
           <nav className="mb-12 text-xs uppercase tracking-widest text-text-muted">
             <Link href="/" className="hover:text-text-primary">
@@ -77,7 +74,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         alt={`${product.name} ${index + 1}`}
                         fill
                         sizes="(max-width: 1024px) 33vw, 20vw"
-                        className={`object-cover ${
+                        className={`object-contain p-2 sm:p-3 ${
                           index === 0 ? "opacity-85" : "opacity-60 transition-opacity hover:opacity-100"
                         }`}
                       />
@@ -197,37 +194,39 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </section>
 
-        <section className="frame-container py-20">
-          <h2 className="display-kicker text-4xl leading-none sm:text-5xl md:text-6xl">YOU MIGHT ALSO LIKE</h2>
+        {related.length > 0 ? (
+          <section className="frame-container py-20">
+            <h2 className="display-kicker text-4xl leading-none sm:text-5xl md:text-6xl">YOU MIGHT ALSO LIKE</h2>
 
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-            {related.map((item) => (
-              <article key={item.id} className="group">
-                <div className="relative mb-5 aspect-4/5 overflow-hidden bg-bg-recessed">
-                  <Image
-                    src={item.images[0]}
-                    alt={item.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition duration-700 group-hover:scale-110"
-                  />
+            <div className="mt-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+              {related.map((item) => (
+                <article key={item.id} className="group">
+                  <div className="relative mb-5 aspect-4/5 overflow-hidden bg-bg-recessed">
+                    <Image
+                      src={item.images[0]}
+                      alt={item.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-contain p-6 transition duration-700"
+                    />
 
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/45 opacity-0 transition group-hover:opacity-100">
-                    <span className="display-kicker border border-bg-base bg-text-primary px-6 py-2 text-xs text-bg-base">
-                      VIEW FRAME
-                    </span>
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/45 opacity-0 transition group-hover:opacity-100">
+                      <span className="display-kicker border border-bg-base bg-text-primary px-6 py-2 text-xs text-bg-base">
+                        VIEW FRAME
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <h3 className="display-kicker text-3xl leading-none">{item.name}</h3>
-                <p className="mt-1 text-sm text-text-muted">Rs. {item.price.toLocaleString("en-PK")}</p>
-                <Link href={`/shop/${item.slug}`} className="sr-only">
-                  View {item.name}
-                </Link>
-              </article>
-            ))}
-          </div>
-        </section>
+                  <h3 className="display-kicker text-3xl leading-none">{item.name}</h3>
+                  <p className="mt-1 text-sm text-text-muted">Rs. {item.price.toLocaleString("en-PK")}</p>
+                  <Link href={`/shop/${item.slug}`} className="sr-only">
+                    View {item.name}
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </main>
 
       <SiteFooter />

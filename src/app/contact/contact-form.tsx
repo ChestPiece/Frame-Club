@@ -122,19 +122,19 @@ export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
       {!intentIsNotify ? (
         <div>
           <Input placeholder="FULL NAME" {...register("name")} />
-          {errors.name ? <p className="mt-2 text-xs text-[#f1a39d]">{errors.name.message}</p> : null}
+          {errors.name ? <p className="mt-2 text-xs text-error">{errors.name.message}</p> : null}
         </div>
       ) : null}
 
       <div>
         <Input placeholder="EMAIL" type="email" {...register("email")} />
-        {errors.email ? <p className="mt-2 text-xs text-[#f1a39d]">{errors.email.message}</p> : null}
+        {errors.email ? <p className="mt-2 text-xs text-error">{errors.email.message}</p> : null}
       </div>
 
       {!intentIsNotify ? (
         <div>
           <Textarea placeholder="MESSAGE" rows={4} {...register("message")} />
-          {errors.message ? <p className="mt-2 text-xs text-[#f1a39d]">{errors.message.message}</p> : null}
+          {errors.message ? <p className="mt-2 text-xs text-error">{errors.message.message}</p> : null}
         </div>
       ) : null}
 
@@ -147,8 +147,8 @@ export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
         {status === "loading" ? "Submitting" : intentIsNotify ? "Notify Me" : "Send Message"}
       </Button>
 
-      {status === "success" ? <p className="text-sm text-[#9bf0ba]">{message}</p> : null}
-      {status === "error" ? <p className="text-sm text-[#f1a39d]">{message}</p> : null}
+      {status === "success" ? <p className="text-sm text-success">{message}</p> : null}
+      {status === "error" ? <p className="text-sm text-error">{message}</p> : null}
     </form>
   );
 }

@@ -25,6 +25,7 @@ type CheckoutFormProps = {
   slug: string;
   background: string;
   notes: string;
+  initialValues?: Partial<CheckoutFormValues>;
 };
 
 const defaultState: CheckoutFormValues = {
@@ -35,7 +36,7 @@ const defaultState: CheckoutFormValues = {
   customerCity: "",
 };
 
-export function CheckoutForm({ product, slug, background, notes }: CheckoutFormProps) {
+export function CheckoutForm({ product, slug, background, notes, initialValues }: CheckoutFormProps) {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [payfastData, setPayfastData] = useState<{ url: string; data: Record<string, string> } | null>(null);
@@ -54,7 +55,7 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
     formState: { errors, isSubmitting },
   } = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
-    defaultValues: defaultState,
+    defaultValues: { ...defaultState, ...initialValues },
     mode: "onSubmit",
   });
 
@@ -84,7 +85,16 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
         }),
       });
 
-      type OrderPayload = { success: boolean; data?: { payfastUrl?: string; payfastData?: Record<string, string>; order?: { id: string } }; error?: { message: string } };
+      type OrderPayload = {
+        success: boolean;
+        data?: {
+          payfastUrl?: string;
+          payfastData?: Record<string, string>;
+          order?: { id: string };
+          orderAccessToken?: string;
+        };
+        error?: { message: string };
+      };
       const payload = (await response.json().catch(() => null)) as OrderPayload | null;
 
       if (!response.ok || !payload || !payload.success) {
@@ -102,7 +112,7 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
         return;
       }
 
-      const { payfastUrl, payfastData, order } = orderData;
+      const { payfastUrl, payfastData, order, orderAccessToken } = orderData;
 
       if (!payfastUrl || !payfastData) {
         // If PayFast config is missing on backend, fall back to mock
@@ -111,7 +121,10 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
           return;
         }
 
-        router.push(`/order/${order.id}`);
+        const orderUrl = orderAccessToken
+          ? `/order/${order.id}?token=${encodeURIComponent(orderAccessToken)}`
+          : `/order/${order.id}`;
+        router.push(orderUrl);
         return;
       }
 
@@ -137,14 +150,14 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
           </p>
         </div>
 
-        {submitError ? <p className="text-sm text-[#f1a39d]">{submitError}</p> : null}
+        {submitError ? <p className="text-sm text-error">{submitError}</p> : null}
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>
             <Label htmlFor="customerName">Full Name</Label>
             <Input id="customerName" {...register("customerName")} className="mt-2" />
             {errors.customerName ? (
-              <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerName.message}</p>
+              <p className="mt-2 text-xs text-error">{errors.customerName.message}</p>
             ) : null}
           </div>
 
@@ -152,7 +165,7 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
             <Label htmlFor="customerPhone">Phone Number</Label>
             <Input id="customerPhone" {...register("customerPhone")} className="mt-2" />
             {errors.customerPhone ? (
-              <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerPhone.message}</p>
+              <p className="mt-2 text-xs text-error">{errors.customerPhone.message}</p>
             ) : null}
           </div>
         </div>
@@ -161,7 +174,7 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
           <Label htmlFor="customerEmail">Email</Label>
           <Input id="customerEmail" type="email" {...register("customerEmail")} className="mt-2" />
           {errors.customerEmail ? (
-            <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerEmail.message}</p>
+            <p className="mt-2 text-xs text-error">{errors.customerEmail.message}</p>
           ) : null}
         </div>
 
@@ -169,7 +182,7 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
           <Label htmlFor="customerAddress">Delivery Address</Label>
           <Input id="customerAddress" {...register("customerAddress")} className="mt-2" />
           {errors.customerAddress ? (
-            <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerAddress.message}</p>
+            <p className="mt-2 text-xs text-error">{errors.customerAddress.message}</p>
           ) : null}
         </div>
 
@@ -178,7 +191,7 @@ export function CheckoutForm({ product, slug, background, notes }: CheckoutFormP
             <Label htmlFor="customerCity">City</Label>
             <Input id="customerCity" {...register("customerCity")} className="mt-2" />
             {errors.customerCity ? (
-              <p className="mt-2 text-xs text-[#f1a39d]">{errors.customerCity.message}</p>
+              <p className="mt-2 text-xs text-error">{errors.customerCity.message}</p>
             ) : null}
           </div>
 

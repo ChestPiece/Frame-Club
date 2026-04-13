@@ -1,6 +1,6 @@
 import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
 import { getProductBySlug } from "@/lib/data";
+import { getOrderById } from "@/lib/services";
 import { CheckoutForm } from "./checkout-form";
 
 type CheckoutPageProps = {
@@ -8,20 +8,21 @@ type CheckoutPageProps = {
     slug?: string;
     background?: string;
     notes?: string;
+    orderId?: string;
   }>;
 };
 
 export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
   const params = await searchParams;
-  const slug = params.slug ?? "";
-  const background = params.background ?? "carbon-grid";
-  const notes = params.notes ?? "";
+  const retryOrder = params.orderId ? await getOrderById(params.orderId) : null;
+  const slug = params.slug ?? retryOrder?.productSlug ?? "";
+  const background = params.background ?? retryOrder?.customization.background ?? "carbon-grid";
+  const notes = params.notes ?? retryOrder?.customization.notes ?? "";
   const product = await getProductBySlug(slug);
 
   return (
     <>
-      <SiteHeader />
-      <main className="pb-24">
+      <main id="main-content" className="pb-24">
         <section className="border-b border-border-dark bg-bg-surface py-14">
           <div className="frame-container">
             <p className="technical-label text-[10px] text-text-muted">Checkout</p>
@@ -34,7 +35,19 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         </section>
 
         <section className="frame-container py-14">
-          <CheckoutForm product={product} slug={slug} background={background} notes={notes} />
+          <CheckoutForm
+            product={product}
+            slug={slug}
+            background={background}
+            notes={notes}
+            initialValues={{
+              customerName: retryOrder?.customerName,
+              customerEmail: retryOrder?.customerEmail,
+              customerPhone: retryOrder?.customerPhone,
+              customerAddress: retryOrder?.customerAddress,
+              customerCity: retryOrder?.customerCity,
+            }}
+          />
         </section>
       </main>
       <SiteFooter />

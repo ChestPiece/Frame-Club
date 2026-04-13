@@ -39,6 +39,11 @@ export function SiteLoader() {
         window.dispatchEvent(new Event(SITE_LOADER_DONE_EVENT));
       };
 
+      if (window[SITE_LOADER_DONE_FLAG]) {
+        hideLoader();
+        return;
+      }
+
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         hideLoader();
         markDoneAndDispatch();
@@ -53,9 +58,12 @@ export function SiteLoader() {
       gsap.set([label, headline, barContainer], { autoAlpha: 0 });
       gsap.set(bar, { scaleX: 0, transformOrigin: "left center" });
 
+      let timelineCompleted = false;
+
       const tl = gsap.timeline({
         defaults: { ease: "power2.out" },
         onComplete: () => {
+          timelineCompleted = true;
           gsap.set(el, {
             autoAlpha: 0,
             pointerEvents: "none",
@@ -84,6 +92,10 @@ export function SiteLoader() {
 
       return () => {
         tl.kill();
+        if (!timelineCompleted && !window[SITE_LOADER_DONE_FLAG]) {
+          hideLoader();
+          markDoneAndDispatch();
+        }
       };
     },
     { scope: rootRef }

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { useGSAP } from "@gsap/react";
+import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 
 type PageScrollAnimationsProps = {
   children: React.ReactNode;
@@ -11,8 +12,11 @@ type PageScrollAnimationsProps = {
 
 export function PageScrollAnimations({ children, config }: PageScrollAnimationsProps) {
   const rootRef = React.useRef<HTMLDivElement | null>(null);
+  const scrollTriggerReady = useScrollTriggerReady();
 
   useGSAP(() => {
+    if (!scrollTriggerReady) return;
+
     const mm = gsap.matchMedia();
 
     mm.add(
@@ -45,7 +49,9 @@ export function PageScrollAnimations({ children, config }: PageScrollAnimationsP
         });
       }
     );
-  }, { scope: rootRef, dependencies: [config] });
+
+    return () => mm.revert();
+  }, { scope: rootRef, dependencies: [config, scrollTriggerReady] });
 
   return <div ref={rootRef}>{children}</div>;
 }

@@ -39,7 +39,7 @@ export default async function Home() {
     <>
       <main id="main-content" className="pb-0 pt-30">
         <HomeAnimations>
-          <section data-animate-section="hero" className="relative overflow-hidden bg-[#030303] min-h-screen flex items-center pt-20 texture-overlay">
+          <section data-animate-section="hero" className="relative overflow-hidden bg-[#030303] min-h-dvh flex items-center pt-20 texture-overlay">
             <div className="pointer-events-none absolute -left-48 -bottom-48 h-[60vw] w-[60vw] md:h-[800px] md:w-[800px] bg-[radial-gradient(circle_at_bottom_left,rgba(56,3,6,0.4),transparent_60%)]" />
             <div className="frame-container relative z-10 grid items-center gap-14 md:grid-cols-2">
               <div className="space-y-6">
@@ -73,7 +73,7 @@ export default async function Home() {
                     src={featuredProducts[0]?.images[0] ?? DIECAST_PRODUCT_IMAGES[0]}
                     alt={featuredProducts[0]?.name ?? "Featured frame"}
                     fill
-                    priority
+                    preload
                     fetchPriority="high"
                     loading="eager"
                     sizes="(max-width: 768px) 100vw, 50vw"

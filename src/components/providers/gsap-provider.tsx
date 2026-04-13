@@ -22,7 +22,8 @@ if (typeof window !== "undefined") {
     ScrambleTextPlugin,
     TextPlugin
   );
-  ScrollTrigger.normalizeScroll(true);
+  // ScrollSmoother owns scroll normalization; normalizeScroll(true) breaks trigger measurement and batch onEnter.
+  ScrollTrigger.normalizeScroll(false);
 }
 
 export function GSAPProvider({ children }: { children: React.ReactNode }) {

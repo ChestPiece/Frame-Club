@@ -42,6 +42,20 @@
     font-family: var(--font-body);
   }
 
+  /* ScrollSmoother sets inline layout when active; scope overflow to active only to avoid clipping when smoother is off */
+  #smooth-wrapper[data-smooth="active"] {
+    overflow: hidden;
+  }
+
+  #smooth-wrapper:not([data-smooth="active"]) {
+    overflow: visible;
+  }
+
+  #smooth-content {
+    overflow: visible;
+    width: 100%;
+  }
+
   a {
     color: inherit;
   }

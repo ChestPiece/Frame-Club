@@ -19,11 +19,13 @@ export function AnimatedCTALink({
 
   const handleMouseEnter = useCallback(() => {
     if (!fillRef.current) return;
+    gsap.killTweensOf(fillRef.current);
     gsap.to(fillRef.current, { scaleX: 1, duration: 0.28, ease: "expo.out" });
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     if (!fillRef.current) return;
+    gsap.killTweensOf(fillRef.current);
     gsap.to(fillRef.current, { scaleX: 0, duration: 0.22, ease: "expo.in" });
   }, []);
 

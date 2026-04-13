@@ -3,6 +3,7 @@ import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
+import { ScrollTriggerEnvironmentProvider } from "@/components/providers/scroll-trigger-environment";
 import { GSAPProvider } from "@/components/providers/gsap-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteLoader } from "@/components/layout/site-loader";
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   title: "The Frame Club",
   description: "Where Speed Meets Art",
   icons: {
-    icon: "/FrameClub.png",
+    icon: "/Assets/FrameClub.png",
   },
 };
 
@@ -58,11 +59,13 @@ export default function RootLayout({
         </a>
         <GSAPProvider>
           <TransitionProvider>
-            <SiteLoader />
-            <AppReveal>
-              <SiteHeader />
-              <SmoothScrollProvider>{children}</SmoothScrollProvider>
-            </AppReveal>
+            <ScrollTriggerEnvironmentProvider>
+              <SiteLoader />
+              <AppReveal>
+                <SiteHeader />
+                <SmoothScrollProvider>{children}</SmoothScrollProvider>
+              </AppReveal>
+            </ScrollTriggerEnvironmentProvider>
           </TransitionProvider>
         </GSAPProvider>
       </body>

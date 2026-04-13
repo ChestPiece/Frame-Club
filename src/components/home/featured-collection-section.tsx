@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap-config";
+import { gsap } from "@/lib/gsap-config";
+import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { AnimatedCTALink } from "@/components/shared/animated-cta-link";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -18,6 +19,7 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
   const sectionRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<HTMLElement[]>([]);
+  const scrollTriggerReady = useScrollTriggerReady();
 
   const setCardRef = (el: HTMLElement | null, index: number) => {
     if (el) cardRefs.current[index] = el;
@@ -25,7 +27,7 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
 
   useGSAP(
     () => {
-      if (cardRefs.current.length === 0) return;
+      if (!scrollTriggerReady || cardRefs.current.length === 0) return;
 
       gsap.fromTo(
         cardRefs.current,
@@ -45,7 +47,7 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
         },
       );
     },
-    { scope: sectionRef },
+    { scope: sectionRef, dependencies: [scrollTriggerReady, products] },
   );
 
   return (

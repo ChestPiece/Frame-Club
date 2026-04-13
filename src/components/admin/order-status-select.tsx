@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
+import { useState } from 'react'
 import {
   Select,
   SelectContent,
@@ -33,33 +34,42 @@ export function OrderStatusSelect({
   productSlug: string
 }) {
   const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
 
   return (
-    <Select
-      disabled={isPending}
-      defaultValue={currentStatus}
-      onValueChange={(value) => {
-        startTransition(async () => {
-          await updateOrderStatus(
-            orderId,
-            value as OrderStatus,
-            customerEmail,
-            orderNumber,
-            productSlug
-          )
-        })
-      }}
-    >
-      <SelectTrigger className="w-full">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {orderStatusOptions.map((status) => (
-          <SelectItem key={status} value={status}>
-            {status}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="space-y-1">
+      <Select
+        disabled={isPending}
+        defaultValue={currentStatus}
+        onValueChange={(value) => {
+          setError(null)
+          startTransition(async () => {
+            const result = await updateOrderStatus(
+              orderId,
+              value as OrderStatus,
+              customerEmail,
+              orderNumber,
+              productSlug
+            )
+
+            if (!result.success) {
+              setError(result.error ?? "Failed to update order status.")
+            }
+          })
+        }}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {orderStatusOptions.map((status) => (
+            <SelectItem key={status} value={status}>
+              {status}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {error ? <p className="text-[10px] text-error">{error}</p> : null}
+    </div>
   )
 }

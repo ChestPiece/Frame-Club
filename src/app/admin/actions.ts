@@ -1,13 +1,36 @@
 'use server'
 
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { OrderStatus, ProductStatus } from '@/lib/types'
 import { sendStatusUpdate } from '@/lib/emails/send'
 import { getOrderById } from '@/lib/services'
 
+async function assertAdminSession() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { ok: false as const, error: 'UNAUTHORIZED' }
+  }
+
+  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase()
+  if (adminEmail && user.email?.toLowerCase() !== adminEmail) {
+    return { ok: false as const, error: 'FORBIDDEN' }
+  }
+
+  return { ok: true as const }
+}
+
 export async function updateOrderStatus(orderId: string, status: OrderStatus, _customerEmail: string, _orderNumber: string, productSlug: string) {
-  const supabase = createAdminClient()
+  const auth = await assertAdminSession()
+  if (!auth.ok) {
+    return { success: false, error: auth.error }
+  }
+
+  const supabase = await createServiceClient()
 
   const { data, error } = await supabase
     .from('orders')
@@ -41,7 +64,12 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus, _c
 }
 
 export async function updateProductStatus(productId: string, status: ProductStatus) {
-  const supabase = createAdminClient()
+  const auth = await assertAdminSession()
+  if (!auth.ok) {
+    return { success: false, error: auth.error }
+  }
+
+  const supabase = await createServiceClient()
 
   const { error } = await supabase
     .from('products')

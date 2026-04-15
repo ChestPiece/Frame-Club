@@ -23,14 +23,14 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
   return (
     <>
       <main id="main-content" className="pb-24">
-        <section className="border-b border-border-dark bg-bg-surface py-14">
+        <section className="border-b border-border bg-bg-surface py-14">
           <div className="frame-container">
             <p className="technical-label text-[10px] text-text-muted">Checkout</p>
             <h1 className="display-kicker mt-4 text-4xl leading-none sm:text-5xl md:text-8xl">COMPLETE YOUR ORDER</h1>
             <p className="mt-4 max-w-2xl text-sm text-text-muted">
               Confirm your frame details, complete shipping information, and proceed to PayFast.
             </p>
-            <p className="mt-3 text-[10px] uppercase tracking-[0.16em] text-[#f5c4c1]">No COD. Full upfront payment only.</p>
+            <p className="mt-3 text-[10px] uppercase tracking-[0.16em] text-text-accent">No COD. Full upfront payment only.</p>
           </div>
         </section>
 

@@ -225,7 +225,7 @@ export function SiteHeader() {
     <header ref={rootRef} className="fixed inset-x-0 top-0 z-40 bg-(--bg-nav) backdrop-blur-xl">
       <div
         ref={headerTintRef}
-        className="pointer-events-none absolute inset-0 z-0 bg-bg-recessed opacity-0"
+        className="pointer-events-none absolute inset-0 z-0 bg-bg-deep opacity-0"
         aria-hidden
       />
       <div

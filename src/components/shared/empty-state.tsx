@@ -13,7 +13,7 @@ type EmptyStateProps = {
 
 export function EmptyState({ label, title, description, cta }: EmptyStateProps) {
   return (
-    <div className="border border-border-dark bg-bg-surface p-12 text-center">
+    <div className="border border-border bg-bg-surface p-12 text-center">
       {label ? <p className="technical-label">{label}</p> : null}
       <p className="display-kicker mt-4 text-3xl">{title}</p>
       <p className="mt-4 text-sm text-text-muted">{description}</p>

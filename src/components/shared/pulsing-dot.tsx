@@ -29,7 +29,7 @@ export function PulsingDot() {
   return (
     <span
       ref={dotRef}
-      className="inline-block h-2 w-2 bg-[#9bf0ba]"
+      className="inline-block h-2 w-2 bg-text-success"
       aria-hidden="true"
     />
   );

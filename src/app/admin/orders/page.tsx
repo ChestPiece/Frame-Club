@@ -23,7 +23,7 @@ export default async function AdminOrdersPage() {
   } catch {
     return (
       <div className="flex items-center justify-center py-32">
-        <div className="border border-border-dark bg-bg-surface p-10 text-center">
+        <div className="border border-border bg-bg-surface p-10 text-center">
           <p className="display-kicker text-2xl text-text-primary">Failed to load orders.</p>
           <p className="mt-3 text-sm text-text-muted">Check your Supabase connection and refresh the page.</p>
         </div>
@@ -32,8 +32,8 @@ export default async function AdminOrdersPage() {
   }
 
   return (
-    <section className="border border-border-dark bg-bg-surface">
-      <div className="flex items-center justify-between border-b border-border-dark bg-bg-recessed px-6 py-4">
+    <section className="border border-border bg-bg-surface">
+      <div className="flex items-center justify-between border-b border-border bg-bg-deep px-6 py-4">
         <h1 className="display-kicker text-5xl leading-none">ORDERS</h1>
         <div className="flex items-center gap-4">
           <p className="technical-label text-[10px] text-text-muted">Newest First</p>

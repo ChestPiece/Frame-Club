@@ -12,7 +12,7 @@ const footerNavItems = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-border-dark bg-bg-recessed">
+    <footer className="mt-auto border-t border-border bg-bg-deep">
       <div className="frame-container flex flex-col justify-between gap-8 py-12 md:flex-row md:items-center">
         <p className="display-kicker text-2xl text-text-primary">THE FRAME CLUB</p>
 
@@ -35,7 +35,7 @@ export function SiteFooter() {
         </p>
       </div>
 
-      <div className="border-t border-border-dark/60">
+      <div className="border-t border-border/60">
         <div className="frame-container py-5 text-center text-[10px] uppercase tracking-[0.18em] text-text-muted">
           {COPY.trustLine}
         </div>

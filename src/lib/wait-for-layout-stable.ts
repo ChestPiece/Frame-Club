@@ -1,5 +1,5 @@
 /**
- * Resolves after fonts are ready (if supported), `window` "load" when still loading,
+ * Resolves after fonts are ready (if supported), bounded `window` "load" wait when still loading,
  * and N animation frames — so ScrollTrigger measures match final layout (e.g. maximized viewport).
  */
 
@@ -19,7 +19,15 @@ export async function waitForLayoutStable(frameCount: number): Promise<void> {
 
   if (document.readyState !== "complete") {
     await new Promise<void>((resolve) => {
-      window.addEventListener("load", () => resolve(), { once: true });
+      const onLoad = () => {
+        clearTimeout(timeoutId);
+        resolve();
+      };
+      const timeoutId = window.setTimeout(() => {
+        window.removeEventListener("load", onLoad);
+        resolve();
+      }, 200);
+      window.addEventListener("load", onLoad, { once: true });
     });
   }
 }

@@ -16,12 +16,12 @@ export default function Error({
 
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center bg-bg-base p-6 text-center">
-      <div className="max-w-md border border-brand-mid/40 bg-[#0A0A0A] p-10">
+      <div className="max-w-md border border-brand-mid/40 bg-bg-deep p-10">
         <h2 className="display-kicker text-3xl text-brand-mid">SYSTEM FAULT</h2>
         <p className="mt-4 text-xs uppercase tracking-widest text-text-muted">
           A critical error has occurred in the module.
         </p>
-        <p className="mt-2 text-[10px] text-[#544342]">
+        <p className="mt-2 text-[10px] text-text-muted">
           {error.message || "Unknown anomaly"}
         </p>
         <Button

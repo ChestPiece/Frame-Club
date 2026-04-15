@@ -119,13 +119,13 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-90 flex flex-col bg-[#0E0E0E]"
+      className="fixed inset-0 z-90 flex flex-col bg-bg-deep"
       style={{ display: "none", opacity: 0 }}
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
     >
-      <div className="flex items-center justify-between px-6 py-6 border-b border-border-dark/40">
+      <div className="flex items-center justify-between px-6 py-6 border-b border-border/40">
         <span className="display-kicker text-sm text-text-muted tracking-[0.2em]">
           NAVIGATION
         </span>

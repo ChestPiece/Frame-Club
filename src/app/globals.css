@@ -3,25 +3,27 @@
 
 @layer base {
   :root {
-    --bg-base: #141313;
-    --bg-recessed: #0e0e0e;
-    --bg-surface: #1c1b1b;
-    --bg-elevated: #2a2a2a;
-    --bg-highest: #353434;
-    --bg-nav: rgba(58, 57, 57, 0.6);
+    --bg-deep: #030303;
+    --bg-base: #0f0d0d;
+    --bg-surface: #1a1715;
+    --bg-elevated: #2c2828;
+    --bg-nav: rgba(44, 40, 40, 0.6);
 
-    --brand: #380306;
-    --brand-mid: #8e130c;
-    --brand-bright: #c0392b;
+    --brand: #350407;
+    --brand-mid: #5c0a0d;
+    --brand-bright: #8e130c;
 
-    --text-primary: #f5f5f5;
-    --text-muted: #888888;
+    --text-primary: #f0eded;
+    --text-muted: #7a7070;
+    --text-accent: #d4b8b8;
     --text-error: #f1a39d;
     --text-success: #9bf0ba;
+    --status-success-bg: #173628;
+    --status-success-border: #2e6f4f;
 
-    --border-dark: #494542;
-    --border-subtle: rgba(84, 67, 66, 0.15);
-    --shadow-ambient: rgba(56, 3, 6, 0.15);
+    --border: #3d3030;
+    --border-subtle: rgba(61, 48, 48, 0.15);
+    --shadow-ambient: rgba(53, 4, 7, 0.18);
 
     --font-display: "Bebas Neue", "Arial Narrow", sans-serif;
     --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -62,11 +64,10 @@
 }
 
 @theme {
+  --color-bg-deep: var(--bg-deep);
   --color-bg-base: var(--bg-base);
-  --color-bg-recessed: var(--bg-recessed);
   --color-bg-surface: var(--bg-surface);
   --color-bg-elevated: var(--bg-elevated);
-  --color-bg-highest: var(--bg-highest);
 
   --color-brand: var(--brand);
   --color-brand-mid: var(--brand-mid);
@@ -74,10 +75,13 @@
 
   --color-text-primary: var(--text-primary);
   --color-text-muted: var(--text-muted);
+  --color-text-accent: var(--text-accent);
   --color-text-error: var(--text-error);
   --color-text-success: var(--text-success);
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-success-border: var(--status-success-border);
 
-  --color-border-dark: var(--border-dark);
+  --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
 
   --font-sans: var(--font-body);
@@ -97,11 +101,11 @@
   }
 
   .display-fluid {
-    font-size: clamp(2.5rem, 8vw, 8rem);
+    font-size: clamp(2rem, 6vw, 6rem);
   }
 
   .display-section {
-    font-size: clamp(2rem, 5vw, 5rem);
+    font-size: clamp(1.75rem, 4vw, 4rem);
   }
 
   .technical-label {
@@ -111,8 +115,8 @@
   }
 
   .machined-field {
-    border: 1px solid var(--border-dark);
-    background-color: var(--bg-recessed);
+    border: 1px solid var(--border);
+    background-color: var(--bg-deep);
     color: var(--text-primary);
   }
 
@@ -141,7 +145,7 @@
     width: 100%;
     transform: scaleX(0);
     transform-origin: right center;
-    background-color: var(--brand-mid);
+    background-color: var(--brand-bright);
   }
 
   .gsap-hidden {

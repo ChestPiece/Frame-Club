@@ -7,11 +7,11 @@ import { useScrollTriggerEnvironment } from "@/components/providers/scroll-trigg
 import { APP_REVEAL_DONE_EVENT } from "@/components/layout/app-reveal";
 import {
   SCROLL_LAYOUT_STABILIZE_FRAME_COUNT,
-  SCROLL_REFRESH_DEBOUNCE_MS,
   isScrollSmootherEnabled,
   logScrollLayoutDebug,
   scrollSmootherMatchMediaQuery,
 } from "@/lib/scroll-layout";
+import { scheduleScrollTriggerRefresh } from "@/lib/scroll-trigger-refresh";
 import { waitForLayoutStable } from "@/lib/wait-for-layout-stable";
 
 type SmoothScrollProviderProps = {
@@ -92,8 +92,6 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       }
     };
 
-    let revealDebounceTimer: ReturnType<typeof setTimeout>;
-
     const onAppRevealDone = () => {
       if (!appRevealDoneRef.current) {
         appRevealDoneRef.current = true;
@@ -101,8 +99,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         queueMicrotask(apply);
         return;
       }
-      clearTimeout(revealDebounceTimer);
-      revealDebounceTimer = setTimeout(() => safeRefresh(), SCROLL_REFRESH_DEBOUNCE_MS);
+      scheduleScrollTriggerRefresh();
     };
 
     const onMqChange = () => {
@@ -124,7 +121,6 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
 
     return () => {
       layoutReadyGenerationRef.current += 1;
-      clearTimeout(revealDebounceTimer);
       window.removeEventListener(APP_REVEAL_DONE_EVENT, onAppRevealDone);
       mq.removeEventListener("change", onMqChange);
       ScrollSmoother.get()?.kill();
@@ -138,16 +134,11 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   React.useEffect(() => {
     if (!isMounted) return;
 
-    let resizeTimer: ReturnType<typeof setTimeout>;
-    const onResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => safeRefresh(), SCROLL_REFRESH_DEBOUNCE_MS);
-    };
+    const onResize = () => scheduleScrollTriggerRefresh();
     window.addEventListener("resize", onResize);
 
     return () => {
       window.removeEventListener("resize", onResize);
-      clearTimeout(resizeTimer);
     };
   }, [isMounted]);
 
@@ -156,16 +147,11 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     if (typeof ResizeObserver === "undefined") return;
 
     const contentEl = contentRef.current;
-    let roTimer: ReturnType<typeof setTimeout>;
-    const ro = new ResizeObserver(() => {
-      clearTimeout(roTimer);
-      roTimer = setTimeout(() => safeRefresh(), SCROLL_REFRESH_DEBOUNCE_MS);
-    });
+    const ro = new ResizeObserver(() => scheduleScrollTriggerRefresh());
     ro.observe(contentEl);
 
     return () => {
       ro.disconnect();
-      clearTimeout(roTimer);
     };
   }, [isMounted]);
 

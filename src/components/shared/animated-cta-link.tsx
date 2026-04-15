@@ -38,7 +38,7 @@ export function AnimatedCTALink({
     >
       <span
         ref={fillRef}
-        className="absolute inset-0 bg-[#F5F5F5] pointer-events-none"
+        className="absolute inset-0 bg-text-primary pointer-events-none"
         style={{ transform: "scaleX(0)", transformOrigin: "0% 50%" }}
         aria-hidden="true"
       />

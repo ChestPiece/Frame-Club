@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { CatalogProductCard } from "@/components/shop/catalog-product-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { PageScrollAnimations } from "@/components/shared/page-scroll-animations";
+import { ShopAnimations } from "@/components/shop/shop-animations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getProducts } from "@/lib/data";
@@ -47,12 +48,40 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     <>
       <main id="main-content" className="pb-16 pt-30 bg-bg-base">
         <PageScrollAnimations config="shop">
-        <section data-animate-page="shop" className="border-b border-border-dark bg-[#0a0a0a] py-16">
+        <ShopAnimations />
+        <section
+          data-animate-page="shop"
+          data-shop-hero
+          className="border-b border-border bg-bg-deep py-12 sm:py-16"
+        >
           <div className="frame-container flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="display-kicker text-[10px] text-brand uppercase tracking-[0.3em] mb-2">DROP ARCHIVE</p>
-              <h1 className="display-kicker mt-4 display-section leading-none">THE COLLECTION</h1>
-              <p className="mt-4 text-sm text-text-muted">
+              <p
+                data-shop-kicker
+                className="display-kicker text-[10px] text-brand uppercase tracking-[0.3em] mb-2"
+              >
+                DROP ARCHIVE
+              </p>
+              <h1 data-shop-heading className="display-kicker mt-4 display-section leading-none">
+                THE COLLECTION
+              </h1>
+              <svg
+                aria-hidden="true"
+                data-drawsvg-shop-accent
+                className="mt-6 h-px w-32 sm:w-48 max-w-full block text-brand"
+                viewBox="0 0 192 1"
+                preserveAspectRatio="none"
+              >
+                <line
+                  x1="0"
+                  y1="0.5"
+                  x2="192"
+                  y2="0.5"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                />
+              </svg>
+              <p data-shop-count className="mt-4 text-sm text-text-muted">
                 {products.length} frame{products.length === 1 ? "" : "s"} found
                 {query.q ? ` for "${query.q}"` : ""}.
               </p>
@@ -60,7 +89,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           </div>
         </section>
 
-        <section className="bg-[#030303]">
+        <section className="bg-bg-deep">
           <div className="frame-container space-y-8 py-6">
             <div className="flex flex-wrap gap-4">
               {statusOptions.map((option) => {
@@ -75,7 +104,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                     className={`display-kicker px-8 py-6 text-sm tracking-[0.2em] ${
                       isActive
                         ? "border-brand bg-brand text-text-primary hover:bg-brand-mid"
-                        : "border-border-dark bg-transparent text-text-muted hover:border-text-primary hover:text-text-primary hover:bg-transparent"
+                        : "border-border bg-transparent text-text-muted hover:border-text-primary hover:text-text-primary hover:bg-transparent"
                     }`}
                   >
                     {option.label}
@@ -91,13 +120,13 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 name="q"
                 defaultValue={query.q ?? ""}
                 placeholder="Search by car, brand, or description"
-                className="border border-border-dark bg-bg-surface"
+                className="border border-border bg-bg-surface"
               />
 
               <select
                 name="brand"
                 defaultValue={query.brand ?? ""}
-                className="h-11 sm:h-10 border border-border-dark bg-bg-surface px-3 text-sm text-text-primary"
+                className="h-11 sm:h-10 border border-border bg-bg-surface px-3 text-sm text-text-primary"
               >
                 <option value="">All Brands</option>
                 {brands.map((brand) => (
@@ -110,7 +139,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
               <select
                 name="sort"
                 defaultValue={query.sort}
-                className="h-11 sm:h-10 border border-border-dark bg-bg-surface px-3 text-sm text-text-primary"
+                className="h-11 sm:h-10 border border-border bg-bg-surface px-3 text-sm text-text-primary"
               >
                 {catalogSortOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -143,7 +172,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         ) : null}
 
         <section className="frame-container pb-16">
-          <div className="border border-border-dark bg-bg-recessed px-5 py-4 text-xs uppercase tracking-[0.18em] text-text-muted">
+          <div className="border border-border bg-bg-deep px-5 py-4 text-xs uppercase tracking-[0.18em] text-text-muted">
             Showing {products.length} / {baseProducts.length} {query.status ? `${query.status} ` : ""}products
           </div>
         </section>

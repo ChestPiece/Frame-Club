@@ -33,7 +33,7 @@ export default async function OrderConfirmationPage({ params, searchParams }: Or
     <>
       <main id="main-content" className="pb-24 pt-14">
         <section className="frame-container">
-          <article className="mx-auto max-w-4xl border border-border-dark bg-bg-surface p-8 md:p-12">
+          <article className="mx-auto max-w-4xl border border-border bg-bg-surface p-8 md:p-12">
             <p className="technical-label text-[10px] text-text-muted">Order Confirmation</p>
             <h1 className="display-kicker mt-4 text-4xl leading-none sm:text-5xl md:text-8xl">
               {isPaymentFailed ? "PAYMENT ISSUE" : "ORDER CONFIRMED"}
@@ -46,16 +46,16 @@ export default async function OrderConfirmationPage({ params, searchParams }: Or
             </p>
 
             {isPaymentFailed ? (
-              <div className="mt-8 inline-flex border border-[#6f2e2e] bg-[#281717] px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-[#f09b9b]">
+              <div className="mt-8 inline-flex border border-brand-mid bg-brand px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-text-accent">
                 Payment Failed
               </div>
             ) : (
-              <div className="mt-8 inline-flex border border-[#2e6f4f] bg-[#173628] px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-[#9bf0ba]">
+              <div className="mt-8 inline-flex border border-status-success-border bg-status-success-bg px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-text-success">
                 Payment Pipeline: Captured
               </div>
             )}
 
-            <div className="mt-6 grid gap-3 border border-border-dark/60 bg-bg-recessed p-7 text-sm">
+            <div className="mt-6 grid gap-3 border border-border/60 bg-bg-deep p-7 text-sm">
               <p>
                 <span className="text-text-muted">Order ID:</span> {id}
               </p>

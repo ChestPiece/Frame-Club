@@ -1,17 +1,17 @@
 import type { OrderRecord } from "../types";
 
 const baseStyles = `
-  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #141313; color: #F5F5F5; margin: 0; padding: 20px; }
-  .container { max-w-[600px] margin: 0 auto; background-color: #1C1B1B; border: 1px solid #494542; padding: 40px; }
-  h1 { font-family: Impact, sans-serif; text-transform: uppercase; letter-spacing: 2px; font-size: 32px; margin-top: 0; color: #F5F5F5; }
-  h2 { font-size: 20px; text-transform: uppercase; color: #888888; letter-spacing: 1px; border-bottom: 1px solid #494542; padding-bottom: 10px; margin-top: 30px; }
+  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #0F0D0D; color: #F0EDED; margin: 0; padding: 20px; }
+  .container { max-w-[600px] margin: 0 auto; background-color: #1A1715; border: 1px solid #3D3030; padding: 40px; }
+  h1 { font-family: Impact, sans-serif; text-transform: uppercase; letter-spacing: 2px; font-size: 32px; margin-top: 0; color: #F0EDED; }
+  h2 { font-size: 20px; text-transform: uppercase; color: #7A7070; letter-spacing: 1px; border-bottom: 1px solid #3D3030; padding-bottom: 10px; margin-top: 30px; }
   p { font-size: 16px; line-height: 1.6; color: #d1d1d1; }
-  .details-box { background-color: #0E0E0E; border: 1px solid #494542; padding: 20px; margin-top: 20px; }
+  .details-box { background-color: #030303; border: 1px solid #3D3030; padding: 20px; margin-top: 20px; }
   .detail-row { margin-bottom: 10px; font-size: 14px; }
-  .detail-label { color: #888888; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; display: block; margin-bottom: 4px; }
-  .detail-value { color: #F5F5F5; font-weight: bold; }
-  .footer { margin-top: 40px; padding-top: 20px; border-t: 1px solid #494542; font-size: 12px; color: #888888; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
-  .accent { color: #ffb3af; }
+  .detail-label { color: #7A7070; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; display: block; margin-bottom: 4px; }
+  .detail-value { color: #F0EDED; font-weight: bold; }
+  .footer { margin-top: 40px; padding-top: 20px; border-t: 1px solid #3D3030; font-size: 12px; color: #7A7070; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+  .accent { color: #D4B8B8; }
 `;
 
 function wrapEmail(content: string) {

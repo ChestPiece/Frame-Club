@@ -12,7 +12,7 @@ export default async function AdminLoginPage({
 
   return (
     <main id="main-content" className="grid min-h-screen bg-bg-base lg:grid-cols-[1.05fr_1fr]">
-      <section className="flex items-center border-b border-border-dark bg-bg-recessed p-8 lg:border-b-0 lg:border-r lg:p-14">
+      <section className="flex items-center border-b border-border bg-bg-deep p-8 lg:border-b-0 lg:border-r lg:p-14">
         <div className="max-w-xl">
           <p className="technical-label text-[10px] text-text-muted">Admin Access</p>
           <h1 className="display-kicker mt-4 text-6xl leading-none md:text-8xl">ADMIN CORE</h1>
@@ -23,7 +23,7 @@ export default async function AdminLoginPage({
       </section>
 
       <section className="flex items-center justify-center p-8 lg:p-14">
-        <article className="w-full max-w-md border border-border-dark bg-bg-surface p-8 md:p-10">
+        <article className="w-full max-w-md border border-border bg-bg-surface p-8 md:p-10">
           <p className="technical-label text-[10px] text-text-muted">Sign In</p>
           <h2 className="display-kicker mt-3 text-5xl leading-none">OPERATOR LOGIN</h2>
 
@@ -32,7 +32,7 @@ export default async function AdminLoginPage({
             <Input name="password" type="password" placeholder="PASSWORD" required />
 
             {error && (
-              <p className="text-xs text-[#ffb4ab]">{error}</p>
+              <p className="text-xs text-text-error">{error}</p>
             )}
 
             <button

@@ -8,7 +8,7 @@ export default function NotFoundPage() {
     <>
       <main id="main-content" className="pb-24 pt-30">
         <section className="frame-container flex min-h-[60vh] items-center justify-center py-12">
-          <article className="w-full max-w-md border border-border-dark bg-bg-surface p-8 md:p-10">
+          <article className="w-full max-w-md border border-border bg-bg-surface p-8 md:p-10">
             <p className="technical-label text-[10px] text-text-muted">ERROR CODE: 404</p>
             <h1 className="display-kicker mt-4 text-4xl leading-none">PAGE NOT FOUND</h1>
             <p className="mt-5 text-sm text-text-muted">

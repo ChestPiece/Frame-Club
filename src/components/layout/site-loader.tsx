@@ -104,7 +104,7 @@ export function SiteLoader() {
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-bg-recessed px-6 text-center will-change-[clip-path]"
+      className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-bg-deep px-6 text-center will-change-[clip-path]"
       aria-hidden="true"
     >
       <div className="flex flex-col items-center justify-center gap-4">
@@ -122,7 +122,7 @@ export function SiteLoader() {
         </p>
         <div
           ref={barContainerRef}
-          className="mt-8 h-[2px] w-48 overflow-hidden bg-border-dark sm:w-56"
+          className="mt-8 h-[2px] w-48 overflow-hidden bg-border sm:w-56"
         >
           <div
             ref={barRef}

@@ -4,7 +4,7 @@ import * as React from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
-import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
+import { useIntroReady, useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 
 type HomeAnimationsProps = {
   children: React.ReactNode;
@@ -13,44 +13,51 @@ type HomeAnimationsProps = {
 const HIDE_TARGETS = "[data-animate-section]:not([data-animate-section='hero']), [data-animate-item]";
 const REVEAL_TARGETS = "[data-animate-section], [data-animate-item]";
 const HERO_REVEAL_TARGETS =
-  "[data-animate='hero-accent'], [data-animate='hero-label'], [data-animate='hero-heading'], [data-animate='hero-subcopy'], [data-animate='hero-cta'], [data-animate='hero-image']";
+  "[data-animate='hero-accent'], [data-animate='hero-label'], [data-animate='hero-heading']";
+const HERO_PIN_TARGETS = "[data-hero-pin='image'], [data-hero-pin='subcopy-group']";
+/** Section-local reveals that start hidden; must be unhidden if GSAP fails or motion is reduced. */
+const MOTION_REVEAL_LOCAL = "[data-motion-reveal]";
+const DRAWSVG_LINE_TARGETS =
+  "[data-hero-svg-accent] line, [data-drawsvg-divider] line, [data-drawsvg-cta] line, [data-drawsvg-vert] line, [data-drawsvg-corners] polyline";
 
 const SAFETY_UNHIDE_MS = 1200;
 
 export function HomeAnimations({ children }: HomeAnimationsProps) {
   const rootRef = React.useRef<HTMLDivElement | null>(null);
+  const introReady = useIntroReady();
   const scrollTriggerReady = useScrollTriggerReady();
+  const introHasPlayedRef = React.useRef(false);
 
   useGSAP(
     () => {
-      if (!scrollTriggerReady) return;
+      if (!introReady || introHasPlayedRef.current) return;
 
       const root = rootRef.current;
       const mm = gsap.matchMedia();
       const splitInstances: SplitText[] = [];
-      const revealAllTargets = (targets: string = `${REVEAL_TARGETS}, ${HERO_REVEAL_TARGETS}`) => {
+      const revealAllTargets = (
+        targets: string = `${REVEAL_TARGETS}, ${HERO_REVEAL_TARGETS}, ${HERO_PIN_TARGETS}`,
+      ) => {
         gsap.set(targets, { autoAlpha: 1, y: 0, clearProps: "opacity,visibility,transform" });
       };
 
       mm.add(
         {
           reduceMotion: "(prefers-reduced-motion: reduce)",
-          normal: "(prefers-reduced-motion: no-preference)",
         },
         (context) => {
           const reduceMotion = Boolean(context.conditions?.reduceMotion);
 
-          if (reduceMotion) {
+                   if (reduceMotion) {
             revealAllTargets();
+            gsap.set(MOTION_REVEAL_LOCAL, { autoAlpha: 1, y: 0, x: 0, clipPath: "none", clearProps: "all" });
+            gsap.set(HERO_PIN_TARGETS, { autoAlpha: 1, y: 0, x: 0, clearProps: "all" });
+            gsap.set(DRAWSVG_LINE_TARGETS, { drawSVG: "100%", autoAlpha: 1 });
+            introHasPlayedRef.current = true;
             return;
           }
 
-          let safetyTimer: ReturnType<typeof setTimeout> | null = null;
-
           try {
-            // Plugins registered in GSAPProvider (ScrambleText, SplitText).
-
-            // 1. Hero Animations
             const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
             tl.fromTo(
@@ -109,121 +116,180 @@ export function HomeAnimations({ children }: HomeAnimationsProps) {
                 tl.fromTo(heading, { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 }, "-=0.4");
               }
             }
-
-            tl.fromTo(
-              '[data-animate="hero-subcopy"], [data-animate="hero-cta"]',
-              { y: 20, autoAlpha: 0 },
-              { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.1 },
-              "-=0.6",
-            );
-
-            tl.fromTo(
-              '[data-animate="hero-image"]',
-              { x: 60, autoAlpha: 0 },
-              { x: 0, autoAlpha: 1, duration: 1.2, ease: "power2.out" },
-              "-=1",
-            );
-
-            ScrollTrigger.batch("[data-animate-section]:not([data-animate-section='hero'])", {
-              start: "top 85%",
-              onEnter: (elements: Element[]) => {
-                gsap.to(elements, {
-                  y: 0,
-                  autoAlpha: 1,
-                  duration: 0.8,
-                  stagger: 0.15,
-                  ease: "power2.out",
-                  overwrite: true,
-                });
-              },
-              once: true,
-            });
-
-            ScrollTrigger.batch("[data-animate-item]", {
-              start: "top 90%",
-              onEnter: (elements: Element[]) => {
-                gsap.to(elements, {
-                  y: 0,
-                  autoAlpha: 1,
-                  duration: 0.6,
-                  stagger: 0.12,
-                  ease: "power2.out",
-                  overwrite: true,
-                });
-              },
-              once: true,
-            });
-
-            gsap.set(HIDE_TARGETS, { autoAlpha: 0, y: 40 });
-
-            const parallaxElements = gsap.utils.toArray("[data-speed]") as HTMLElement[];
-            parallaxElements.forEach((el) => {
-              const speed = parseFloat(el.getAttribute("data-speed") || "1");
-              gsap.to(el, {
-                y: () => -100 * speed,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: el,
-                  start: "top bottom",
-                  end: "bottom top",
-                  scrub: 0.65,
-                  invalidateOnRefresh: true,
-                },
-              });
-            });
-
-            ScrollTrigger.sort();
-            ScrollTrigger.refresh();
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                ScrollTrigger.sort();
-                ScrollTrigger.refresh();
-              });
-            });
-
-            safetyTimer = setTimeout(() => {
-              const safetySelector = `${HIDE_TARGETS}, ${HERO_REVEAL_TARGETS}`;
-              const stillHidden = gsap.utils.toArray(safetySelector).filter((target) => {
-                if (!(target instanceof HTMLElement)) return false;
-                const styles = window.getComputedStyle(target);
-                return styles.visibility === "hidden" || Number.parseFloat(styles.opacity) < 0.05;
-              }) as HTMLElement[];
-
-              if (stillHidden.length > 0) {
-                gsap.set(stillHidden, {
-                  autoAlpha: 1,
-                  y: 0,
-                  clearProps: "opacity,visibility,transform",
-                });
-              }
-
-              const heroChars = root?.querySelectorAll(".hero-char") ?? [];
-              if (heroChars.length > 0) {
-                const anyCharHidden = Array.from(heroChars).some((el) => {
-                  const styles = window.getComputedStyle(el);
-                  return styles.visibility === "hidden" || Number.parseFloat(styles.opacity) < 0.05;
-                });
-                if (anyCharHidden) {
-                  gsap.set(heroChars, {
-                    autoAlpha: 1,
-                    y: 0,
-                    clearProps: "opacity,visibility,transform",
-                  });
-                }
-              }
-            }, SAFETY_UNHIDE_MS);
+            introHasPlayedRef.current = true;
           } catch {
             revealAllTargets();
+            introHasPlayedRef.current = true;
           }
-
-          return () => {
-            if (safetyTimer) clearTimeout(safetyTimer);
-          };
         },
       );
 
       return () => {
         splitInstances.forEach((instance) => instance.revert());
+        mm.revert();
+      };
+    },
+    { scope: rootRef, dependencies: [introReady] },
+  );
+
+  useGSAP(
+    () => {
+      if (!scrollTriggerReady) return;
+
+      const mm = gsap.matchMedia();
+      let safetyTimer: ReturnType<typeof setTimeout> | null = null;
+
+      mm.add(
+        {
+          reduceMotion: "(prefers-reduced-motion: reduce)",
+          desktop: "(min-width: 1024px)",
+          mobile: "(max-width: 1023px)",
+        },
+        (context) => {
+          const reduceMotion = Boolean(context.conditions?.reduceMotion);
+          const isDesktop = Boolean(context.conditions?.desktop);
+
+          if (reduceMotion) {
+            gsap.set(HIDE_TARGETS, { autoAlpha: 1, y: 0, clearProps: "all" });
+            gsap.set(MOTION_REVEAL_LOCAL, { autoAlpha: 1, y: 0, x: 0, clipPath: "none", clearProps: "all" });
+            gsap.set(HERO_PIN_TARGETS, { autoAlpha: 1, y: 0, x: 0, clearProps: "all" });
+            gsap.set(DRAWSVG_LINE_TARGETS, { drawSVG: "100%", autoAlpha: 1 });
+            return;
+          }
+
+          gsap.set(HIDE_TARGETS, { autoAlpha: 0, y: 40 });
+          gsap.set(DRAWSVG_LINE_TARGETS, { drawSVG: "0%" });
+
+          if (isDesktop) {
+            gsap.set("[data-hero-pin='image']", { x: 80, autoAlpha: 1 });
+            gsap.set("[data-hero-pin='subcopy-group']", { y: 30, autoAlpha: 1 });
+
+            const pinTl = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#hero-pin-target",
+                start: "top top",
+                end: "+=120%",
+                scrub: 1,
+                pin: "#hero-pin-target",
+                pinType: "transform",
+                anticipatePin: 1,
+                invalidateOnRefresh: true,
+              },
+            });
+
+            pinTl
+              .to("[data-hero-pin='image']", { x: 0, duration: 1, ease: "power2.out" }, 0)
+              .to("[data-hero-pin='subcopy-group']", { y: 0, duration: 1, ease: "power2.out" }, 0.7)
+              .fromTo(
+                "[data-hero-svg-accent] line",
+                { drawSVG: "0%" },
+                { drawSVG: "100%", duration: 1, ease: "none" },
+                1.4,
+              );
+          } else {
+            gsap.set("[data-hero-pin='image']", { x: 0, autoAlpha: 1 });
+            gsap.set("[data-hero-pin='subcopy-group']", { y: 0, autoAlpha: 1 });
+            gsap.fromTo(
+              "[data-hero-svg-accent] line",
+              { drawSVG: "0%" },
+              {
+                drawSVG: "100%",
+                ease: "none",
+                scrollTrigger: {
+                  trigger: "#hero-section",
+                  start: "top 85%",
+                  end: "bottom 40%",
+                  scrub: 1,
+                },
+              },
+            );
+          }
+
+          ScrollTrigger.batch("[data-animate-section]:not([data-animate-section='hero'])", {
+            start: "top 92%",
+            onEnter: (elements: Element[]) => {
+              gsap.to(elements, {
+                y: 0,
+                autoAlpha: 1,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: "power2.out",
+                overwrite: true,
+              });
+            },
+            once: true,
+          });
+
+          ScrollTrigger.batch("[data-animate-item]", {
+            start: "top 90%",
+            onEnter: (elements: Element[]) => {
+              gsap.to(elements, {
+                y: 0,
+                autoAlpha: 1,
+                duration: 0.6,
+                stagger: 0.12,
+                ease: "power2.out",
+                overwrite: true,
+              });
+            },
+            once: true,
+          });
+
+          ScrollTrigger.batch("[data-drawsvg-divider], [data-drawsvg-cta]", {
+            start: "top 90%",
+            once: true,
+            onEnter: (elements: Element[]) => {
+              const lines = elements.flatMap((el) => Array.from(el.querySelectorAll("line")));
+              gsap.fromTo(lines, { drawSVG: "0%" }, { drawSVG: "100%", duration: 1.2, ease: "power2.inOut" });
+            },
+          });
+
+          ScrollTrigger.batch("[data-drawsvg-vert]", {
+            start: "top 70%",
+            once: true,
+            onEnter: (elements: Element[]) => {
+              const lines = elements.flatMap((el) => Array.from(el.querySelectorAll("line")));
+              gsap.fromTo(lines, { drawSVG: "0 0%" }, { drawSVG: "0 100%", duration: 1.4, ease: "power3.out" });
+            },
+          });
+
+          ScrollTrigger.batch("[data-drawsvg-corners]", {
+            start: "top 75%",
+            once: true,
+            onEnter: (elements: Element[]) => {
+              const lines = elements.flatMap((el) => Array.from(el.querySelectorAll("polyline")));
+              gsap.fromTo(
+                lines,
+                { drawSVG: "0%" },
+                { drawSVG: "100%", duration: 0.8, ease: "power2.out", stagger: 0.12 },
+              );
+            },
+          });
+
+          ScrollTrigger.sort();
+          ScrollTrigger.refresh();
+
+          safetyTimer = setTimeout(() => {
+            const safetySelector = `${HIDE_TARGETS}, ${HERO_REVEAL_TARGETS}, ${MOTION_REVEAL_LOCAL}`;
+            const stillHidden = gsap.utils.toArray(safetySelector).filter((target) => {
+              if (!(target instanceof HTMLElement)) return false;
+              const styles = window.getComputedStyle(target);
+              return styles.visibility === "hidden" || Number.parseFloat(styles.opacity) < 0.05;
+            }) as HTMLElement[];
+
+            if (stillHidden.length > 0) {
+              gsap.set(stillHidden, {
+                autoAlpha: 1,
+                y: 0,
+                clearProps: "opacity,visibility,transform",
+              });
+            }
+          }, SAFETY_UNHIDE_MS);
+        },
+      );
+
+      return () => {
+        if (safetyTimer) clearTimeout(safetyTimer);
         mm.revert();
       };
     },

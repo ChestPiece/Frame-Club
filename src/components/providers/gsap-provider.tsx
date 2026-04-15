@@ -11,6 +11,8 @@ import {
   ScrambleTextPlugin,
   TextPlugin,
 } from "gsap/all";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { Flip } from "gsap/Flip";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(
@@ -20,7 +22,9 @@ if (typeof window !== "undefined") {
     ScrollToPlugin,
     SplitText,
     ScrambleTextPlugin,
-    TextPlugin
+    TextPlugin,
+    DrawSVGPlugin,
+    Flip
   );
   // ScrollSmoother owns scroll normalization; normalizeScroll(true) breaks trigger measurement and batch onEnter.
   ScrollTrigger.normalizeScroll(false);

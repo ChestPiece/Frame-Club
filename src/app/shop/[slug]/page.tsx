@@ -50,7 +50,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <div className="grid gap-12 lg:grid-cols-10">
             <section className="space-y-4 lg:col-span-6">
-              <article className="relative aspect-4/5 border border-[#544342]/30 bg-[#0f0f0f] p-8">
+              <article className="relative aspect-4/5 border border-border/30 bg-bg-deep p-8">
                 <Image
                   src={product.images[0]}
                   alt={product.name}
@@ -65,8 +65,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <article
                     key={`${image}-${index}`}
                     className={`aspect-square border ${
-                      index === 0 ? "border-2 border-[#8E130C]" : "border-[#544342]/30"
-                    } bg-[#0f0f0f]`}
+                      index === 0 ? "border-2 border-brand-bright" : "border-border/30"
+                    } bg-bg-deep`}
                   >
                     <div className="relative h-full w-full">
                       <Image
@@ -105,7 +105,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       <RadioGroupItem
                         key={background.value}
                         value={background.value}
-                        className="h-10 w-10 border border-border-dark/40 p-0 data-checked:border-brand"
+                        className="h-10 w-10 border border-border/40 p-0 data-checked:border-brand"
                         style={{
                           backgroundColor: background.swatch,
                           backgroundImage: backgroundPatterns[background.value],
@@ -150,7 +150,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   )}
 
                   {product.status === "preorder" ? (
-                    <p className="text-center text-[10px] uppercase tracking-[0.16em] text-[#f5c4c1]">{preorderCopy}</p>
+                    <p className="text-center text-[10px] uppercase tracking-[0.16em] text-text-accent">{preorderCopy}</p>
                   ) : null}
 
                   {product.status === "unavailable" ? (
@@ -169,7 +169,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </Button>
                 </div>
 
-                <div className="flex justify-between border-t border-border-dark/20 pt-5 text-[10px] uppercase tracking-[0.12em] text-text-muted">
+                <div className="flex justify-between border-t border-border/20 pt-5 text-[10px] uppercase tracking-[0.12em] text-text-muted">
                   <span>Nationwide Delivery</span>
                   <span>Secure Payment</span>
                   <span>Handcrafted to Order</span>
@@ -179,11 +179,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </section>
 
-        <section className="bg-bg-recessed py-24">
+        <section className="bg-bg-deep py-24">
           <div className="frame-container">
             <h2 className="display-kicker text-4xl leading-none sm:text-5xl md:text-6xl">THE SPECS</h2>
 
-            <div className="mt-10 grid grid-cols-2 gap-px border border-border-dark/20 bg-border-dark/20 sm:grid-cols-3 md:grid-cols-5">
+            <div className="mt-10 grid grid-cols-2 gap-px border border-border/20 bg-border/20 sm:grid-cols-3 md:grid-cols-5">
               {product.specs.map((spec) => (
                 <article key={spec.label} className="bg-bg-base p-7">
                   <p className="technical-label text-[10px] text-text-muted">{spec.label}</p>
@@ -201,7 +201,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="mt-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
               {related.map((item) => (
                 <article key={item.id} className="group">
-                  <div className="relative mb-5 aspect-4/5 overflow-hidden bg-bg-recessed">
+                  <div className="relative mb-5 aspect-4/5 overflow-hidden bg-bg-deep">
                     <Image
                       src={item.images[0]}
                       alt={item.name}

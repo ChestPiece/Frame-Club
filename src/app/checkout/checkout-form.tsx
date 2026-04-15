@@ -141,9 +141,9 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
     <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 border border-border-dark bg-bg-surface p-4 md:p-8 lg:p-10"
+        className="space-y-6 border border-border bg-bg-surface p-4 md:p-8 lg:p-10"
       >
-        <div className="border-b border-border-dark pb-5">
+        <div className="border-b border-border pb-5">
           <p className="technical-label text-[10px] text-text-muted">Customer Details</p>
           <p className="mt-2 text-sm text-text-muted">
             Complete your details to continue to secure PayFast checkout.
@@ -195,7 +195,7 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
             ) : null}
           </div>
 
-          <div className="rounded-none border border-border-dark bg-bg-recessed p-4">
+          <div className="rounded-none border border-border bg-bg-deep p-4">
             <p className="technical-label text-[10px] text-text-muted">Delivery Window</p>
             <p className="mt-2 text-sm text-text-primary">
               {product ? `${product.deliveryDays}-${product.deliveryDays + 3} working days` : "--"}
@@ -223,8 +223,8 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
         </form>
       )}
 
-      <aside className="space-y-6 border border-border-dark bg-bg-recessed p-4 md:p-8">
-        <div className="border-b border-border-dark pb-5">
+      <aside className="space-y-6 border border-border bg-bg-deep p-4 md:p-8">
+        <div className="border-b border-border pb-5">
           <p className="technical-label text-[10px] text-text-muted">Cart Summary</p>
           <p className="mt-2 display-kicker text-2xl leading-none sm:text-4xl">
             {product?.name ?? "No frame selected"}
@@ -234,7 +234,7 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
           </p>
         </div>
 
-        <div className="space-y-3 border border-border-dark/60 bg-bg-surface p-5 text-sm">
+        <div className="space-y-3 border border-border/60 bg-bg-surface p-5 text-sm">
           <div className="flex items-center justify-between">
             <span className="text-text-muted">Product</span>
             <span className="text-text-primary">
@@ -251,19 +251,19 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
           </div>
         </div>
 
-        <div className="space-y-3 border border-border-dark/50 bg-bg-surface p-5 text-sm text-text-muted">
+        <div className="space-y-3 border border-border/50 bg-bg-surface p-5 text-sm text-text-muted">
           <p className="technical-label text-[10px]">Order Notes</p>
           <p>{notes || "No notes provided."}</p>
         </div>
 
-        <div className="border-t border-border-dark/70 pt-4">
+        <div className="border-t border-border/70 pt-4">
           <p className="technical-label text-[10px] text-text-muted">Total</p>
           <p className="mt-2 text-3xl text-text-primary">
             Rs. {product ? product.price.toLocaleString("en-PK") : "0"}
           </p>
         </div>
 
-        <div className="border border-border-dark/60 bg-bg-surface p-4">
+        <div className="border border-border/60 bg-bg-surface p-4">
           <p className="technical-label text-[10px] text-text-muted">Payment Method</p>
           <p className="mt-2 text-sm text-text-primary">PayFast (secure checkout)</p>
         </div>

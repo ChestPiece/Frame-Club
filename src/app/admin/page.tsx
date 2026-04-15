@@ -33,7 +33,7 @@ export default async function AdminDashboardPage() {
   } catch {
     return (
       <div className="flex items-center justify-center py-32">
-        <div className="border border-border-dark bg-bg-surface p-10 text-center">
+        <div className="border border-border bg-bg-surface p-10 text-center">
           <p className="display-kicker text-2xl text-text-primary">Failed to load dashboard data.</p>
           <p className="mt-3 text-sm text-text-muted">Check your Supabase connection and refresh the page.</p>
         </div>
@@ -44,7 +44,7 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-10">
       <section className="grid gap-0 md:grid-cols-2 lg:grid-cols-4">
-        <article className="border border-border-dark bg-bg-surface p-8">
+        <article className="border border-border bg-bg-surface p-8">
           <div className="flex items-start justify-between">
             <p className="technical-label text-[10px] text-text-muted">Total Orders</p>
             <span className="text-[10px] text-green-500">+12%</span>
@@ -52,7 +52,7 @@ export default async function AdminDashboardPage() {
           <p className="mt-4 text-4xl font-bold">{stats.totalOrders}</p>
         </article>
 
-        <article className="border border-border-dark border-l-0 bg-bg-surface p-8">
+        <article className="border border-border border-l-0 bg-bg-surface p-8">
           <div className="flex items-start justify-between">
             <p className="technical-label text-[10px] text-text-muted">Pending Orders</p>
             <span className="text-[10px] text-brand-mid">-3%</span>
@@ -60,7 +60,7 @@ export default async function AdminDashboardPage() {
           <p className="mt-4 text-4xl font-bold">{stats.pendingOrders}</p>
         </article>
 
-        <article className="border border-border-dark border-l-0 bg-bg-surface p-8">
+        <article className="border border-border border-l-0 bg-bg-surface p-8">
           <div className="flex items-start justify-between">
             <p className="technical-label text-[10px] text-text-muted">Revenue This Month</p>
             <span className="text-[10px] text-green-500">+8%</span>
@@ -68,19 +68,19 @@ export default async function AdminDashboardPage() {
           <p className="mt-4 text-3xl font-bold">Rs. {stats.revenue.toLocaleString("en-PK")}</p>
         </article>
 
-        <article className="border border-border-dark border-l-0 bg-bg-surface p-8">
+        <article className="border border-border border-l-0 bg-bg-surface p-8">
           <div className="flex items-start justify-between">
             <p className="technical-label text-[10px] text-text-muted">Frames In Production</p>
           </div>
           <p className="mt-4 text-4xl font-bold">{stats.inProduction}</p>
-          <div className="mt-3 h-1 w-full bg-bg-recessed">
-            <div className="h-full bg-[#ffb3af]" style={{ width: "45%" }} />
+          <div className="mt-3 h-1 w-full bg-bg-deep">
+            <div className="h-full bg-text-accent" style={{ width: "45%" }} />
           </div>
         </article>
       </section>
 
-      <section className="border border-border-dark bg-bg-surface">
-        <div className="flex items-center justify-between border-b border-border-dark bg-bg-recessed px-6 py-4">
+      <section className="border border-border bg-bg-surface">
+        <div className="flex items-center justify-between border-b border-border bg-bg-deep px-6 py-4">
           <h2 className="technical-label text-xs text-text-primary">Live Order Pipeline</h2>
           <ExportCsvButton orders={orders} />
         </div>
@@ -142,15 +142,15 @@ export default async function AdminDashboardPage() {
       </section>
 
       <section className="grid gap-8 lg:grid-cols-3">
-        <article className="border border-border-dark bg-bg-surface lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-border-dark bg-bg-recessed px-6 py-4">
+        <article className="border border-border bg-bg-surface lg:col-span-2">
+          <div className="flex items-center justify-between border-b border-border bg-bg-deep px-6 py-4">
             <h2 className="technical-label text-xs text-text-primary">Inventory Management</h2>
             <Button
               type="button"
               disabled
               variant="ghost"
               size="sm"
-              className="technical-label border-transparent px-0 text-[10px] text-[#ffb3af] hover:bg-transparent"
+              className="technical-label border-transparent px-0 text-[10px] text-text-accent hover:bg-transparent"
             >
               + Add Frame
             </Button>
@@ -192,7 +192,7 @@ export default async function AdminDashboardPage() {
         </article>
 
         <article className="border border-brand-mid bg-brand p-8">
-          <Activity className="mb-4 h-6 w-6 text-[#ffb3af]" strokeWidth={1.5} />
+          <Activity className="mb-4 h-6 w-6 text-text-accent" strokeWidth={1.5} />
           <h3 className="technical-label text-xl leading-tight text-text-primary italic">
             Precision
             <br />
@@ -200,7 +200,7 @@ export default async function AdminDashboardPage() {
             <br />
             Metrics
           </h3>
-          <p className="mt-4 text-[11px] uppercase tracking-[0.16em] text-[#f3bbb7]">
+          <p className="mt-4 text-[11px] uppercase tracking-[0.16em] text-text-accent">
             System performance is optimal. All production modules reporting green.
           </p>
 

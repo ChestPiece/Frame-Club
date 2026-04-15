@@ -9,8 +9,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         brand: "border-brand bg-brand text-text-primary hover:bg-brand-mid",
-        outline: "border-border-dark bg-transparent text-text-primary hover:bg-bg-elevated",
-        muted: "border-border-dark bg-bg-recessed text-text-muted hover:text-text-primary",
+        outline: "border-border bg-transparent text-text-primary hover:bg-bg-elevated",
+        muted: "border-border bg-bg-deep text-text-muted hover:text-text-primary",
         ghost: "border-transparent bg-transparent text-text-muted hover:text-text-primary",
       },
       size: {

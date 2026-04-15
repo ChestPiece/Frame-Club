@@ -9,6 +9,8 @@ type ScrollTriggerEnvironmentValue = {
   appShellVisible: boolean;
   /** Safe to create ScrollTriggers that depend on smooth scroll + visible app shell. */
   animationsReady: boolean;
+  /** Safe to run non-scroll hero intro motion once shell is visible. */
+  introReady: boolean;
   setScrollLayoutReady: (value: boolean) => void;
   setAppShellVisible: (value: boolean) => void;
 };
@@ -28,16 +30,18 @@ export function ScrollTriggerEnvironmentProvider({ children }: { children: React
   }, []);
 
   const animationsReady = scrollLayoutReady && appShellVisible;
+  const introReady = appShellVisible;
 
   const value = React.useMemo(
     () => ({
       scrollLayoutReady,
       appShellVisible,
       animationsReady,
+      introReady,
       setScrollLayoutReady,
       setAppShellVisible,
     }),
-    [scrollLayoutReady, appShellVisible, animationsReady, setScrollLayoutReady, setAppShellVisible],
+    [scrollLayoutReady, appShellVisible, animationsReady, introReady, setScrollLayoutReady, setAppShellVisible],
   );
 
   return (
@@ -56,4 +60,9 @@ export function useScrollTriggerEnvironment() {
 /** Use for ScrollTrigger / useGSAP setup: true only when smooth layout and AppReveal have settled. */
 export function useScrollTriggerReady() {
   return useScrollTriggerEnvironment().animationsReady;
+}
+
+/** Use for non-scroll intro motion that should start as soon as app shell is visible. */
+export function useIntroReady() {
+  return useScrollTriggerEnvironment().introReady;
 }

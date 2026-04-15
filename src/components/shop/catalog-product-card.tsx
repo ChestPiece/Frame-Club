@@ -15,12 +15,13 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
   return (
     <article
       data-animate-item
-      className={`group flex flex-col border border-border-dark bg-bg-surface transition-colors duration-300 hover:border-brand ${
+      data-flip-card
+      className={`group flex flex-col border border-border bg-bg-surface transition-colors duration-300 hover:border-brand ${
         product.status === "unavailable" ? "opacity-75" : "opacity-100"
       }`}
     >
       <Link href={`/shop/${product.slug}`} className="block">
-        <div className="relative overflow-hidden bg-[#0A0A0A]">
+        <div className="relative overflow-hidden bg-bg-deep">
           <div className="relative aspect-4/3 w-full overflow-hidden">
             <Image
               src={product.images[0]}
@@ -29,7 +30,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-contain p-5 sm:p-8 grayscale transition-all duration-700 group-hover:grayscale-0"
             />
-            <div className="absolute right-4 top-4 z-10 rotate-12 border border-brand bg-[#1A1614]/80 px-2 py-1 text-[10px] uppercase tracking-widest text-brand backdrop-blur-sm">
+            <div className="absolute right-4 top-4 z-10 rotate-12 border border-brand bg-bg-surface/80 px-2 py-1 text-[10px] uppercase tracking-widest text-brand backdrop-blur-sm">
               MADE TO ORDER
             </div>
           </div>
@@ -47,7 +48,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
       </Link>
 
       <div className="mt-auto space-y-4 px-7 pb-7">
-        <div className="flex items-center justify-between border border-border-dark/60 bg-bg-recessed px-3 py-2">
+        <div className="flex items-center justify-between border border-border/60 bg-bg-deep px-3 py-2">
           <span className="technical-label text-[10px] text-text-muted">Price</span>
           <span className="display-kicker text-sm text-text-primary">
             Rs. {product.price.toLocaleString("en-PK")}

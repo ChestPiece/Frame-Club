@@ -50,8 +50,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <SidebarProvider defaultOpen>
-      <Sidebar className="border-r border-border-dark bg-bg-recessed" collapsible="icon" variant="sidebar">
-        <SidebarHeader className="gap-1 border-b border-border-dark px-6 py-6 group-data-[collapsible=icon]:px-2">
+      <Sidebar className="border-r border-border bg-bg-deep" collapsible="icon" variant="sidebar">
+        <SidebarHeader className="gap-1 border-b border-border px-6 py-6 group-data-[collapsible=icon]:px-2">
           <p className="technical-label text-xl tracking-[0.08em] text-text-primary group-data-[collapsible=icon]:text-sm">THE FRAME CLUB</p>
           <p className="text-[10px] uppercase tracking-[0.26em] text-text-muted group-data-[collapsible=icon]:hidden">Admin Core</p>
         </SidebarHeader>
@@ -84,8 +84,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </SidebarMenu>
         </SidebarContent>
 
-        <SidebarFooter className="border-t border-border-dark px-4 py-4 group-data-[collapsible=icon]:hidden">
-          <div className="border border-border-dark/60 bg-bg-surface p-3">
+        <SidebarFooter className="border-t border-border px-4 py-4 group-data-[collapsible=icon]:hidden">
+          <div className="border border-border/60 bg-bg-surface p-3">
             <p className="text-[10px] uppercase tracking-[0.2em] text-text-primary">System Admin</p>
             <p className="mt-1 text-[10px] text-text-muted">v2.4.1 Active</p>
           </div>
@@ -93,7 +93,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </Sidebar>
 
       <SidebarInset className="min-h-screen bg-bg-base text-text-primary">
-        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border-dark bg-bg-base/85 px-6 backdrop-blur-md">
+        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-bg-base/85 px-6 backdrop-blur-md">
           <div className="flex items-center gap-3">
             <SidebarTrigger className="text-text-muted hover:text-text-primary" />
             <p className="technical-label text-xs text-text-primary">ADMIN CORE</p>
@@ -109,7 +109,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             <DropdownMenu>
               <DropdownMenuTrigger
-                render={<Button variant="outline" size="sm" className="display-kicker gap-2 border-border-dark text-[10px]" />}
+                render={<Button variant="outline" size="sm" className="display-kicker gap-2 border-border text-[10px]" />}
               >
                 <UserRound className="h-4 w-4" strokeWidth={1.5} />
                 Account

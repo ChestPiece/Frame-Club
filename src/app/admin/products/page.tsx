@@ -17,8 +17,8 @@ export default async function AdminProductsPage() {
   const products = await listProductsForAdmin();
 
   return (
-    <section className="border border-border-dark bg-bg-surface">
-      <div className="flex items-center justify-between border-b border-border-dark bg-bg-recessed px-6 py-4">
+    <section className="border border-border bg-bg-surface">
+      <div className="flex items-center justify-between border-b border-border bg-bg-deep px-6 py-4">
         <h1 className="display-kicker text-5xl leading-none">PRODUCTS</h1>
         <Button
           type="button"

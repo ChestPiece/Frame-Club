@@ -2,9 +2,9 @@
 
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-import type { OrderStatus, ProductStatus } from '@/lib/types'
+import type { OrderStatus, ProductStatus } from '@/lib/db/types'
 import { sendStatusUpdate } from '@/lib/emails/send'
-import { getOrderById } from '@/lib/services'
+import { getOrderById } from '@/lib/db/services'
 
 async function assertAdminSession() {
   const supabase = await createClient()

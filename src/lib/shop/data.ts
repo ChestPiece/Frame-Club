@@ -1,7 +1,7 @@
 import { createPublicClient } from "@/lib/supabase/server";
-import { productDiecastImages } from "@/lib/diecast-assets";
+import { productDiecastImages } from "@/lib/shop/diecast-assets";
 import type { Tables } from "@/lib/supabase/database.types";
-import type { Product, ProductStatus } from "@/lib/types";
+import type { Product, ProductStatus } from "@/lib/db/types";
 
 type ProductRow = Tables<"products">;
 type CustomizationRow = Tables<"customization_options">;

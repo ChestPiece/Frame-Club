@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { applyWebhook } from "@/lib/services";
-import { verifyPayFastSignature } from "@/lib/payfast";
-import { getProductBySlug } from "@/lib/data";
+import { applyWebhook } from "@/lib/db/services";
+import { verifyPayFastSignature } from "@/lib/payment/payfast";
+import { getProductBySlug } from "@/lib/shop/data";
 import { sendAdminNotification, sendOrderConfirmation } from "@/lib/emails/send";
 import { createServiceClient } from "@/lib/supabase/server";
 

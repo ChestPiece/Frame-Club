@@ -6,7 +6,7 @@ import type {
   OrderRecord,
   OrderStatus,
   PaymentStatus,
-} from "@/lib/types";
+} from "@/lib/db/types";
 
 type CreateOrderInput = {
   customerName: string;

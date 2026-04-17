@@ -1,7 +1,7 @@
-import { fail, ok } from "@/lib/api-envelope";
-import { createOrderAccessToken } from "@/lib/order-access-token";
-import { createOrder } from "@/lib/services";
-import { generatePayFastSignature, getPayFastUrl, payfastConfig } from "@/lib/payfast";
+import { fail, ok } from "@/lib/http/api-envelope";
+import { createOrderAccessToken } from "@/lib/payment/order-access-token";
+import { createOrder } from "@/lib/db/services";
+import { generatePayFastSignature, getPayFastUrl, payfastConfig } from "@/lib/payment/payfast";
 import { isNonEmpty } from "@/lib/utils";
 
 type OrderPayload = {

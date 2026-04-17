@@ -1,5 +1,5 @@
-import { fail, ok } from "@/lib/api-envelope";
-import { getOrderById } from "@/lib/services";
+import { fail, ok } from "@/lib/http/api-envelope";
+import { getOrderById } from "@/lib/db/services";
 import { createClient } from "@/lib/supabase/server";
 
 type RouteContext = {

@@ -1,4 +1,4 @@
-import type { OrderRecord } from "../types";
+import type { OrderRecord } from "../db/types";
 
 const baseStyles = `
   body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #0F0D0D; color: #F0EDED; margin: 0; padding: 20px; }

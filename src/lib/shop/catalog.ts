@@ -1,4 +1,4 @@
-import type { Product, ProductStatus } from "@/lib/types";
+import type { Product, ProductStatus } from "@/lib/db/types";
 
 export type CatalogSortKey = "newest" | "price-asc" | "price-desc" | "name-asc";
 

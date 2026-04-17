@@ -1,5 +1,5 @@
-import { fail, ok } from "@/lib/api-envelope";
-import { createNotifySubscription } from "@/lib/services";
+import { fail, ok } from "@/lib/http/api-envelope";
+import { createNotifySubscription } from "@/lib/db/services";
 import { isNonEmpty } from "@/lib/utils";
 
 type NotifyPayload = {

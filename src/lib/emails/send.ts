@@ -4,7 +4,7 @@ import {
   statusUpdateTemplate,
   adminNewOrderTemplate,
 } from "./templates";
-import type { OrderRecord } from "../types";
+import type { OrderRecord } from "../db/types";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const FROM_EMAIL = "Frame Club <orders@frameclub.pk>";

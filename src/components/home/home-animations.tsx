@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap-config";
+import { gsap, ScrollTrigger } from "@/lib/animation/gsap-config";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { useIntroReady, useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
@@ -62,8 +62,8 @@ export function HomeAnimations({ children }: HomeAnimationsProps) {
 
             tl.fromTo(
               '[data-animate="hero-accent"]',
-              { width: 0, autoAlpha: 0 },
-              { width: 96, autoAlpha: 1, duration: 0.8, delay: 0.2 },
+              { scaleX: 0, transformOrigin: "left center", autoAlpha: 0 },
+              { scaleX: 1, autoAlpha: 1, duration: 0.8, delay: 0.2 },
             );
 
             tl.fromTo(

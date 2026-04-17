@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { gsap } from "@/lib/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 
 type TransitionContextValue = {
   startTransition: (href: string) => void;

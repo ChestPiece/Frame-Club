@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getProducts as listProductsForAdmin } from "@/lib/data";
+import { getProducts as listProductsForAdmin } from "@/lib/shop/data";
 import { ProductStatusToggle } from "@/components/admin/product-status-toggle";
 
 export default async function AdminProductsPage() {

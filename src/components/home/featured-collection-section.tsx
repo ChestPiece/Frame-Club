@@ -5,7 +5,7 @@ import Link from "next/link";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 import { Flip } from "gsap/Flip";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -13,7 +13,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import type { Product } from "@/lib/types";
+import type { Product } from "@/lib/db/types";
 
 type FeaturedCollectionSectionProps = {
   products: Product[];
@@ -198,30 +198,15 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
 function ProductCardCTA({ href, children }: { href: string; children: string }) {
   const fillRef = useRef<HTMLSpanElement>(null);
 
-  const handleEnter = useCallback(() => {
-    if (!fillRef.current) return;
-    gsap.killTweensOf(fillRef.current);
-    gsap.to(fillRef.current, { scaleX: 1, duration: 0.28, ease: "expo.out" });
-  }, []);
-
-  const handleLeave = useCallback(() => {
-    if (!fillRef.current) return;
-    gsap.killTweensOf(fillRef.current);
-    gsap.to(fillRef.current, { scaleX: 0, duration: 0.22, ease: "expo.in" });
-  }, []);
-
   return (
     <Button
       render={<Link href={href} />}
       variant="outline"
       className="relative w-full overflow-hidden border border-border py-4 text-center display-kicker tracking-widest focus-visible:ring-2 focus-visible:ring-brand-mid focus-visible:ring-offset-2 focus-visible:ring-offset-bg-deep"
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      onFocus={handleEnter}
-      onBlur={handleLeave}
     >
       <span
         ref={fillRef}
+        data-button-fill="true"
         aria-hidden="true"
         className="absolute inset-0 bg-text-primary pointer-events-none"
         style={{ transform: "scaleX(0)", transformOrigin: "0% 50%" }}

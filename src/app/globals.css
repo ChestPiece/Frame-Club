@@ -5,6 +5,7 @@
   :root {
     --bg-deep: #030303;
     --bg-base: #0f0d0d;
+    --bg-recessed: #0a0a0a;
     --bg-surface: #1a1715;
     --bg-elevated: #2c2828;
     --bg-nav: rgba(44, 40, 40, 0.6);
@@ -66,6 +67,7 @@
 @theme {
   --color-bg-deep: var(--bg-deep);
   --color-bg-base: var(--bg-base);
+  --color-bg-recessed: var(--bg-recessed);
   --color-bg-surface: var(--bg-surface);
   --color-bg-elevated: var(--bg-elevated);
 
@@ -91,6 +93,7 @@
   .frame-container {
     margin-inline: auto;
     width: min(100% - 2rem, 80rem);
+    min-width: 0;
   }
 
   .display-kicker {
@@ -108,10 +111,26 @@
     font-size: clamp(1.75rem, 4vw, 4rem);
   }
 
+  .display-hero-fluid {
+    font-size: clamp(2.75rem, 9vw, 8rem);
+  }
+
+  .display-massive-fluid {
+    font-size: clamp(4rem, 10vw, 9rem);
+  }
+
   .technical-label {
     font-family: var(--font-body);
     letter-spacing: 0.2em;
     text-transform: uppercase;
+  }
+
+  .min-touch-target {
+    min-height: 44px;
+  }
+
+  .min-inline-safe {
+    min-width: 0;
   }
 
   .machined-field {
@@ -151,5 +170,14 @@
   .gsap-hidden {
     visibility: hidden;
     opacity: 0;
+  }
+}
+
+@media (max-width: 374px) {
+  @layer utilities {
+    .frame-container {
+      width: calc(100% - 2rem);
+      padding-inline: 0;
+    }
   }
 }

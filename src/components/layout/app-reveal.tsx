@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 import { SITE_LOADER_DONE_EVENT } from "@/components/layout/site-loader";
 import { useScrollTriggerEnvironment } from "@/components/providers/scroll-trigger-environment";
 

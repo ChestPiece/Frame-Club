@@ -3,7 +3,7 @@
 import { useRef, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
 import { Layers, CarFront, FileText } from "lucide-react";
-import { gsap } from "@/lib/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { Card, CardContent } from "@/components/ui/card";
 

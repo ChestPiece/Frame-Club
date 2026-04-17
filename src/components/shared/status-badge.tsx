@@ -1,4 +1,4 @@
-import type { ProductStatus } from "@/lib/types";
+import type { ProductStatus } from "@/lib/db/types";
 import { Badge } from "@/components/ui/badge";
 import { PulsingDot } from "@/components/shared/pulsing-dot";
 

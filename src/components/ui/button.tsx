@@ -37,9 +37,20 @@ function Button({
   nativeButton,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  const motionLevel =
+    size === "icon" || size === "icon-sm"
+      ? "minimal"
+      : variant === "brand" && (size === "lg" || size === "xl")
+        ? "strong"
+        : variant === "ghost" || variant === "muted"
+          ? "subtle"
+          : "default";
+
   return (
     <ButtonPrimitive
       data-slot="button"
+      data-button-motion="true"
+      data-button-motion-level={motionLevel}
       className={cn(buttonVariants({ variant, size, className }))}
       render={render}
       nativeButton={render ? false : nativeButton}

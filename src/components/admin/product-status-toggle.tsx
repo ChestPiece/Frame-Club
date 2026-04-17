@@ -3,7 +3,7 @@
 import { useTransition } from 'react'
 import { useState } from 'react'
 import { updateProductStatus } from '@/app/admin/actions'
-import type { ProductStatus } from '@/lib/types'
+import type { ProductStatus } from '@/lib/db/types'
 
 export function ProductStatusToggle({
   productId,
@@ -42,6 +42,7 @@ export function ProductStatusToggle({
         type="button"
         onClick={toggleStatus}
         disabled={isPending}
+        data-button-motion="true"
         className="group flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] outline-none"
       >
         <span className="relative block h-4 w-8 border border-border bg-bg-deep opacity-80 group-hover:opacity-100">

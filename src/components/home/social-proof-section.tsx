@@ -3,10 +3,10 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { Card, CardContent } from "@/components/ui/card";
-import { COPY } from "@/lib/copy-constants";
+import { COPY } from "@/lib/content/copy-constants";
 
 const proofPoints = [
   {

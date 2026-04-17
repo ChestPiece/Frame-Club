@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import type { OrderRecord } from '@/lib/types'
+import type { OrderRecord } from '@/lib/db/types'
 
 function escapeCsvValue(value: unknown) {
   return `"${String(value ?? '').replace(/"/g, '""')}"`

@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { updateOrderStatus } from '@/app/admin/actions'
-import type { OrderStatus } from '@/lib/types'
+import type { OrderStatus } from '@/lib/db/types'
 
 const orderStatusOptions: OrderStatus[] = [
   "pending",
@@ -58,7 +58,7 @@ export function OrderStatusSelect({
           })
         }}
       >
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" data-button-motion="true">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

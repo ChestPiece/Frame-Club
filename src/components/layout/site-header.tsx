@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { gsap, ScrollTrigger } from "@/lib/gsap-config";
+import { gsap, ScrollTrigger } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { Button } from "@/components/ui/button";
 import {
@@ -158,7 +158,7 @@ export function SiteHeader() {
         .to(
           navRowRef.current,
           {
-            height: 56,
+            y: -4,
             duration: 0.4,
             ease: "power2.out",
           },
@@ -237,16 +237,17 @@ export function SiteHeader() {
       </div>
       <div
         ref={navRowRef}
-        className="relative z-10 frame-container grid h-20 w-full grid-cols-[auto_1fr_auto] items-center gap-4"
+        className="relative z-10 frame-container grid h-20 w-full min-inline-safe grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:grid-cols-[auto_1fr_auto] md:gap-4"
       >
         <Link
           ref={logoRef}
           href="/"
           data-header-logo
-          className={`${headerReady ? "gsap-hidden" : ""} display-kicker flex items-center gap-3 text-2xl leading-none text-text-primary md:text-3xl`}
+          className={`${headerReady ? "gsap-hidden" : ""} display-kicker min-inline-safe flex items-center gap-2 text-xl leading-none text-text-primary sm:gap-3 md:text-3xl`}
         >
-          <Image src="/Assets/FrameClub.png" alt="The Frame Club Logo" width={36} height={36} className="object-contain" />
-          THE FRAME CLUB
+          <Image src="/Assets/FrameClub.png" alt="The Frame Club Logo" width={34} height={34} className="object-contain sm:h-9 sm:w-9" />
+          <span className="hidden sm:inline">THE FRAME CLUB</span>
+          <span className="sm:hidden">FRAME CLUB</span>
         </Link>
 
         <NavigationMenu className="hidden justify-self-center md:flex">
@@ -296,7 +297,7 @@ export function SiteHeader() {
             variant="brand"
             size="sm"
             data-header-cta
-            className={`${headerReady ? "gsap-hidden" : ""} display-kicker px-4 py-2 md:px-6 md:text-sm`}
+            className={`${headerReady ? "gsap-hidden" : ""} display-kicker min-touch-target px-4 py-2 md:px-6 md:text-sm`}
           >
             <span className="md:hidden">ORDER</span>
             <span className="hidden md:inline">ORDER NOW</span>

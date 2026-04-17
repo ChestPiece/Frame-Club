@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 
 export const SITE_LOADER_DONE_EVENT = "frameclub:site-loader-done";
 const SITE_LOADER_DONE_FLAG = "__frameClubLoaderDone";

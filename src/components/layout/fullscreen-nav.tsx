@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 
 export type NavItem = {
   href: string;
@@ -131,6 +131,7 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         </span>
         <button
           onClick={onClose}
+          data-button-motion="true"
           className="p-2 text-text-muted hover:text-text-primary transition-colors"
           aria-label="Close navigation"
         >
@@ -185,6 +186,7 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         <Link
           href="/shop"
           onClick={onClose}
+          data-button-motion="true"
           className="display-kicker block w-full bg-brand py-5 text-center text-lg tracking-[0.3em] text-text-primary hover:bg-brand-mid transition-colors"
         >
           ORDER NOW

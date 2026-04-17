@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
-import { WHATSAPP_LINK } from "@/lib/copy-constants";
+import { WHATSAPP_LINK } from "@/lib/content/copy-constants";
 
 export default function NotFoundPage() {
   return (

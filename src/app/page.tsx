@@ -11,9 +11,9 @@ import { SocialProofSection } from "@/components/home/social-proof-section";
 import { FinalCTASection } from "@/components/home/final-cta-section";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { COPY } from "@/lib/copy-constants";
-import { DIECAST_PRODUCT_IMAGES } from "@/lib/diecast-assets";
-import { getProducts } from "@/lib/data";
+import { COPY } from "@/lib/content/copy-constants";
+import { DIECAST_PRODUCT_IMAGES } from "@/lib/shop/diecast-assets";
+import { getProducts } from "@/lib/shop/data";
 
 export default async function Home() {
   const featuredProducts = (await getProducts()).slice(0, 3);

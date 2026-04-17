@@ -2,9 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
-import { getProductBySlug } from "@/lib/data";
-import { verifyOrderAccessToken } from "@/lib/order-access-token";
-import { getOrderById } from "@/lib/services";
+import { getProductBySlug } from "@/lib/shop/data";
+import { verifyOrderAccessToken } from "@/lib/payment/order-access-token";
+import { getOrderById } from "@/lib/db/services";
 
 type OrderConfirmationProps = {
   params: Promise<{ id: string }>;

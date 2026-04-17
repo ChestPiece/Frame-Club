@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/shared/status-badge";
-import type { Product } from "@/lib/types";
+import type { Product } from "@/lib/db/types";
 
 type CatalogProductCardProps = {
   product: Product;
@@ -40,7 +40,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
           </div>
         </div>
 
-        <div className="border-t-2 border-t-transparent p-7 transition-colors group-hover:border-t-brand">
+        <div className="border-t-2 border-t-transparent p-8 transition-colors group-hover:border-t-brand">
           <h2 className="display-kicker text-xl sm:text-2xl leading-none">{product.name}</h2>
           <p className="mt-2 text-xs uppercase tracking-[0.2em] text-text-muted">{product.brand}</p>
           <p className="mt-4 line-clamp-2 text-sm text-text-muted">{product.description}</p>
@@ -59,7 +59,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
           <Button
             render={<Link href={`/shop/${product.slug}`} />}
             variant="outline"
-            className="display-kicker w-full justify-center"
+            className="display-kicker min-touch-target w-full justify-center"
           >
             View Specs
           </Button>
@@ -68,7 +68,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
             <Button
               render={<Link href={`/contact?product=${encodeURIComponent(product.slug)}`} />}
               variant="muted"
-              className="display-kicker w-full justify-center"
+              className="display-kicker min-touch-target w-full justify-center"
             >
               Notify Me
             </Button>
@@ -76,7 +76,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
             <Button
               render={<Link href={quickAddHref} />}
               variant="brand"
-              className="display-kicker w-full justify-center"
+              className="display-kicker min-touch-target w-full justify-center"
             >
               Quick Add
             </Button>

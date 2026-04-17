@@ -11,8 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAdminStats, listOrders } from "@/lib/services";
-import { getProducts as listProductsForAdmin } from "@/lib/data";
+import { getAdminStats, listOrders } from "@/lib/db/services";
+import { getProducts as listProductsForAdmin } from "@/lib/shop/data";
 import { OrderStatusSelect } from "@/components/admin/order-status-select";
 import { ProductStatusToggle } from "@/components/admin/product-status-toggle";
 import { ExportCsvButton } from "@/components/admin/export-csv-button";

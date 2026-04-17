@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { Button } from "@/components/ui/button";
-import { COPY } from "@/lib/copy-constants";
+import { COPY } from "@/lib/content/copy-constants";
 
 const headlineWords = ["READY", "TO", "FRAME", "YOUR", "OBSESSION?"];
 
@@ -15,18 +15,6 @@ export function FinalCTASection() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const fillRef = useRef<HTMLSpanElement>(null);
   const scrollTriggerReady = useScrollTriggerReady();
-
-  const handleEnter = useCallback(() => {
-    if (!fillRef.current) return;
-    gsap.killTweensOf(fillRef.current);
-    gsap.to(fillRef.current, { scaleX: 1, duration: 0.28, ease: "expo.out" });
-  }, []);
-
-  const handleLeave = useCallback(() => {
-    if (!fillRef.current) return;
-    gsap.killTweensOf(fillRef.current);
-    gsap.to(fillRef.current, { scaleX: 0, duration: 0.22, ease: "expo.in" });
-  }, []);
 
   useGSAP(
     () => {
@@ -97,13 +85,10 @@ export function FinalCTASection() {
         render={<Link href="/shop" />}
         variant="outline"
         className="relative inline-flex overflow-hidden display-kicker text-lg sm:text-xl md:text-2xl tracking-[0.14em] sm:tracking-[0.2em] w-full max-w-md md:max-w-none md:w-auto px-6 sm:px-10 md:px-16 py-4 md:py-6 border-2 border-border bg-bg-surface text-text-primary hover:bg-bg-elevated transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-bright focus-visible:ring-offset-2 focus-visible:ring-offset-bg-deep"
-        onMouseEnter={handleEnter}
-        onMouseLeave={handleLeave}
-        onFocus={handleEnter}
-        onBlur={handleLeave}
       >
         <span
           ref={fillRef}
+          data-button-fill="true"
           aria-hidden="true"
           className="absolute inset-0 bg-text-primary pointer-events-none"
           style={{ transform: "scaleX(0)", transformOrigin: "0% 50%" }}

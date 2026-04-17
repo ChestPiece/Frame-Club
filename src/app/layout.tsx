@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { ScrollTriggerEnvironmentProvider } from "@/components/providers/scroll-trigger-environment";
 import { GSAPProvider } from "@/components/providers/gsap-provider";
+import { ButtonMotionProvider } from "@/components/providers/button-motion-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteLoader } from "@/components/layout/site-loader";
 import { AppReveal } from "@/components/layout/app-reveal";
@@ -58,15 +59,17 @@ export default function RootLayout({
           Skip to main content
         </a>
         <GSAPProvider>
-          <TransitionProvider>
-            <ScrollTriggerEnvironmentProvider>
-              <SiteLoader />
-              <AppReveal>
-                <SiteHeader />
-                <SmoothScrollProvider>{children}</SmoothScrollProvider>
-              </AppReveal>
-            </ScrollTriggerEnvironmentProvider>
-          </TransitionProvider>
+          <ButtonMotionProvider>
+            <TransitionProvider>
+              <ScrollTriggerEnvironmentProvider>
+                <SiteLoader />
+                <AppReveal>
+                  <SiteHeader />
+                  <SmoothScrollProvider>{children}</SmoothScrollProvider>
+                </AppReveal>
+              </ScrollTriggerEnvironmentProvider>
+            </TransitionProvider>
+          </ButtonMotionProvider>
         </GSAPProvider>
       </body>
     </html>

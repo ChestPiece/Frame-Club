@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { listOrders } from "@/lib/services";
+import { listOrders } from "@/lib/db/services";
 import { OrderStatusSelect } from "@/components/admin/order-status-select";
 import { ExportCsvButton } from "@/components/admin/export-csv-button";
 

@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useCallback } from "react";
-import { gsap } from "@/lib/gsap-config";
+import { useRef } from "react";
 
 type AnimatedCTALinkProps = {
   href: string;
@@ -17,27 +16,15 @@ export function AnimatedCTALink({
 }: AnimatedCTALinkProps) {
   const fillRef = useRef<HTMLSpanElement>(null);
 
-  const handleMouseEnter = useCallback(() => {
-    if (!fillRef.current) return;
-    gsap.killTweensOf(fillRef.current);
-    gsap.to(fillRef.current, { scaleX: 1, duration: 0.28, ease: "expo.out" });
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    if (!fillRef.current) return;
-    gsap.killTweensOf(fillRef.current);
-    gsap.to(fillRef.current, { scaleX: 0, duration: 0.22, ease: "expo.in" });
-  }, []);
-
   return (
     <Link
       href={href}
+      data-button-motion="true"
       className={`relative overflow-hidden block ${className}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <span
         ref={fillRef}
+        data-button-fill="true"
         className="absolute inset-0 bg-text-primary pointer-events-none"
         style={{ transform: "scaleX(0)", transformOrigin: "0% 50%" }}
         aria-hidden="true"

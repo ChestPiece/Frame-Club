@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { ScrollTrigger } from "@/lib/gsap-config";
+import { ScrollTrigger } from "@/lib/animation/gsap-config";
 import { useScrollTriggerEnvironment } from "@/components/providers/scroll-trigger-environment";
 import { APP_REVEAL_DONE_EVENT } from "@/components/layout/app-reveal";
 import {
@@ -10,9 +10,9 @@ import {
   isScrollSmootherEnabled,
   logScrollLayoutDebug,
   scrollSmootherMatchMediaQuery,
-} from "@/lib/scroll-layout";
-import { scheduleScrollTriggerRefresh } from "@/lib/scroll-trigger-refresh";
-import { waitForLayoutStable } from "@/lib/wait-for-layout-stable";
+} from "@/lib/animation/scroll-layout";
+import { scheduleScrollTriggerRefresh } from "@/lib/animation/scroll-trigger-refresh";
+import { waitForLayoutStable } from "@/lib/animation/wait-for-layout-stable";
 
 type SmoothScrollProviderProps = {
   children: React.ReactNode;
@@ -34,6 +34,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const layoutReadyGenerationRef = React.useRef(0);
   const appRevealDoneRef = React.useRef(false);
   const pendingMqChangeRef = React.useRef(false);
+  const resizeRefreshQueuedRef = React.useRef(false);
 
   React.useEffect(() => {
     setIsMounted(true);
@@ -134,7 +135,14 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   React.useEffect(() => {
     if (!isMounted) return;
 
-    const onResize = () => scheduleScrollTriggerRefresh();
+    const onResize = () => {
+      if (resizeRefreshQueuedRef.current) return;
+      resizeRefreshQueuedRef.current = true;
+      requestAnimationFrame(() => {
+        resizeRefreshQueuedRef.current = false;
+        scheduleScrollTriggerRefresh();
+      });
+    };
     window.addEventListener("resize", onResize);
 
     return () => {
@@ -147,7 +155,14 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     if (typeof ResizeObserver === "undefined") return;
 
     const contentEl = contentRef.current;
-    const ro = new ResizeObserver(() => scheduleScrollTriggerRefresh());
+    const ro = new ResizeObserver(() => {
+      if (resizeRefreshQueuedRef.current) return;
+      resizeRefreshQueuedRef.current = true;
+      requestAnimationFrame(() => {
+        resizeRefreshQueuedRef.current = false;
+        scheduleScrollTriggerRefresh();
+      });
+    });
     ro.observe(contentEl);
 
     return () => {

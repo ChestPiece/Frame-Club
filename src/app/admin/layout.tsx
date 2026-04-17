@@ -121,7 +121,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <form action={logout} className="w-full">
-                    <button type="submit" className="w-full text-left">Sign Out</button>
+                    <button type="submit" data-button-motion="true" className="w-full text-left">Sign Out</button>
                   </form>
                 </DropdownMenuItem>
               </DropdownMenuContent>

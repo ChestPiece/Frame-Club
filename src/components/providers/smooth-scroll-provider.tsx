@@ -150,9 +150,13 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       });
     };
     window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    window.visualViewport?.addEventListener("resize", onResize);
 
     return () => {
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+      window.visualViewport?.removeEventListener("resize", onResize);
     };
   }, [isMounted]);
 

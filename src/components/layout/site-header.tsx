@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { FullscreenNav } from "@/components/layout/fullscreen-nav";
 import { SiteTicker } from "@/components/layout/site-ticker";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/shop", label: "Collection" },
@@ -207,19 +208,22 @@ export function SiteHeader() {
       const [topBar, midBar, bottomBar] = gsap.utils.toArray<HTMLElement>("[data-hamburger-bar]");
       if (!topBar || !midBar || !bottomBar) return;
 
+      gsap.set(topBar, { y: -6, rotation: 0, transformOrigin: "50% 50%" });
+      gsap.set(midBar, { autoAlpha: 1, scaleX: 1, transformOrigin: "50% 50%" });
+      gsap.set(bottomBar, { y: 6, rotation: 0, transformOrigin: "50% 50%" });
+
       const tl = gsap.timeline({ defaults: { duration: 0.28, ease: "power2.out" } });
       if (mobileNavOpen) {
         tl.to(topBar, { y: 6, rotation: 45 }, 0)
           .to(midBar, { autoAlpha: 0, scaleX: 0, duration: 0.2 }, 0)
           .to(bottomBar, { y: -6, rotation: -45 }, 0);
-        return;
+      } else {
+        tl.to(topBar, { y: -6, rotation: 0 }, 0)
+          .to(midBar, { autoAlpha: 1, scaleX: 1, duration: 0.2 }, 0)
+          .to(bottomBar, { y: 6, rotation: 0 }, 0);
       }
-
-      tl.to(topBar, { y: 0, rotation: 0 }, 0)
-        .to(midBar, { autoAlpha: 1, scaleX: 1, duration: 0.2 }, 0)
-        .to(bottomBar, { y: 0, rotation: 0 }, 0);
     },
-    { scope: mobileToggleRef, dependencies: [mobileNavOpen] },
+    { scope: mobileToggleRef, dependencies: [mobileNavOpen], revertOnUpdate: true },
   );
 
   return (
@@ -231,14 +235,20 @@ export function SiteHeader() {
       />
       <div
         ref={tickerWrapRef}
-        className={`${headerReady ? "gsap-hidden" : ""} relative z-10 overflow-hidden origin-top`}
+        className={cn(
+          `${headerReady ? "gsap-hidden" : ""} relative z-10 overflow-hidden origin-top`,
+          mobileNavOpen && "pointer-events-none md:pointer-events-auto",
+        )}
         data-header-ticker
       >
         <SiteTicker />
       </div>
       <div
         ref={navRowRef}
-        className="relative z-10 frame-container grid h-20 w-full min-inline-safe grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:grid-cols-[auto_1fr_auto] md:gap-4"
+        className={cn(
+          "relative z-10 frame-container grid h-20 w-full min-inline-safe grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:grid-cols-[auto_1fr_auto] md:gap-4",
+          mobileNavOpen && "pointer-events-none md:pointer-events-auto",
+        )}
       >
         <TransitionLink
           ref={logoRef}
@@ -316,14 +326,12 @@ export function SiteHeader() {
             <span className="sr-only">Toggle navigation</span>
             <span
               data-hamburger-bar
-              className="absolute h-[1.5px] w-5 bg-text-primary"
-              style={{ transform: "translateY(-6px)" }}
+              className="absolute h-[1.5px] w-5 -translate-y-1.5 bg-text-primary"
             />
             <span data-hamburger-bar className="absolute h-[1.5px] w-5 bg-text-primary" />
             <span
               data-hamburger-bar
-              className="absolute h-[1.5px] w-5 bg-text-primary"
-              style={{ transform: "translateY(6px)" }}
+              className="absolute h-[1.5px] w-5 translate-y-1.5 bg-text-primary"
             />
           </Button>
         </div>

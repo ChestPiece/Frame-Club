@@ -80,7 +80,14 @@ export function ButtonMotionProvider({ children }: ButtonMotionProviderProps) {
     const onPointerRelease = (event: PointerEvent) => {
       const button = getMotionTarget(event.target);
       if (!button) return;
-      animateButton(button, "hover");
+      const mode = event.pointerType === "touch" ? "rest" : "hover";
+      animateButton(button, mode);
+    };
+
+    const onPointerCancel = (event: PointerEvent) => {
+      const button = getMotionTarget(event.target);
+      if (!button) return;
+      animateButton(button, "rest");
     };
 
     document.addEventListener("pointerenter", onPointerEnter, true);
@@ -89,7 +96,7 @@ export function ButtonMotionProvider({ children }: ButtonMotionProviderProps) {
     document.addEventListener("focusout", onFocusOut, true);
     document.addEventListener("pointerdown", onPointerDown, true);
     document.addEventListener("pointerup", onPointerRelease, true);
-    document.addEventListener("pointercancel", onPointerRelease, true);
+    document.addEventListener("pointercancel", onPointerCancel, true);
 
     return () => {
       document.removeEventListener("pointerenter", onPointerEnter, true);
@@ -98,7 +105,7 @@ export function ButtonMotionProvider({ children }: ButtonMotionProviderProps) {
       document.removeEventListener("focusout", onFocusOut, true);
       document.removeEventListener("pointerdown", onPointerDown, true);
       document.removeEventListener("pointerup", onPointerRelease, true);
-      document.removeEventListener("pointercancel", onPointerRelease, true);
+      document.removeEventListener("pointercancel", onPointerCancel, true);
     };
   }, []);
 

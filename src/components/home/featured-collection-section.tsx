@@ -147,7 +147,7 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
       ) : (
         <div
           ref={gridRef}
-          className={cn("grid gap-6 sm:gap-8", viewMode === "grid" ? "md:grid-cols-3" : "md:grid-cols-1")}
+          className={cn("grid gap-6 sm:gap-8", viewMode === "grid" ? "sm:grid-cols-2 md:grid-cols-3" : "md:grid-cols-1")}
         >
           {products.map((product, index) => (
             <Card

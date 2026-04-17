@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { TransitionLink } from "@/components/layout/page-transition";
 import { HomeAnimations } from "@/components/home/home-animations";
 import { WhatIsThisSection } from "@/components/home/what-is-this-section";
 import { HowItWorksSection } from "@/components/home/how-it-works-section";
@@ -57,7 +57,7 @@ export default async function Home() {
                       {COPY.heroSub}
                     </p>
                     <Button
-                      render={<Link href="/shop" />}
+                      render={<TransitionLink href="/shop" />}
                       variant="brand"
                       className="display-kicker h-auto w-full md:w-auto gap-3 px-8 md:px-10 py-5 text-xl"
                     >

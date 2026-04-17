@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useRef } from "react";
+import { TransitionLink } from "@/components/layout/page-transition";
 
 type AnimatedCTALinkProps = {
   href: string;
@@ -17,7 +17,7 @@ export function AnimatedCTALink({
   const fillRef = useRef<HTMLSpanElement>(null);
 
   return (
-    <Link
+    <TransitionLink
       href={href}
       data-button-motion="true"
       className={`relative overflow-hidden block ${className}`}
@@ -30,6 +30,6 @@ export function AnimatedCTALink({
         aria-hidden="true"
       />
       <span className="relative z-10 mix-blend-difference">{children}</span>
-    </Link>
+    </TransitionLink>
   );
 }

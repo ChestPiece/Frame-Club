@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TransitionLink } from "@/components/layout/page-transition";
 import { Button } from "@/components/ui/button";
 
 type EmptyStateProps = {
@@ -18,7 +19,11 @@ export function EmptyState({ label, title, description, cta }: EmptyStateProps) 
       <p className="display-kicker mt-4 text-3xl">{title}</p>
       <p className="mt-4 text-sm text-text-muted">{description}</p>
       {cta ? (
-        <Button render={<Link href={cta.href} />} variant="outline" className="mt-6 display-kicker">
+        <Button
+          render={cta.href.startsWith("/") ? <TransitionLink href={cta.href} /> : <Link href={cta.href} />}
+          variant="outline"
+          className="mt-6 display-kicker"
+        >
           {cta.label}
         </Button>
       ) : null}

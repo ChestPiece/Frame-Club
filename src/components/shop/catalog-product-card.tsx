@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink } from "@/components/layout/page-transition";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/shared/status-badge";
 import type { Product } from "@/lib/db/types";
@@ -20,7 +20,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
         product.status === "unavailable" ? "opacity-75" : "opacity-100"
       }`}
     >
-      <Link href={`/shop/${product.slug}`} className="block">
+      <TransitionLink href={`/shop/${product.slug}`} className="block">
         <div className="relative overflow-hidden bg-bg-deep">
           <div className="relative aspect-4/3 w-full overflow-hidden">
             <Image
@@ -45,7 +45,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
           <p className="mt-2 text-xs uppercase tracking-[0.2em] text-text-muted">{product.brand}</p>
           <p className="mt-4 line-clamp-2 text-sm text-text-muted">{product.description}</p>
         </div>
-      </Link>
+      </TransitionLink>
 
       <div className="mt-auto space-y-4 px-7 pb-7">
         <div className="flex items-center justify-between border border-border/60 bg-bg-deep px-3 py-2">
@@ -57,7 +57,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
 
         <div className="grid grid-cols-2 gap-3">
           <Button
-            render={<Link href={`/shop/${product.slug}`} />}
+            render={<TransitionLink href={`/shop/${product.slug}`} />}
             variant="outline"
             className="display-kicker min-touch-target w-full justify-center"
           >
@@ -66,7 +66,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
 
           {product.status === "unavailable" ? (
             <Button
-              render={<Link href={`/contact?product=${encodeURIComponent(product.slug)}`} />}
+              render={<TransitionLink href={`/contact?product=${encodeURIComponent(product.slug)}`} />}
               variant="muted"
               className="display-kicker min-touch-target w-full justify-center"
             >
@@ -74,7 +74,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
             </Button>
           ) : (
             <Button
-              render={<Link href={quickAddHref} />}
+              render={<TransitionLink href={quickAddHref} />}
               variant="brand"
               className="display-kicker min-touch-target w-full justify-center"
             >

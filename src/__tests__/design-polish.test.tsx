@@ -43,6 +43,15 @@ vi.mock("@/components/layout/app-reveal", () => ({
 
 vi.mock("@/components/layout/page-transition", () => ({
   TransitionProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  TransitionLink: ({
+    href,
+    children,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
 }));
 
 vi.mock("@/components/providers/smooth-scroll-provider", () => ({

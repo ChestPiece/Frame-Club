@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TransitionLink } from "@/components/layout/page-transition";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Button } from "@/components/ui/button";
 import { getProductBySlug } from "@/lib/shop/data";
@@ -84,19 +84,19 @@ export default async function OrderConfirmationPage({ params, searchParams }: Or
 
             <div className="mt-8 flex flex-wrap gap-3">
               {isPaymentFailed ? (
-                <Button render={<Link href={retryHref} />} variant="brand" className="display-kicker">
+                <Button render={<TransitionLink href={retryHref} />} variant="brand" className="display-kicker">
                   TRY AGAIN
                 </Button>
               ) : null}
               <Button
-                render={<Link href="/shop" />}
+                render={<TransitionLink href="/shop" />}
                 variant={isPaymentFailed ? "outline" : "brand"}
                 className="display-kicker"
               >
                 ORDER ANOTHER FRAME
               </Button>
               <Button
-                render={<Link href="/" />}
+                render={<TransitionLink href="/" />}
                 variant="outline"
                 className="display-kicker"
               >

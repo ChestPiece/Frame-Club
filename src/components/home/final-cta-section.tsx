@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
+import { TransitionLink } from "@/components/layout/page-transition";
 import { Button } from "@/components/ui/button";
 import { COPY } from "@/lib/content/copy-constants";
 
@@ -82,7 +82,7 @@ export function FinalCTASection() {
       </svg>
 
       <Button
-        render={<Link href="/shop" />}
+        render={<TransitionLink href="/shop" />}
         variant="outline"
         className="relative inline-flex overflow-hidden display-kicker text-lg sm:text-xl md:text-2xl tracking-[0.14em] sm:tracking-[0.2em] w-full max-w-md md:max-w-none md:w-auto px-6 sm:px-10 md:px-16 py-4 md:py-6 border-2 border-border bg-bg-surface text-text-primary hover:bg-bg-elevated transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-bright focus-visible:ring-offset-2 focus-visible:ring-offset-bg-deep"
       >

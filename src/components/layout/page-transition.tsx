@@ -82,7 +82,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       {/* z-[80]: below fullscreen nav (z-90) and loader (z-100), above everything else */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 z-[80] bg-brand pointer-events-none"
+        className="fixed inset-0 z-80 bg-brand pointer-events-none"
         style={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)" }}
         aria-hidden="true"
       />
@@ -95,22 +95,45 @@ type TransitionLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
 };
 
-export function TransitionLink({ href, children, className, onClick, ...props }: TransitionLinkProps) {
-  const { startTransition } = React.useContext(TransitionContext);
+export const TransitionLink = React.forwardRef<HTMLAnchorElement, TransitionLinkProps>(
+  ({ href, children, className, onClick, ...props }, ref) => {
+    const { startTransition } = React.useContext(TransitionContext);
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Let browser handle modifier-key clicks (new tab, etc.)
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    // Only intercept internal routes
-    if (!href.startsWith("/")) return;
-    e.preventDefault();
-    onClick?.(e);
-    startTransition(href);
-  };
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      onClick?.(e);
+      if (e.defaultPrevented) return;
 
-  return (
-    <a href={href} onClick={handleClick} className={className} {...props}>
-      {children}
-    </a>
-  );
-}
+      if (e.button !== 0) return;
+      // Let browser handle modifier-key clicks (new tab, etc.)
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (props.download) return;
+      if (props.target && props.target !== "_self") return;
+      // Only intercept app-internal routes and let anchors/external URLs behave natively.
+      if (!href.startsWith("/")) return;
+
+      const targetUrl = new URL(href, window.location.origin);
+      if (targetUrl.origin !== window.location.origin) return;
+
+      const currentPath = window.location.pathname;
+      const currentSearch = window.location.search;
+      const isSamePath = targetUrl.pathname === currentPath;
+      const isSameSearch = targetUrl.search === currentSearch;
+
+      // Same-page hash anchors should keep default browser/handler scrolling behavior.
+      if (isSamePath && isSameSearch && targetUrl.hash.length > 0) {
+        return;
+      }
+
+      e.preventDefault();
+      startTransition(`${targetUrl.pathname}${targetUrl.search}${targetUrl.hash}`);
+    };
+
+    return (
+      <a ref={ref} href={href} onClick={handleClick} className={className} {...props}>
+        {children}
+      </a>
+    );
+  },
+);
+
+TransitionLink.displayName = "TransitionLink";

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Clock3, Package, ShieldCheck } from "lucide-react";
+import { TransitionLink } from "@/components/layout/page-transition";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
@@ -39,13 +40,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <main id="main-content" className="pb-24">
         <section className="frame-container pt-16 pb-20">
           <nav className="mb-10 border-b border-border/20 pb-4 text-xs uppercase tracking-widest text-text-muted">
-            <Link href="/" className="hover:text-text-primary">
+            <TransitionLink href="/" className="hover:text-text-primary">
               Home
-            </Link>{" "}
+            </TransitionLink>{" "}
             &gt;{" "}
-            <Link href="/shop" className="hover:text-text-primary">
+            <TransitionLink href="/shop" className="hover:text-text-primary">
               Shop
-            </Link>{" "}
+            </TransitionLink>{" "}
             &gt; <span className="text-text-primary">{product.name}</span>
           </nav>
 
@@ -138,7 +139,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <div className="space-y-3">
                   {product.status === "unavailable" ? (
                     <Button
-                      render={<Link href={`/contact?intent=notify&product=${product.slug}`} />}
+                      render={<TransitionLink href={`/contact?intent=notify&product=${product.slug}`} />}
                       variant="muted"
                       className="display-kicker w-full justify-center py-5 text-xl"
                     >
@@ -231,9 +232,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
                   <h3 className="display-kicker text-3xl leading-none">{item.name}</h3>
                   <p className="mt-1 text-sm text-text-muted">Rs. {item.price.toLocaleString("en-PK")}</p>
-                  <Link href={`/shop/${item.slug}`} className="sr-only">
+                  <TransitionLink href={`/shop/${item.slug}`} className="sr-only">
                     View {item.name}
-                  </Link>
+                  </TransitionLink>
                 </article>
               ))}
             </div>

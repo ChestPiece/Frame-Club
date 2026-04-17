@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bell,
@@ -30,6 +29,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { TransitionLink } from "@/components/layout/page-transition";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -65,7 +65,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               return (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
-                    render={<Link href={item.href} />}
+                    render={<TransitionLink href={item.href} />}
                     size="lg"
                     isActive={active}
                     tooltip={item.label}
@@ -115,7 +115,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 Account
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-52">
-                <DropdownMenuItem render={<Link href="/" />}>Storefront</DropdownMenuItem>
+                <DropdownMenuItem render={<TransitionLink href="/" />}>Storefront</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem disabled>Signed in as Admin</DropdownMenuItem>
                 <DropdownMenuSeparator />

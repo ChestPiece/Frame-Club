@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animation/gsap-config";
 import { Flip } from "gsap/Flip";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
+import { TransitionLink } from "@/components/layout/page-transition";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
@@ -200,7 +200,7 @@ function ProductCardCTA({ href, children }: { href: string; children: string }) 
 
   return (
     <Button
-      render={<Link href={href} />}
+      render={<TransitionLink href={href} />}
       variant="outline"
       className="relative w-full overflow-hidden border border-border py-4 text-center display-kicker tracking-widest focus-visible:ring-2 focus-visible:ring-brand-mid focus-visible:ring-offset-2 focus-visible:ring-offset-bg-deep"
     >

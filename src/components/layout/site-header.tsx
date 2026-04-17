@@ -2,12 +2,12 @@
 
 import * as React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { gsap, ScrollTrigger } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
+import { TransitionLink } from "@/components/layout/page-transition";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -239,7 +239,7 @@ export function SiteHeader() {
         ref={navRowRef}
         className="relative z-10 frame-container grid h-20 w-full min-inline-safe grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:grid-cols-[auto_1fr_auto] md:gap-4"
       >
-        <Link
+        <TransitionLink
           ref={logoRef}
           href="/"
           data-header-logo
@@ -248,13 +248,13 @@ export function SiteHeader() {
           <Image src="/Assets/FrameClub.png" alt="The Frame Club Logo" width={34} height={34} className="object-contain sm:h-9 sm:w-9" />
           <span className="hidden sm:inline">THE FRAME CLUB</span>
           <span className="sm:hidden">FRAME CLUB</span>
-        </Link>
+        </TransitionLink>
 
         <NavigationMenu className="hidden justify-self-center md:flex">
           <NavigationMenuList className="items-center gap-10 text-xs uppercase tracking-[0.22em]">
             <NavigationMenuItem>
               <NavigationMenuLink
-                render={<Link href="/#collection-section" onClick={handleExploreClick} />}
+                render={<TransitionLink href="/#collection-section" onClick={handleExploreClick} />}
                 data-desktop-link
                 onMouseEnter={(event) => animateUnderline(event, true)}
                 onMouseLeave={(event) => animateUnderline(event, false)}
@@ -273,7 +273,7 @@ export function SiteHeader() {
               return (
                 <NavigationMenuItem key={item.href}>
                   <NavigationMenuLink
-                    render={<Link href={item.href} />}
+                    render={<TransitionLink href={item.href} />}
                     data-desktop-link
                     onMouseEnter={(event) => animateUnderline(event, true)}
                     onMouseLeave={(event) => animateUnderline(event, false)}
@@ -293,7 +293,7 @@ export function SiteHeader() {
 
         <div className="flex items-center justify-self-end gap-3">
           <Button
-            render={<Link href="/shop" />}
+            render={<TransitionLink href="/shop" />}
             variant="brand"
             size="sm"
             data-header-cta

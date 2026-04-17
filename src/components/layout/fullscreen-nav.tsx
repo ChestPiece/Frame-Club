@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animation/gsap-config";
+import { TransitionLink } from "@/components/layout/page-transition";
 
 export type NavItem = {
   href: string;
@@ -159,7 +159,7 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
             className="border-b border-brand/20"
             style={{ opacity: 0 }}
           >
-            <Link
+            <TransitionLink
               href={item.href}
               onClick={onClose}
               className="group flex w-full items-baseline gap-4 px-6 py-5 text-text-primary hover:text-brand-bright transition-colors duration-150"
@@ -173,7 +173,7 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
               >
                 {item.label}
               </span>
-            </Link>
+            </TransitionLink>
           </div>
         ))}
       </nav>
@@ -183,14 +183,14 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         className="px-6 pb-8 pt-6"
         style={{ opacity: 0 }}
       >
-        <Link
+        <TransitionLink
           href="/shop"
           onClick={onClose}
           data-button-motion="true"
           className="display-kicker block w-full bg-brand py-5 text-center text-lg tracking-[0.3em] text-text-primary hover:bg-brand-mid transition-colors"
         >
           ORDER NOW
-        </Link>
+        </TransitionLink>
       </div>
     </div>
   );

@@ -79,7 +79,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
   return (
     <TransitionContext.Provider value={{ startTransition }}>
-      {/* z-[80]: below fullscreen nav (z-90) and loader (z-100), above everything else */}
+      {/* z-80 (theme): below fullscreen nav (z-90) and loader (z-100), above everything else */}
       <div
         ref={overlayRef}
         className="fixed inset-0 z-80 bg-brand pointer-events-none"

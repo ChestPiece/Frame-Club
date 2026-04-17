@@ -1,7 +1,7 @@
 import { SiteFooter } from "@/components/layout/site-footer";
-import { getProductBySlug } from "@/lib/data";
-import { getOrderById } from "@/lib/services";
-import { CheckoutForm } from "./checkout-form";
+import { getProductBySlug } from "@/lib/shop/data";
+import { getOrderById } from "@/lib/db/services";
+import { CheckoutForm } from "@/components/checkout/checkout-form";
 
 type CheckoutPageProps = {
   searchParams: Promise<{

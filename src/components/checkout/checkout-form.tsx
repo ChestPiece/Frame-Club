@@ -8,7 +8,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Product } from "@/lib/types";
+import type { Product } from "@/lib/db/types";
 
 const checkoutSchema = z.object({
   customerName: z.string().trim().min(1, "Full name is required."),

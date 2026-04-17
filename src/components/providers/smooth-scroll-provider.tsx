@@ -26,6 +26,11 @@ function safeRefresh() {
   }
 }
 
+function resetScrollTriggerScrollerDefault() {
+  if (typeof ScrollTrigger.defaults !== "function") return;
+  ScrollTrigger.defaults({ scroller: undefined });
+}
+
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const wrapperRef = React.useRef<HTMLDivElement | null>(null);
   const contentRef = React.useRef<HTMLDivElement | null>(null);
@@ -52,6 +57,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       pendingMqChangeRef.current = false;
       const generation = ++layoutReadyGenerationRef.current;
       ScrollSmoother.get()?.kill();
+      resetScrollTriggerScrollerDefault();
       wrapper.removeAttribute("data-smooth");
 
       try {

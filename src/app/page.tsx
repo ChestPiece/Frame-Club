@@ -39,7 +39,7 @@ export default async function Home() {
               }}
             />
             <div id="hero-pin-target" className="h-dvh flex items-center">
-              <div className="frame-container relative z-10 grid items-center gap-10 md:grid-cols-2">
+              <div className="frame-container relative z-10 grid items-center gap-6 md:gap-10 md:grid-cols-2">
                 <div className="space-y-6">
                   <div className="flex flex-col gap-4">
                     <div data-animate="hero-accent" className="h-px bg-brand w-24" />

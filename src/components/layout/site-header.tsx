@@ -93,9 +93,10 @@ export function SiteHeader() {
 
       setHeaderReady(true);
       const navLinks = gsap.utils.toArray<HTMLElement>("[data-desktop-link]");
+      const logoXOffset = window.innerWidth < 400 ? -8 : -16;
 
       gsap.set("[data-header-ticker]", { y: -8, scaleY: 1, transformOrigin: "top center" });
-      gsap.set("[data-header-logo]", { x: -16 });
+      gsap.set("[data-header-logo]", { x: logoXOffset });
       gsap.set(navLinks, { y: -6 });
       gsap.set("[data-header-cta]", { scale: 0.92 });
       if (headerTintRef.current) {

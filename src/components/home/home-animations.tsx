@@ -20,13 +20,12 @@ const MOTION_REVEAL_LOCAL = "[data-motion-reveal]";
 const DRAWSVG_LINE_TARGETS =
   "[data-hero-svg-accent] line, [data-drawsvg-divider] line, [data-drawsvg-cta] line, [data-drawsvg-vert] line, [data-drawsvg-corners] polyline";
 
-const SAFETY_UNHIDE_MS = 1200;
-
 export function HomeAnimations({ children }: HomeAnimationsProps) {
   const rootRef = React.useRef<HTMLDivElement | null>(null);
   const introReady = useIntroReady();
   const scrollTriggerReady = useScrollTriggerReady();
   const introHasPlayedRef = React.useRef(false);
+  const safetyUnhideMs = typeof window !== "undefined" && window.innerWidth < 1024 ? 600 : 1200;
 
   useGSAP(
     () => {
@@ -284,7 +283,7 @@ export function HomeAnimations({ children }: HomeAnimationsProps) {
                 clearProps: "opacity,visibility,transform",
               });
             }
-          }, SAFETY_UNHIDE_MS);
+          }, safetyUnhideMs);
         },
       );
 

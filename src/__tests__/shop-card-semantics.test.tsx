@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import type { Product } from "@/lib/types";
+import type { Product } from "@/lib/db/types";
 import ShopPage from "@/app/shop/page";
 
 vi.mock("next/image", () => ({
@@ -70,7 +70,7 @@ const mockProducts: Product[] = [
   },
 ];
 
-vi.mock("@/lib/data", () => ({
+vi.mock("@/lib/shop/data", () => ({
   getProducts: vi.fn(async () => mockProducts),
 }));
 

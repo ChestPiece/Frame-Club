@@ -2,7 +2,7 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import type { OrderRecord } from "@/lib/types";
+import type { OrderRecord } from "@/lib/db/types";
 
 vi.mock("next/link", () => ({
   default: ({
@@ -85,12 +85,12 @@ vi.mock("@/components/shared/animated-cta-link", () => ({
   ),
 }));
 
-vi.mock("@/lib/copy-constants", async () => {
-  const actual = await vi.importActual<typeof import("@/lib/copy-constants")>("@/lib/copy-constants");
+vi.mock("@/lib/content/copy-constants", async () => {
+  const actual = await vi.importActual<typeof import("@/lib/content/copy-constants")>("@/lib/content/copy-constants");
   return actual;
 });
 
-vi.mock("@/lib/gsap-config", () => ({
+vi.mock("@/lib/animation/gsap-config", () => ({
   gsap: {
     fromTo: vi.fn(() => ({ kill: vi.fn() })),
     to: vi.fn(() => ({ kill: vi.fn() })),
@@ -114,16 +114,16 @@ const getOrderByIdMock = vi.fn();
 const getProductBySlugMock = vi.fn();
 const getRelatedProductsMock = vi.fn();
 
-vi.mock("@/lib/services", () => ({
+vi.mock("@/lib/db/services", () => ({
   getOrderById: getOrderByIdMock,
 }));
 
-vi.mock("@/lib/data", () => ({
+vi.mock("@/lib/shop/data", () => ({
   getProductBySlug: getProductBySlugMock,
   getRelatedProducts: getRelatedProductsMock,
 }));
 
-vi.mock("@/lib/order-access-token", () => ({
+vi.mock("@/lib/payment/order-access-token", () => ({
   verifyOrderAccessToken: () => true,
 }));
 

@@ -10,7 +10,7 @@ vi.mock("@/lib/supabase/server", () => ({
   createServiceClient: createServiceClientMock,
 }));
 
-import { applyWebhook, createOrder, getOrderById } from "@/lib/services";
+import { applyWebhook, createOrder, getOrderById } from "@/lib/db/services";
 
 function buildInsertChain(result: { data: unknown; error: unknown }) {
   const single = vi.fn().mockResolvedValue(result);

@@ -24,16 +24,16 @@ const {
   sendAdminNotificationMock: vi.fn(),
 }));
 
-vi.mock("@/lib/services", () => ({
+vi.mock("@/lib/db/services", () => ({
   createOrder: createOrderMock,
   applyWebhook: applyWebhookMock,
 }));
 
-vi.mock("@/lib/order-access-token", () => ({
+vi.mock("@/lib/payment/order-access-token", () => ({
   createOrderAccessToken: createOrderAccessTokenMock,
 }));
 
-vi.mock("@/lib/payfast", () => ({
+vi.mock("@/lib/payment/payfast", () => ({
   payfastConfig: {
     merchantId: "merchant",
     merchantKey: "key",
@@ -47,7 +47,7 @@ vi.mock("@/lib/supabase/server", () => ({
   createServiceClient: createServiceClientMock,
 }));
 
-vi.mock("@/lib/data", () => ({
+vi.mock("@/lib/shop/data", () => ({
   getProductBySlug: getProductBySlugMock,
 }));
 

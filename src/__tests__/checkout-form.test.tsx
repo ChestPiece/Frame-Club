@@ -2,8 +2,8 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { CheckoutForm } from "@/app/checkout/checkout-form";
-import type { Product } from "@/lib/types";
+import { CheckoutForm } from "@/components/checkout/checkout-form";
+import type { Product } from "@/lib/db/types";
 
 const pushMock = vi.fn();
 const mockSubmit = vi.fn();

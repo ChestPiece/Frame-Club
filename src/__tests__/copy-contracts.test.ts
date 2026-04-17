@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { COPY } from "@/lib/copy-constants";
+import { COPY } from "@/lib/content/copy-constants";
 
 describe("locked copy contracts", () => {
   it("matches hero sub-copy from CLAUDE.md", () => {

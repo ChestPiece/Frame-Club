@@ -2,7 +2,7 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { SCROLL_SMOOTHER_MIN_WIDTH_PX } from "@/lib/scroll-layout";
+import { SCROLL_SMOOTHER_MIN_WIDTH_PX } from "@/lib/animation/scroll-layout";
 import { APP_REVEAL_DONE_EVENT } from "@/components/layout/app-reveal";
 
 vi.unmock("@/components/providers/scroll-trigger-environment");
@@ -19,7 +19,7 @@ vi.mock("gsap/ScrollSmoother", () => ({
 
 const refreshMock = vi.fn();
 
-vi.mock("@/lib/gsap-config", () => ({
+vi.mock("@/lib/animation/gsap-config", () => ({
   gsap: {},
   ScrollTrigger: {
     refresh: (...args: unknown[]) => refreshMock(...args),

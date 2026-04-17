@@ -38,6 +38,12 @@ yarn-error.log*
 # local editor + MCP secrets
 .vscode/mcp.json
 .cursor/debug*.log
+.cursor/
+.npmrc
+
+# local planning/spec artifacts
+docs/restructuring-plan.md
+docs/superpowers/specs/
 
 # vercel
 .vercel

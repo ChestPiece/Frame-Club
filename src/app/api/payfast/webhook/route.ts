@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { applyWebhook } from "@/lib/db/services";
-import { verifyPayFastSignature } from "@/lib/payment/payfast";
+import { assertPayfastSigningConfigured, verifyPayFastSignature } from "@/lib/payment/payfast";
 import { getProductBySlug } from "@/lib/shop/data";
 import { sendAdminNotification, sendOrderConfirmation } from "@/lib/emails/send";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -10,6 +10,7 @@ export async function POST(request: Request) {
 
   try {
     serviceClient = await createServiceClient();
+    assertPayfastSigningConfigured();
   } catch (error) {
     console.error("Webhook configuration error:", error);
     return new NextResponse("Webhook Configuration Error", { status: 500 });
@@ -30,7 +31,10 @@ export async function POST(request: Request) {
   // Verify the signature
   const isValid = verifyPayFastSignature(data);
   if (!isValid) {
-    console.error("PayFast signature verification failed", data);
+    console.error("PayFast signature verification failed", {
+      m_payment_id: data.m_payment_id,
+      payment_status: data.payment_status,
+    });
     return new NextResponse("Invalid Signature", { status: 400 });
   }
 

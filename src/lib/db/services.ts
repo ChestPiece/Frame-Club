@@ -109,37 +109,45 @@ export async function createOrder(input: CreateOrderInput) {
     return { error: "PRODUCT_NOT_FOUND" as const };
   }
 
-  const orderNumber = makeOrderNumber();
+  const maxAttempts = 6;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const orderNumber = makeOrderNumber();
 
-  // Insert order
-  const { data: order, error: orderError } = await supabase
-    .from("orders")
-    .insert({
-      order_number: orderNumber,
-      customer_name: input.customerName,
-      customer_email: input.customerEmail,
-      customer_phone: input.customerPhone,
-      customer_address: input.customerAddress,
-      customer_city: input.customerCity,
-      product_id: product.id,
-      product_slug: product.slug,
-      customization: {
-        background: input.background,
-        notes: input.notes ?? "",
-      },
-      price: product.price,
-      payment_status: "pending",
-      order_status: "pending",
-    })
-    .select()
-    .single();
+    const { data: order, error: orderError } = await supabase
+      .from("orders")
+      .insert({
+        order_number: orderNumber,
+        customer_name: input.customerName,
+        customer_email: input.customerEmail,
+        customer_phone: input.customerPhone,
+        customer_address: input.customerAddress,
+        customer_city: input.customerCity,
+        product_id: product.id,
+        product_slug: product.slug,
+        customization: {
+          background: input.background,
+          notes: input.notes ?? "",
+        },
+        price: product.price,
+        payment_status: "pending",
+        order_status: "pending",
+      })
+      .select()
+      .single();
 
-  if (orderError) {
+    if (!orderError && order) {
+      return { data: toOrderRecord(order) };
+    }
+
+    if (orderError?.code === "23505") {
+      continue;
+    }
+
     console.error("Order insertion error:", orderError);
     return { error: "ORDER_CREATION_FAILED" as const };
   }
 
-  return { data: toOrderRecord(order) };
+  return { error: "ORDER_CREATION_FAILED" as const };
 }
 
 export async function getOrderById(id: string) {

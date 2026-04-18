@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/layout/site-footer";
 import { getProductBySlug } from "@/lib/shop/data";
+import { verifyOrderAccessToken } from "@/lib/payment/order-access-token";
 import { getOrderById } from "@/lib/db/services";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
 
@@ -9,12 +10,24 @@ type CheckoutPageProps = {
     background?: string;
     notes?: string;
     orderId?: string;
+    token?: string;
   }>;
 };
 
 export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
   const params = await searchParams;
-  const retryOrder = params.orderId ? await getOrderById(params.orderId) : null;
+
+  let retryOrder = null;
+  if (
+    params.orderId &&
+    params.token &&
+    verifyOrderAccessToken(params.orderId, params.token)
+  ) {
+    const order = await getOrderById(params.orderId);
+    if (order?.paymentStatus === "failed") {
+      retryOrder = order;
+    }
+  }
   const slug = params.slug ?? retryOrder?.productSlug ?? "";
   const background = params.background ?? retryOrder?.customization.background ?? "carbon-grid";
   const notes = params.notes ?? retryOrder?.customization.notes ?? "";

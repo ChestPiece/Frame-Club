@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from "node:crypto";
 
 type PayFastConfig = {
   merchantId: string;
@@ -8,11 +8,20 @@ type PayFastConfig = {
 };
 
 export const payfastConfig: PayFastConfig = {
-  merchantId: process.env.PAYFAST_MERCHANT_ID || '',
-  merchantKey: process.env.PAYFAST_MERCHANT_KEY || '',
-  passphrase: process.env.PAYFAST_PASSPHRASE || '',
-  sandbox: process.env.PAYFAST_SANDBOX === 'true' || false,
+  merchantId: process.env.PAYFAST_MERCHANT_ID || "",
+  merchantKey: process.env.PAYFAST_MERCHANT_KEY || "",
+  passphrase: process.env.PAYFAST_PASSPHRASE || "",
+  sandbox: process.env.PAYFAST_SANDBOX === "true" || false,
 };
+
+/** Fail fast in production when PayFast signing cannot work (outbound forms + ITN verification). */
+export function assertPayfastSigningConfigured(): void {
+  if (process.env.NODE_ENV !== "production") return;
+  const { merchantId, merchantKey } = payfastConfig;
+  if (!merchantId.trim() || !merchantKey.trim()) {
+    throw new Error("PAYFAST_MERCHANT_ID and PAYFAST_MERCHANT_KEY must be set in production.");
+  }
+}
 
 export function getPayFastUrl(): string {
   return payfastConfig.sandbox
@@ -47,5 +56,14 @@ export function verifyPayFastSignature(data: Record<string, string>): boolean {
   if (!providedSignature) return false;
 
   const generatedSignature = generatePayFastSignature(data);
-  return generatedSignature === providedSignature;
+  if (providedSignature.length !== generatedSignature.length) return false;
+
+  try {
+    const a = Buffer.from(providedSignature, "hex");
+    const b = Buffer.from(generatedSignature, "hex");
+    if (a.length !== b.length) return false;
+    return crypto.timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
 }

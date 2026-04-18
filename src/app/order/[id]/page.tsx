@@ -27,7 +27,7 @@ export default async function OrderConfirmationPage({ params, searchParams }: Or
 
   const product = await getProductBySlug(order.productSlug);
   const isPaymentFailed = order.paymentStatus === "failed";
-  const retryHref = `/checkout?orderId=${id}`;
+  const retryHref = `/checkout?orderId=${encodeURIComponent(id)}&token=${encodeURIComponent(token!)}`;
 
   return (
     <>

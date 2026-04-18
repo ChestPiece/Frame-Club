@@ -3,14 +3,25 @@ import crypto from "node:crypto";
 const ORDER_TOKEN_TTL_MS = 1000 * 60 * 30;
 
 function getOrderTokenSecret() {
+  const explicit = process.env.ORDER_ACCESS_TOKEN_SECRET?.trim();
+
+  if (process.env.NODE_ENV === "production") {
+    if (!explicit) {
+      throw new Error(
+        "ORDER_ACCESS_TOKEN_SECRET must be set in production (do not use PAYFAST_PASSPHRASE or SUPABASE_SERVICE_ROLE_KEY for order tokens)."
+      );
+    }
+    return explicit;
+  }
+
   const secret =
-    process.env.ORDER_ACCESS_TOKEN_SECRET ||
+    explicit ||
     process.env.PAYFAST_PASSPHRASE ||
     process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!secret) {
     throw new Error(
-      "Missing token secret. Set ORDER_ACCESS_TOKEN_SECRET, PAYFAST_PASSPHRASE, or SUPABASE_SERVICE_ROLE_KEY."
+      "Missing token secret. Set ORDER_ACCESS_TOKEN_SECRET, PAYFAST_PASSPHRASE, or SUPABASE_SERVICE_ROLE_KEY for local development."
     );
   }
 

@@ -1,7 +1,12 @@
 import { fail, ok } from "@/lib/http/api-envelope";
 import { createOrderAccessToken } from "@/lib/payment/order-access-token";
 import { createOrder } from "@/lib/db/services";
-import { generatePayFastSignature, getPayFastUrl, payfastConfig } from "@/lib/payment/payfast";
+import {
+  assertPayfastSigningConfigured,
+  generatePayFastSignature,
+  getPayFastUrl,
+  payfastConfig,
+} from "@/lib/payment/payfast";
 import { isNonEmpty } from "@/lib/utils";
 
 type OrderPayload = {
@@ -32,6 +37,13 @@ export async function POST(request: Request) {
     !isNonEmpty(payload.background)
   ) {
     return fail("VALIDATION_ERROR", "Missing required order fields.", 422);
+  }
+
+  try {
+    assertPayfastSigningConfigured();
+  } catch (err) {
+    console.error("PayFast configuration:", err);
+    return fail("PAYFAST_CONFIG", "Payment gateway is not configured.", 500);
   }
 
   const result = await createOrder({

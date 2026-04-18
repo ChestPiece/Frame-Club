@@ -74,6 +74,10 @@ vi.mock("@/lib/shop/data", () => ({
   getProducts: vi.fn(async () => mockProducts),
 }));
 
+vi.mock("@/components/shop/catalog-toolbar", () => ({
+  CatalogToolbar: () => <div data-testid="catalog-toolbar" />,
+}));
+
 describe("shop product-card link semantics", () => {
   it("does not render nested anchors in product cards", async () => {
     const page = await ShopPage({ searchParams: Promise.resolve({}) });

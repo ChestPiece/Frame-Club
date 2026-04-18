@@ -16,19 +16,19 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
     <article
       data-animate-item
       data-flip-card
-      className={`group flex flex-col border border-border bg-bg-surface transition-colors duration-300 hover:border-brand ${
+      className={`group flex flex-col bg-bg-elevated transition-colors duration-300 ${
         product.status === "unavailable" ? "opacity-75" : "opacity-100"
       }`}
     >
-      <TransitionLink href={`/shop/${product.slug}`} className="block">
+      <TransitionLink href={`/shop/${product.slug}`} className="block cursor-pointer">
         <div className="relative overflow-hidden bg-bg-deep">
-          <div className="relative aspect-4/3 w-full overflow-hidden">
+          <div className="relative aspect-4/3 w-full overflow-hidden will-change-transform">
             <Image
               src={product.images[0]}
               alt={product.name}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-contain p-5 sm:p-8 grayscale transition-all duration-700 group-hover:grayscale-0"
+              className="object-contain p-5 sm:p-8 opacity-95 transition-[opacity,transform] duration-500 ease-out motion-safe:group-hover:scale-[1.02] group-hover:opacity-100"
             />
             <div className="absolute right-4 top-4 z-10 rotate-12 border border-brand bg-bg-surface/80 px-2 py-1 text-[10px] uppercase tracking-widest text-brand backdrop-blur-sm">
               MADE TO ORDER
@@ -40,15 +40,15 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
           </div>
         </div>
 
-        <div className="border-t-2 border-t-transparent p-8 transition-colors group-hover:border-t-brand">
+        <div className="border-t-2 border-border/50 p-8 transition-colors duration-300 group-hover:border-brand">
           <h2 className="display-kicker text-xl sm:text-2xl leading-none">{product.name}</h2>
           <p className="mt-2 text-xs uppercase tracking-[0.2em] text-text-muted">{product.brand}</p>
           <p className="mt-4 line-clamp-2 text-sm text-text-muted">{product.description}</p>
         </div>
       </TransitionLink>
 
-      <div className="mt-auto space-y-4 px-7 pb-7">
-        <div className="flex items-center justify-between border border-border/60 bg-bg-deep px-3 py-2">
+      <div className="mt-auto space-y-4 px-8 pb-8">
+        <div className="flex items-center justify-between bg-bg-deep px-3 py-2.5">
           <span className="technical-label text-[10px] text-text-muted">Price</span>
           <span className="display-kicker text-sm text-text-primary">
             Rs. {product.price.toLocaleString("en-PK")}

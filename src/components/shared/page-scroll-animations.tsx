@@ -8,9 +8,11 @@ import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-env
 type PageScrollAnimationsProps = {
   children: React.ReactNode;
   config: "about" | "shop" | "contact";
+  /** When this changes (e.g. filtered product list), scroll entrance animations re-bind. */
+  contentKey?: string;
 };
 
-export function PageScrollAnimations({ children, config }: PageScrollAnimationsProps) {
+export function PageScrollAnimations({ children, config, contentKey = "" }: PageScrollAnimationsProps) {
   const rootRef = React.useRef<HTMLDivElement | null>(null);
   const scrollTriggerReady = useScrollTriggerReady();
 
@@ -47,11 +49,13 @@ export function PageScrollAnimations({ children, config }: PageScrollAnimationsP
           },
           once: true,
         });
+
+        ScrollTrigger.refresh();
       }
     );
 
     return () => mm.revert();
-  }, { scope: rootRef, dependencies: [config, scrollTriggerReady] });
+  }, { scope: rootRef, dependencies: [config, scrollTriggerReady, contentKey] });
 
   return <div ref={rootRef}>{children}</div>;
 }

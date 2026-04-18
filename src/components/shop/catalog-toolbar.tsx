@@ -106,7 +106,7 @@ export function CatalogToolbar({ query, brands, className }: CatalogToolbarProps
     () =>
       Boolean(
         (query.q && query.q.trim().length > 0) ||
-          (query.status && query.status !== "all") ||
+          query.status != null ||
           Boolean(query.brand && query.brand.length > 0)
       ),
     [query.q, query.status, query.brand]

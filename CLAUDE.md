@@ -282,6 +282,8 @@ PAYFAST_SANDBOX=true  # flip to false on launch
 RESEND_API_KEY=
 NEXT_PUBLIC_SITE_URL=
 ADMIN_EMAIL=
+# Required in production for signed order confirmation / checkout retry links (do not reuse service role key).
+ORDER_ACCESS_TOKEN_SECRET=
 ```
 
 ---

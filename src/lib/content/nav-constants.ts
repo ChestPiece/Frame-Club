@@ -5,7 +5,7 @@ export const NAV_ITEMS = [
 ] as const;
 
 export const MOBILE_NAV_ITEMS = [
-  { href: "/#collection-section", label: "Explore", number: "01" },
+  { href: "/?section=collection", label: "Explore", number: "01" },
   { href: "/shop", label: "Collection", number: "02" },
   { href: "/about", label: "Story", number: "03" },
   { href: "/contact", label: "Contact", number: "04" },

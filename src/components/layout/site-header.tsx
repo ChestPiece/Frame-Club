@@ -3,9 +3,9 @@
 import * as React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { gsap } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
+import { scrollToCollectionSection } from "@/lib/animation/scroll-to-collection";
 import { useHeaderIntroAnimation } from "@/components/layout/hooks/use-header-intro-animation";
 import { useHeaderScrollAnimation } from "@/components/layout/hooks/use-header-scroll-animation";
 import { TransitionLink } from "@/components/layout/page-transition";
@@ -41,26 +41,11 @@ export function SiteHeader() {
     return null;
   }
 
-  const handleExploreClick = React.useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement>) => {
-      if (pathname !== "/") return;
-      event.preventDefault();
-      const target = "#collection-section";
-      const smoother = ScrollSmoother.get();
-
-      if (smoother) {
-        smoother.scrollTo(target, true, "top 120px");
-        return;
-      }
-
-      gsap.to(window, {
-        duration: 1,
-        ease: "power2.out",
-        scrollTo: { y: target, offsetY: 120 },
-      });
-    },
-    [pathname],
-  );
+  const handleExploreClick = React.useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== "/") return;
+    event.preventDefault();
+    scrollToCollectionSection();
+  }, [pathname]);
 
   const animateUnderline = React.useCallback((event: React.MouseEvent<HTMLElement>, shouldShow: boolean) => {
     const currentTarget = event.currentTarget;
@@ -132,7 +117,7 @@ export function SiteHeader() {
           <NavigationMenuList className="items-center gap-10 text-xs uppercase tracking-[0.22em]">
             <NavigationMenuItem>
               <NavigationMenuLink
-                render={<TransitionLink href="/#collection-section" onClick={handleExploreClick} />}
+                render={<TransitionLink href="/?section=collection" onClick={handleExploreClick} />}
                 data-desktop-link
                 onMouseEnter={(event) => animateUnderline(event, true)}
                 onMouseLeave={(event) => animateUnderline(event, false)}

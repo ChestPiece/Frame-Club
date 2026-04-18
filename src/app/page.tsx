@@ -1,8 +1,10 @@
 import Image from "next/image";
+import { Suspense } from "react";
 import { ArrowRight } from "lucide-react";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { TransitionLink } from "@/components/layout/page-transition";
 import { HomeAnimations } from "@/components/home/home-animations";
+import { HomeSectionScroll } from "@/components/home/home-section-scroll";
 import { WhatIsThisSection } from "@/components/home/what-is-this-section";
 import { HowItWorksSection } from "@/components/home/how-it-works-section";
 import { FeaturedCollectionSection } from "@/components/home/featured-collection-section";
@@ -24,6 +26,9 @@ export default async function Home() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <HomeSectionScroll />
+      </Suspense>
       <main id="main-content" className="scroll-margin-site-header pb-0">
         <HomeAnimations>
           <section

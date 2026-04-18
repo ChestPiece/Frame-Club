@@ -2,13 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { COPY } from "@/lib/content/copy-constants";
+import { FOOTER_NAV_ITEMS } from "@/lib/content/nav-constants";
 import { TransitionLink } from "@/components/layout/page-transition";
-
-const footerNavItems = [
-  { href: "/shop", label: "Collection" },
-  { href: "/about", label: "Story" },
-  { href: "/contact", label: "Contact" },
-];
 
 export function SiteFooter() {
   return (
@@ -17,7 +12,7 @@ export function SiteFooter() {
         <p className="display-kicker text-2xl text-text-primary min-inline-safe">THE FRAME CLUB</p>
 
         <nav className="flex flex-wrap gap-4 text-[10px] uppercase tracking-[0.2em] text-text-muted">
-          {footerNavItems.map((item) => (
+          {FOOTER_NAV_ITEMS.map((item) => (
             <Button
               key={item.href}
               render={<TransitionLink href={item.href} />}

@@ -6,7 +6,7 @@ import { HomeAnimations } from "@/components/home/home-animations";
 import { WhatIsThisSection } from "@/components/home/what-is-this-section";
 import { HowItWorksSection } from "@/components/home/how-it-works-section";
 import { FeaturedCollectionSection } from "@/components/home/featured-collection-section";
-import { CustomisationSection } from "@/components/home/customisation-section";
+import { CustomizationSection } from "@/components/home/customization-section";
 import { SocialProofSection } from "@/components/home/social-proof-section";
 import { FinalCTASection } from "@/components/home/final-cta-section";
 import { Button } from "@/components/ui/button";
@@ -126,9 +126,9 @@ export default async function Home() {
             <Separator className="bg-border/20" />
           </div>
 
-          <section data-animate-section="customisation" className="bg-bg-deep py-16 md:py-24 lg:py-28">
+          <section data-animate-section="customization" className="bg-bg-deep py-16 md:py-24 lg:py-28">
             <div className="frame-container">
-              <CustomisationSection />
+              <CustomizationSection />
             </div>
           </section>
           <div className="frame-container">

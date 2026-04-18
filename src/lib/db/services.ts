@@ -55,14 +55,14 @@ function parseCustomization(value: Json | null): OrderRecord["customization"] {
   return { background: "", notes: "" };
 }
 
-function parsePaymentStatus(value: string | null): PaymentStatus {
+export function parsePaymentStatus(value: string | null): PaymentStatus {
   if (value === "paid" || value === "failed" || value === "pending") {
     return value;
   }
   return "pending";
 }
 
-function parseOrderStatus(value: string | null): OrderStatus {
+export function parseOrderStatus(value: string | null): OrderStatus {
   if (
     value === "pending" ||
     value === "confirmed" ||

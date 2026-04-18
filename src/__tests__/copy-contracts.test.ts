@@ -14,8 +14,8 @@ describe("locked copy contracts", () => {
     );
   });
 
-  it("matches hero CTA copy from CLAUDE.md", () => {
-    expect(COPY.heroCta).toBe("ORDER YOUR FRAME — Rs. 5,000");
+  it("matches hero CTA (neutral site-wide; per-frame prices on PDP)", () => {
+    expect(COPY.heroCta).toBe("ORDER YOUR FRAME");
   });
 
   it("matches final CTA heading from CLAUDE.md", () => {

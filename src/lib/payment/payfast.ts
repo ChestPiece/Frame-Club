@@ -14,12 +14,11 @@ export const payfastConfig: PayFastConfig = {
   sandbox: process.env.PAYFAST_SANDBOX === "true" || false,
 };
 
-/** Fail fast in production when PayFast signing cannot work (outbound forms + ITN verification). */
+/** Fail fast when PayFast signing cannot work (outbound forms + ITN verification). */
 export function assertPayfastSigningConfigured(): void {
-  if (process.env.NODE_ENV !== "production") return;
   const { merchantId, merchantKey } = payfastConfig;
   if (!merchantId.trim() || !merchantKey.trim()) {
-    throw new Error("PAYFAST_MERCHANT_ID and PAYFAST_MERCHANT_KEY must be set in production.");
+    throw new Error("PAYFAST_MERCHANT_ID and PAYFAST_MERCHANT_KEY must be set.");
   }
 }
 

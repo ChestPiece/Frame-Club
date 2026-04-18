@@ -1,4 +1,4 @@
-import { TransitionLink } from "@/components/layout/page-transition";
+import { AnimatedCTALink } from "@/components/shared/animated-cta-link";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { AboutAnimations } from "@/components/about/about-animations";
 import { PageScrollAnimations } from "@/components/shared/page-scroll-animations";
@@ -177,12 +177,12 @@ export default function AboutPage() {
                 Built for people who collect stories as seriously as they
                 collect cars.
               </p>
-              <TransitionLink
+              <AnimatedCTALink
                 href="/shop"
                 className="display-kicker min-touch-target mt-10 inline-flex items-center justify-center border border-brand bg-brand px-8 py-4 text-sm tracking-[0.18em] text-text-primary transition-colors hover:bg-brand-mid"
               >
                 ORDER NOW
-              </TransitionLink>
+              </AnimatedCTALink>
             </div>
           </section>
         </PageScrollAnimations>

@@ -7,7 +7,7 @@ import { gsap } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
 import { Card, CardContent } from "@/components/ui/card";
 
-export function CustomisationSection() {
+export function CustomizationSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const obsessionRef = useRef<HTMLSpanElement>(null);

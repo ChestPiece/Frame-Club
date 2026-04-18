@@ -1,27 +1,20 @@
 import { fail, ok } from "@/lib/http/api-envelope";
-import { getConfiguredAdminEmail, isUserAdmin } from "@/lib/auth/admin";
+import { assertAdminSession } from "@/lib/auth/assert-admin-session";
 import { getOrderById } from "@/lib/db/services";
-import { createClient } from "@/lib/supabase/server";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
 };
 
 export async function GET(_request: Request, context: RouteContext) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return fail("UNAUTHORIZED", "Authentication required.", 401);
-  }
-
-  if (!getConfiguredAdminEmail()) {
-    return fail("ADMIN_NOT_CONFIGURED", "Admin email is not configured.", 503);
-  }
-
-  if (!isUserAdmin(user.email)) {
+  const auth = await assertAdminSession();
+  if (!auth.ok) {
+    if (auth.error === "UNAUTHORIZED") {
+      return fail("UNAUTHORIZED", "Authentication required.", 401);
+    }
+    if (auth.error === "ADMIN_NOT_CONFIGURED") {
+      return fail("ADMIN_NOT_CONFIGURED", "Admin email is not configured.", 503);
+    }
     return fail("FORBIDDEN", "Admin access required.", 403);
   }
 

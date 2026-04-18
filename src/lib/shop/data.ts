@@ -29,25 +29,19 @@ function toProduct(row: ProductRow, backgrounds: CustomizationRow[] = []): Produ
 }
 
 export async function getProducts(status?: ProductStatus): Promise<Product[]> {
-  try {
-    const supabase = createPublicClient();
-    let query = supabase.from("products").select("*").order("created_at", { ascending: false });
+  const supabase = createPublicClient();
+  let query = supabase.from("products").select("*").order("created_at", { ascending: false });
 
-    if (status) {
-      query = query.eq("status", status);
-    }
-
-    const { data, error } = await query;
-    if (error) {
-      console.error("Failed to fetch products:", error.message);
-      return [];
-    }
-
-    return (data ?? []).map((row) => toProduct(row));
-  } catch (error) {
-    console.error("Failed to fetch products:", error);
-    return [];
+  if (status) {
+    query = query.eq("status", status);
   }
+
+  const { data, error } = await query;
+  if (error) {
+    throw new Error(`Failed to fetch products: ${error.message}`);
+  }
+
+  return (data ?? []).map((row) => toProduct(row));
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {

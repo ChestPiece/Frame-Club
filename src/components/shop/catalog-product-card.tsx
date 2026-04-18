@@ -3,6 +3,7 @@ import { TransitionLink } from "@/components/layout/page-transition";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/shared/status-badge";
 import type { Product } from "@/lib/db/types";
+import { formatPkr } from "@/lib/utils";
 
 type CatalogProductCardProps = {
   product: Product;
@@ -50,9 +51,7 @@ export function CatalogProductCard({ product }: CatalogProductCardProps) {
       <div className="mt-auto space-y-4 px-8 pb-8">
         <div className="flex items-center justify-between bg-bg-deep px-3 py-2.5">
           <span className="technical-label text-[10px] text-text-muted">Price</span>
-          <span className="display-kicker text-sm text-text-primary">
-            Rs. {product.price.toLocaleString("en-PK")}
-          </span>
+          <span className="display-kicker text-sm text-text-primary">{formatPkr(product.price)}</span>
         </div>
 
         <div className="grid grid-cols-2 gap-3">

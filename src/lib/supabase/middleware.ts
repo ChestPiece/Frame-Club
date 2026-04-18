@@ -50,7 +50,7 @@ export async function updateSession(request: NextRequest) {
   const adminEmail = getConfiguredAdminEmail()
 
   if (isAdminProtectedPath) {
-    if (process.env.NODE_ENV === 'production' && !adminEmail) {
+    if (!adminEmail) {
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
       url.searchParams.set('error', 'admin_not_configured')

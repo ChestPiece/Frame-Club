@@ -4,11 +4,27 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { TransitionLink } from "@/components/layout/page-transition";
-import { catalogSortOptions, type CatalogQuery } from "@/lib/shop/catalog";
+import { catalogSortOptions, type CatalogQuery, type CatalogSortKey } from "@/lib/shop/catalog";
 
-const selectClassName =
-  "machined-field h-10 w-full cursor-pointer px-2 py-1 text-[11px] text-text-primary outline-none transition-colors focus-visible:border-brand-bright disabled:cursor-not-allowed disabled:opacity-70";
+function parseSortKey(value: string): CatalogSortKey {
+  if (
+    value === "price-asc" ||
+    value === "price-desc" ||
+    value === "name-asc" ||
+    value === "newest"
+  ) {
+    return value;
+  }
+  return "newest";
+}
 
 type CatalogToolbarProps = {
   query: CatalogQuery;
@@ -32,6 +48,16 @@ function buildShopPath(fd: FormData) {
 export function CatalogToolbar({ query, brands }: CatalogToolbarProps) {
   const router = useRouter();
   const [pending, startTransition] = React.useTransition();
+  const [status, setStatus] = React.useState(query.status ?? "all");
+  const [brand, setBrand] = React.useState(query.brand ?? "");
+  const [sort, setSort] = React.useState<CatalogSortKey>(query.sort ?? "newest");
+  const brandSelectValue = brand || "__all__";
+
+  React.useEffect(() => {
+    setStatus(query.status ?? "all");
+    setBrand(query.brand ?? "");
+    setSort(query.sort ?? "newest");
+  }, [query.status, query.brand, query.sort]);
 
   return (
     <form
@@ -44,6 +70,10 @@ export function CatalogToolbar({ query, brands }: CatalogToolbarProps) {
         });
       }}
     >
+      <input type="hidden" name="status" value={status} readOnly />
+      <input type="hidden" name="brand" value={brand} readOnly />
+      <input type="hidden" name="sort" value={sort} readOnly />
+
       <div className="min-inline-safe w-full lg:min-w-48 lg:flex-1 lg:max-w-md">
         <label htmlFor="catalog-q" className="technical-label mb-2 block text-[10px] text-text-muted">
           Search
@@ -60,47 +90,60 @@ export function CatalogToolbar({ query, brands }: CatalogToolbarProps) {
       </div>
 
       <div className="min-inline-safe w-full sm:w-[calc(50%-0.5rem)] lg:w-40">
-        <label htmlFor="catalog-status" className="technical-label mb-2 block text-[10px] text-text-muted">
+        <p id="catalog-status-label" className="technical-label mb-2 block text-[10px] text-text-muted">
           Availability
-        </label>
-        <select
-          id="catalog-status"
-          name="status"
-          className={selectClassName}
-          defaultValue={query.status ?? "all"}
-        >
-          <option value="all">All</option>
-          <option value="available">Available</option>
-          <option value="preorder">Pre-Order</option>
-          <option value="unavailable">Unavailable</option>
-        </select>
+        </p>
+        <Select value={status} onValueChange={(v) => setStatus((v as string) || "all")}>
+          <SelectTrigger id="catalog-status" className="h-10 w-full" aria-labelledby="catalog-status-label">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="available">Available</SelectItem>
+            <SelectItem value="preorder">Pre-Order</SelectItem>
+            <SelectItem value="unavailable">Unavailable</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="min-inline-safe w-full sm:w-[calc(50%-0.5rem)] lg:w-44">
-        <label htmlFor="catalog-brand" className="technical-label mb-2 block text-[10px] text-text-muted">
+        <p id="catalog-brand-label" className="technical-label mb-2 block text-[10px] text-text-muted">
           Brand
-        </label>
-        <select id="catalog-brand" name="brand" className={selectClassName} defaultValue={query.brand ?? ""}>
-          <option value="">All brands</option>
-          {brands.map((b) => (
-            <option key={b} value={b}>
-              {b}
-            </option>
-          ))}
-        </select>
+        </p>
+        <Select
+          value={brandSelectValue}
+          onValueChange={(v) => setBrand(String(v) === "__all__" ? "" : String(v))}
+        >
+          <SelectTrigger id="catalog-brand" className="h-10 w-full" aria-labelledby="catalog-brand-label">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="__all__">All brands</SelectItem>
+            {brands.map((b) => (
+              <SelectItem key={b} value={b}>
+                {b}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="min-inline-safe w-full sm:w-[calc(50%-0.5rem)] lg:w-48">
-        <label htmlFor="catalog-sort" className="technical-label mb-2 block text-[10px] text-text-muted">
+        <p id="catalog-sort-label" className="technical-label mb-2 block text-[10px] text-text-muted">
           Sort
-        </label>
-        <select id="catalog-sort" name="sort" className={selectClassName} defaultValue={query.sort}>
-          {catalogSortOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        </p>
+        <Select value={sort} onValueChange={(v) => setSort(parseSortKey(String(v ?? "")))}>
+          <SelectTrigger id="catalog-sort" className="h-10 w-full" aria-labelledby="catalog-sort-label">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {catalogSortOptions.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex w-full flex-wrap gap-3 lg:w-auto lg:pb-px">

@@ -14,6 +14,8 @@ const badgeVariants = cva(
         unavailable: "border-border bg-bg-surface text-text-muted",
         paid: "border-border/40 bg-brand text-text-accent",
         pending: "border-border bg-bg-deep text-text-muted",
+        success: "border-status-success-border bg-status-success-bg text-text-success",
+        failed: "border-brand-mid bg-brand text-text-accent",
       },
     },
     defaultVariants: {

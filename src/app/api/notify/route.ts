@@ -1,4 +1,4 @@
-import { fail, ok } from "@/lib/http/api-envelope";
+import { fail, ok, parseJsonBody } from "@/lib/http/api-envelope";
 import { createNotifySubscription } from "@/lib/db/services";
 import { isNonEmpty } from "@/lib/utils";
 
@@ -8,7 +8,7 @@ type NotifyPayload = {
 };
 
 export async function POST(request: Request) {
-  const payload = (await request.json().catch(() => null)) as NotifyPayload | null;
+  const payload = await parseJsonBody<NotifyPayload>(request);
 
   if (!payload) {
     return fail("INVALID_JSON", "Request body must be valid JSON.", 400);
@@ -18,10 +18,14 @@ export async function POST(request: Request) {
     return fail("VALIDATION_ERROR", "email and productSlug are required.", 422);
   }
 
-  const subscription = await createNotifySubscription({
-    email: payload.email,
-    productSlug: payload.productSlug,
-  });
+  try {
+    const subscription = await createNotifySubscription({
+      email: payload.email,
+      productSlug: payload.productSlug,
+    });
 
-  return ok({ subscription }, 201);
+    return ok({ subscription }, 201);
+  } catch {
+    return fail("INTERNAL_ERROR", "Could not save notify subscription.", 500);
+  }
 }

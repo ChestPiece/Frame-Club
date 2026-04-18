@@ -21,7 +21,7 @@ export default async function AdminLoginPage({
           : undefined;
 
   return (
-    <main id="main-content" className="grid min-h-screen bg-bg-base lg:grid-cols-[1.05fr_1fr]">
+    <main id="main-content" className="grid min-h-svh bg-bg-base lg:grid-cols-[1.05fr_1fr]">
       <section className="flex items-center border-b border-border bg-bg-deep p-8 lg:border-b-0 lg:border-r lg:p-14">
         <div className="max-w-xl">
           <p className="technical-label text-[10px] text-text-muted">Admin Access</p>

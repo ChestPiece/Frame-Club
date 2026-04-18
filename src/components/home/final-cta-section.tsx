@@ -69,7 +69,7 @@ export function FinalCTASection() {
       </h2>
 
       <p className="mx-auto mt-5 max-w-2xl text-sm sm:text-base text-text-muted mb-8 md:mb-10 px-2 leading-relaxed">
-        Rs. 5,000. Fully customised. Delivered nationwide. Takes 2 minutes to order.
+        Fully customised frames, priced per model in the collection. Delivered nationwide. Takes 2 minutes to order.
       </p>
       <svg
         aria-hidden="true"

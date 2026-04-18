@@ -14,7 +14,7 @@ export function SiteTicker() {
             <span className="mx-4">✦</span>
             <span className="mx-4">NATIONWIDE DELIVERY</span>
             <span className="mx-4">✦</span>
-            <span className="mx-4">RS. 5,000</span>
+            <span className="mx-4">PER-FRAME PRICING</span>
             <span className="mx-4">✦</span>
           </div>
         ))}

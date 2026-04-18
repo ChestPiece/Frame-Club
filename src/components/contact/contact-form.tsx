@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 type ContactFormProps = {
@@ -121,9 +122,9 @@ export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
     <form className="space-y-6 sm:space-y-7" onSubmit={handleSubmit(onSubmit)}>
       {!intentIsNotify ? (
         <div className="space-y-2">
-          <label htmlFor="contact-name" className="technical-label block text-[10px] text-text-muted">
+          <Label htmlFor="contact-name" className="technical-label block text-[10px] text-text-muted">
             Full Name
-          </label>
+          </Label>
           <Input
             id="contact-name"
             placeholder="Enter your full name"
@@ -135,9 +136,9 @@ export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
       ) : null}
 
       <div className="space-y-2">
-        <label htmlFor="contact-email" className="technical-label block text-[10px] text-text-muted">
+        <Label htmlFor="contact-email" className="technical-label block text-[10px] text-text-muted">
           Email
-        </label>
+        </Label>
         <Input
           id="contact-email"
           placeholder="name@email.com"
@@ -150,9 +151,9 @@ export function ContactForm({ intentIsNotify, productSlug }: ContactFormProps) {
 
       {!intentIsNotify ? (
         <div className="space-y-2">
-          <label htmlFor="contact-message" className="technical-label block text-[10px] text-text-muted">
+          <Label htmlFor="contact-message" className="technical-label block text-[10px] text-text-muted">
             Message
-          </label>
+          </Label>
           <Textarea
             id="contact-message"
             placeholder="Tell us what you need"

@@ -30,6 +30,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TransitionLink } from "@/components/layout/page-transition";
+import { isExactActive, isPrefixActive } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -37,12 +38,11 @@ const navItems = [
   { href: "/admin/products", label: "Products", icon: Package },
 ];
 
-function isActive(pathname: string, href: string) {
+function isAdminNavActive(pathname: string, href: string) {
   if (href === "/admin") {
-    return pathname === href;
+    return isExactActive(pathname, href);
   }
-
-  return pathname.startsWith(href);
+  return isPrefixActive(pathname, href);
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -56,10 +56,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <p className="text-[10px] uppercase tracking-[0.26em] text-text-muted group-data-[collapsible=icon]:hidden">Admin Core</p>
         </SidebarHeader>
 
-        <SidebarContent className="px-2 py-4">
+        <SidebarContent className="overflow-hidden px-2 py-4">
           <SidebarMenu className="gap-1">
             {navItems.map((item) => {
-              const active = isActive(pathname, item.href);
+              const active = isAdminNavActive(pathname, item.href);
               const Icon = item.icon;
 
               return (
@@ -92,7 +92,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </SidebarFooter>
       </Sidebar>
 
-      <SidebarInset className="min-h-screen bg-bg-base text-text-primary">
+      <SidebarInset className="min-h-svh bg-bg-base text-text-primary">
         <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border bg-bg-base/85 px-6 backdrop-blur-md">
           <div className="flex items-center gap-3">
             <SidebarTrigger className="text-text-muted hover:text-text-primary" />

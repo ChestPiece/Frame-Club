@@ -14,6 +14,7 @@ import {
 import { listOrders } from "@/lib/db/services";
 import { OrderStatusSelect } from "@/components/admin/order-status-select";
 import { ExportCsvButton } from "@/components/admin/export-csv-button";
+import { AdminErrorFallback } from "@/components/admin/admin-error-fallback";
 
 export default async function AdminOrdersPage() {
   let orders: Awaited<ReturnType<typeof listOrders>>;
@@ -21,14 +22,7 @@ export default async function AdminOrdersPage() {
   try {
     orders = await listOrders();
   } catch {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="border border-border bg-bg-surface p-10 text-center">
-          <p className="display-kicker text-2xl text-text-primary">Failed to load orders.</p>
-          <p className="mt-3 text-sm text-text-muted">Check your Supabase connection and refresh the page.</p>
-        </div>
-      </div>
-    );
+    return <AdminErrorFallback message="Failed to load orders." />;
   }
 
   return (

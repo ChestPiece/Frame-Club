@@ -3,12 +3,14 @@
 import * as React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useGSAP } from "@gsap/react";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { gsap, ScrollTrigger } from "@/lib/animation/gsap-config";
+import { gsap } from "@/lib/animation/gsap-config";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
+import { useHeaderIntroAnimation } from "@/components/layout/hooks/use-header-intro-animation";
+import { useHeaderScrollAnimation } from "@/components/layout/hooks/use-header-scroll-animation";
 import { TransitionLink } from "@/components/layout/page-transition";
 import { Button } from "@/components/ui/button";
+import { NAV_ITEMS, MOBILE_NAV_ITEMS } from "@/lib/content/nav-constants";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -17,24 +19,10 @@ import {
 } from "@/components/ui/navigation-menu";
 import { FullscreenNav } from "@/components/layout/fullscreen-nav";
 import { SiteTicker } from "@/components/layout/site-ticker";
-import { cn } from "@/lib/utils";
+import { cn, isPrefixActive } from "@/lib/utils";
 
-const navItems = [
-  { href: "/shop", label: "Collection" },
-  { href: "/about", label: "Story" },
-  { href: "/contact", label: "Contact" },
-];
-
-const mobileNavItems = [
-  { href: "/#collection-section", label: "Explore", number: "01" },
-  { href: "/shop", label: "Collection", number: "02" },
-  { href: "/about", label: "Story", number: "03" },
-  { href: "/contact", label: "Contact", number: "04" },
-];
-
-function isActive(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
+const navItems = NAV_ITEMS;
+const mobileNavItems = [...MOBILE_NAV_ITEMS];
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -88,143 +76,17 @@ export function SiteHeader() {
     });
   }, []);
 
-  useGSAP(
-    () => {
-      if (!scrollTriggerReady) return;
+  useHeaderIntroAnimation({
+    rootRef,
+    scrollTriggerReady,
+    headerTintRef,
+    navRowRef,
+    logoRef,
+    tickerWrapRef,
+    setHeaderReady,
+  });
 
-      setHeaderReady(true);
-      const navLinks = gsap.utils.toArray<HTMLElement>("[data-desktop-link]");
-      const logoXOffset = window.innerWidth < 400 ? -8 : -16;
-
-      gsap.set("[data-header-ticker]", { y: -8, scaleY: 1, transformOrigin: "top center" });
-      gsap.set("[data-header-logo]", { x: logoXOffset });
-      gsap.set(navLinks, { y: -6 });
-      gsap.set("[data-header-cta]", { scale: 0.92 });
-      if (headerTintRef.current) {
-        gsap.set(headerTintRef.current, { autoAlpha: 0 });
-      }
-
-      const introTimeline = gsap.timeline({ defaults: { clearProps: "transform" } });
-      introTimeline
-        .to("[data-header-ticker]", {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.3,
-          ease: "power2.out",
-        })
-        .to(
-          "[data-header-logo]",
-          {
-            autoAlpha: 1,
-            x: 0,
-            duration: 0.4,
-            ease: "power3.out",
-          },
-          0.1,
-        )
-        .to(
-          navLinks,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.3,
-            stagger: 0.06,
-            ease: "power2.out",
-          },
-          0.18,
-        )
-        .to(
-          "[data-header-cta]",
-          {
-            autoAlpha: 1,
-            scale: 1,
-            duration: 0.35,
-            ease: "back.out(1.4)",
-          },
-          0.38,
-        );
-
-      const compactTimeline = gsap.timeline({ paused: true });
-      if (headerTintRef.current) {
-        compactTimeline.to(
-          headerTintRef.current,
-          {
-            autoAlpha: 1,
-            duration: 0.4,
-            ease: "power2.out",
-          },
-          0,
-        );
-      }
-      compactTimeline
-        .to(
-          navRowRef.current,
-          {
-            y: -4,
-            duration: 0.4,
-            ease: "power2.out",
-          },
-          0,
-        )
-        .to(
-          logoRef.current,
-          {
-            scale: 0.88,
-            transformOrigin: "left center",
-            duration: 0.4,
-            ease: "power2.out",
-          },
-          0,
-        )
-        .to(
-          tickerWrapRef.current,
-          {
-            scaleY: 0,
-            autoAlpha: 0,
-            transformOrigin: "top center",
-            duration: 0.35,
-            ease: "power2.out",
-          },
-          0,
-        );
-
-      const trigger = ScrollTrigger.create({
-        start: 60,
-        onEnter: () => compactTimeline.play(),
-        onLeaveBack: () => compactTimeline.reverse(),
-      });
-
-      return () => {
-        trigger.kill();
-      };
-    },
-    { scope: rootRef, dependencies: [scrollTriggerReady] },
-  );
-
-  useGSAP(
-    () => {
-      if (!mobileToggleRef.current) return;
-
-      const [topBar, midBar, bottomBar] = gsap.utils.toArray<HTMLElement>("[data-hamburger-bar]");
-      if (!topBar || !midBar || !bottomBar) return;
-
-      gsap.set(topBar, { y: -6, rotation: 0, transformOrigin: "50% 50%" });
-      gsap.set(midBar, { autoAlpha: 1, scaleX: 1, transformOrigin: "50% 50%" });
-      gsap.set(bottomBar, { y: 6, rotation: 0, transformOrigin: "50% 50%" });
-
-      const tl = gsap.timeline({ defaults: { duration: 0.28, ease: "power2.out" } });
-      if (mobileNavOpen) {
-        tl.to(topBar, { y: 6, rotation: 45 }, 0)
-          .to(midBar, { autoAlpha: 0, scaleX: 0, duration: 0.2 }, 0)
-          .to(bottomBar, { y: -6, rotation: -45 }, 0);
-      } else {
-        tl.to(topBar, { y: -6, rotation: 0 }, 0)
-          .to(midBar, { autoAlpha: 1, scaleX: 1, duration: 0.2 }, 0)
-          .to(bottomBar, { y: 6, rotation: 0 }, 0);
-      }
-    },
-    { scope: mobileToggleRef, dependencies: [mobileNavOpen], revertOnUpdate: true },
-  );
+  useHeaderScrollAnimation({ mobileToggleRef, mobileNavOpen });
 
   return (
     <header ref={rootRef} className="fixed inset-x-0 top-0 z-40 bg-(--bg-nav) backdrop-blur-xl">
@@ -284,7 +146,7 @@ export function SiteHeader() {
               </NavigationMenuLink>
             </NavigationMenuItem>
             {navItems.map((item) => {
-              const active = isActive(pathname, item.href);
+              const active = isPrefixActive(pathname, item.href);
 
               return (
                 <NavigationMenuItem key={item.href}>

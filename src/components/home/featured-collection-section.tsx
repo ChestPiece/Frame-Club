@@ -7,12 +7,12 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animation/gsap-config";
 import { Flip } from "gsap/Flip";
 import { useScrollTriggerReady } from "@/components/providers/scroll-trigger-environment";
-import { TransitionLink } from "@/components/layout/page-transition";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { AnimatedCTALink } from "@/components/shared/animated-cta-link";
+import { cn, formatPkr } from "@/lib/utils";
 import type { Product } from "@/lib/db/types";
 
 type FeaturedCollectionSectionProps = {
@@ -187,9 +187,7 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
               <CardContent className="p-5 sm:p-6">
                 <div className="mb-4 flex flex-wrap items-start justify-between gap-3 gap-y-2">
                   <h3 className="display-kicker text-lg sm:text-xl leading-none min-w-0 wrap-break-word">{product.name}</h3>
-                  <span className="technical-label text-xs text-brand-bright shrink-0">
-                    Rs. {product.price.toLocaleString("en-PK")}
-                  </span>
+                  <span className="technical-label text-xs text-brand-bright shrink-0">{formatPkr(product.price)}</span>
                 </div>
 
                 <p className="mb-6 text-xs uppercase tracking-[0.16em] sm:tracking-[0.2em] text-text-muted">
@@ -199,33 +197,23 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
                   <StatusBadge status={product.status} />
                 </div>
 
-                <ProductCardCTA href={`/shop/${product.slug}`}>VIEW SPECS</ProductCardCTA>
+                <Button
+                  render={
+                    <AnimatedCTALink
+                      href={`/shop/${product.slug}`}
+                      className="w-full border border-border py-4 text-center display-kicker tracking-widest focus-visible:ring-2 focus-visible:ring-brand-mid focus-visible:ring-offset-2 focus-visible:ring-offset-bg-deep"
+                    >
+                      VIEW SPECS
+                    </AnimatedCTALink>
+                  }
+                  variant="outline"
+                  className="relative w-full overflow-hidden"
+                />
               </CardContent>
             </Card>
           ))}
         </div>
       )}
     </div>
-  );
-}
-
-function ProductCardCTA({ href, children }: { href: string; children: string }) {
-  const fillRef = useRef<HTMLSpanElement>(null);
-
-  return (
-    <Button
-      render={<TransitionLink href={href} />}
-      variant="outline"
-      className="relative w-full overflow-hidden border border-border py-4 text-center display-kicker tracking-widest focus-visible:ring-2 focus-visible:ring-brand-mid focus-visible:ring-offset-2 focus-visible:ring-offset-bg-deep"
-    >
-      <span
-        ref={fillRef}
-        data-button-fill="true"
-        aria-hidden="true"
-        className="absolute inset-0 bg-text-primary pointer-events-none"
-        style={{ transform: "scaleX(0)", transformOrigin: "0% 50%" }}
-      />
-      <span className="relative z-10 mix-blend-difference">{children}</span>
-    </Button>
   );
 }

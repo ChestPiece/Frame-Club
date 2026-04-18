@@ -1,7 +1,6 @@
-import { Edit2, Eye, Activity } from "lucide-react";
+import { Edit2, Activity } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -13,9 +12,10 @@ import {
 } from "@/components/ui/table";
 import { getAdminStats, listOrders } from "@/lib/db/services";
 import { getProducts as listProductsForAdmin } from "@/lib/shop/data";
-import { OrderStatusSelect } from "@/components/admin/order-status-select";
 import { ProductStatusToggle } from "@/components/admin/product-status-toggle";
-import { ExportCsvButton } from "@/components/admin/export-csv-button";
+import { AdminErrorFallback } from "@/components/admin/admin-error-fallback";
+import { AdminStatsRow } from "@/components/admin/admin-stats-row";
+import { LiveOrderPipeline } from "@/components/admin/live-order-pipeline";
 
 export default async function AdminDashboardPage() {
   let stats: Awaited<ReturnType<typeof getAdminStats>>;
@@ -31,14 +31,7 @@ export default async function AdminDashboardPage() {
     orders = orders.slice(0, 5);
     products = products.slice(0, 4);
   } catch {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="border border-border bg-bg-surface p-10 text-center">
-          <p className="display-kicker text-2xl text-text-primary">Failed to load dashboard data.</p>
-          <p className="mt-3 text-sm text-text-muted">Check your Supabase connection and refresh the page.</p>
-        </div>
-      </div>
-    );
+    return <AdminErrorFallback message="Failed to load dashboard data." />;
   }
 
   const pipelinePct =
@@ -48,100 +41,9 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-10">
-      <section className="grid gap-0 md:grid-cols-2 lg:grid-cols-4">
-        <article className="border border-border bg-bg-surface p-8">
-          <div className="flex items-start justify-between">
-            <p className="technical-label text-[10px] text-text-muted">Total Orders</p>
-          </div>
-          <p className="mt-4 text-4xl font-bold">{stats.totalOrders}</p>
-        </article>
+      <AdminStatsRow stats={stats} pipelinePct={pipelinePct} />
 
-        <article className="border border-border border-l-0 bg-bg-surface p-8">
-          <div className="flex items-start justify-between">
-            <p className="technical-label text-[10px] text-text-muted">Pending Orders</p>
-          </div>
-          <p className="mt-4 text-4xl font-bold">{stats.pendingOrders}</p>
-        </article>
-
-        <article className="border border-border border-l-0 bg-bg-surface p-8">
-          <div className="flex items-start justify-between">
-            <p className="technical-label text-[10px] text-text-muted">Revenue (paid)</p>
-          </div>
-          <p className="mt-4 text-3xl font-bold">Rs. {stats.revenue.toLocaleString("en-PK")}</p>
-        </article>
-
-        <article className="border border-border border-l-0 bg-bg-surface p-8">
-          <div className="flex items-start justify-between">
-            <p className="technical-label text-[10px] text-text-muted">Frames In Production</p>
-          </div>
-          <p className="mt-4 text-4xl font-bold">{stats.inProduction}</p>
-          <div className="mt-3 h-1 w-full bg-bg-deep">
-            <div className="h-full bg-text-accent" style={{ width: `${pipelinePct}%` }} />
-          </div>
-        </article>
-      </section>
-
-      <section className="border border-border bg-bg-surface">
-        <div className="flex items-center justify-between border-b border-border bg-bg-deep px-6 py-4">
-          <h2 className="technical-label text-xs text-text-primary">Live Order Pipeline</h2>
-          <ExportCsvButton orders={orders} />
-        </div>
-
-        <Table className="min-w-245">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Car Model</TableHead>
-              <TableHead>Customization</TableHead>
-              <TableHead className="text-center">Payment</TableHead>
-              <TableHead>Order Status</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {orders.map((order, index) => (
-              <TableRow key={order.id} className={`text-[11px] ${index % 2 === 0 ? "bg-bg-surface" : "bg-bg-base"}`}>
-                <TableCell className="font-semibold text-text-primary">{order.orderNumber}</TableCell>
-                <TableCell className="text-text-muted">{order.customerName}</TableCell>
-                <TableCell className="text-text-muted">{order.productSlug}</TableCell>
-                <TableCell className="text-text-muted">{order.customization.background}</TableCell>
-                <TableCell className="text-center">
-                  <Badge
-                    variant={order.paymentStatus === "paid" ? "paid" : "pending"}
-                    className="px-2 py-1 text-[9px] tracking-widest"
-                  >
-                    {order.paymentStatus}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-text-muted">
-                  <OrderStatusSelect
-                    orderId={order.id}
-                    currentStatus={order.orderStatus}
-                    customerEmail={order.customerEmail}
-                    orderNumber={order.orderNumber}
-                    productSlug={order.productSlug}
-                  />
-                </TableCell>
-                <TableCell className="text-text-muted">{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="text-text-muted hover:text-text-primary"
-                    aria-label="View order"
-                  >
-                    <Eye className="h-4 w-4" strokeWidth={1.5} />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </section>
+      <LiveOrderPipeline orders={orders} />
 
       <section className="grid gap-8 lg:grid-cols-3">
         <article className="border border-border bg-bg-surface lg:col-span-2">

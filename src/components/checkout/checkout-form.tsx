@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { CheckoutSummary } from "@/components/checkout/checkout-summary";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -138,69 +139,81 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
+    <div className="grid min-w-0 gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-12 xl:gap-16">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 border border-border bg-bg-surface p-4 md:p-8 lg:p-10"
+        className="min-w-0 space-y-9 border border-border bg-bg-surface p-6 sm:p-8 md:p-10 lg:p-12"
       >
-        <div className="border-b border-border pb-5">
+        <div className="border-b border-border pb-6">
           <p className="technical-label text-[10px] text-text-muted">Customer Details</p>
-          <p className="mt-2 text-sm text-text-muted">
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-muted">
             Complete your details to continue to secure PayFast checkout.
           </p>
         </div>
 
         {submitError ? <p className="text-sm text-error">{submitError}</p> : null}
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <div>
-            <Label htmlFor="customerName">Full Name</Label>
-            <Input id="customerName" {...register("customerName")} className="mt-2" />
+        <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+          <div className="min-w-0">
+            <Label htmlFor="customerName" className="mb-2.5">
+              Full Name
+            </Label>
+            <Input id="customerName" {...register("customerName")} className="w-full" />
             {errors.customerName ? (
               <p className="mt-2 text-xs text-error">{errors.customerName.message}</p>
             ) : null}
           </div>
 
-          <div>
-            <Label htmlFor="customerPhone">Phone Number</Label>
-            <Input id="customerPhone" {...register("customerPhone")} className="mt-2" />
+          <div className="min-w-0">
+            <Label htmlFor="customerPhone" className="mb-2.5">
+              Phone Number
+            </Label>
+            <Input id="customerPhone" {...register("customerPhone")} className="w-full" />
             {errors.customerPhone ? (
               <p className="mt-2 text-xs text-error">{errors.customerPhone.message}</p>
             ) : null}
           </div>
-        </div>
 
-        <div>
-          <Label htmlFor="customerEmail">Email</Label>
-          <Input id="customerEmail" type="email" {...register("customerEmail")} className="mt-2" />
-          {errors.customerEmail ? (
-            <p className="mt-2 text-xs text-error">{errors.customerEmail.message}</p>
-          ) : null}
-        </div>
-
-        <div>
-          <Label htmlFor="customerAddress">Delivery Address</Label>
-          <Input id="customerAddress" {...register("customerAddress")} className="mt-2" />
-          {errors.customerAddress ? (
-            <p className="mt-2 text-xs text-error">{errors.customerAddress.message}</p>
-          ) : null}
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <div>
-            <Label htmlFor="customerCity">City</Label>
-            <Input id="customerCity" {...register("customerCity")} className="mt-2" />
-            {errors.customerCity ? (
-              <p className="mt-2 text-xs text-error">{errors.customerCity.message}</p>
+          <div className="min-w-0 md:col-span-2">
+            <Label htmlFor="customerEmail" className="mb-2.5">
+              Email
+            </Label>
+            <Input id="customerEmail" type="email" {...register("customerEmail")} className="w-full" />
+            {errors.customerEmail ? (
+              <p className="mt-2 text-xs text-error">{errors.customerEmail.message}</p>
             ) : null}
           </div>
 
-          <div className="rounded-none border border-border bg-bg-deep p-4">
-            <p className="technical-label text-[10px] text-text-muted">Delivery Window</p>
-            <p className="mt-2 text-sm text-text-primary">
-              {product ? `${product.deliveryDays}-${product.deliveryDays + 3} working days` : "--"}
-            </p>
+          <div className="min-w-0 md:col-span-2">
+            <Label htmlFor="customerAddress" className="mb-2.5">
+              Delivery Address
+            </Label>
+            <Input id="customerAddress" {...register("customerAddress")} className="w-full" />
+            {errors.customerAddress ? (
+              <p className="mt-2 text-xs text-error">{errors.customerAddress.message}</p>
+            ) : null}
           </div>
+
+          <div className="min-w-0 md:col-span-2">
+            <Label htmlFor="customerCity" className="mb-2.5">
+              City
+            </Label>
+            <Input id="customerCity" {...register("customerCity")} className="w-full" />
+            {errors.customerCity ? (
+              <p className="mt-2 min-h-5 text-xs text-error">{errors.customerCity.message}</p>
+            ) : (
+              <p className="mt-2 min-h-5" aria-hidden />
+            )}
+          </div>
+        </div>
+
+        <div className="bg-bg-elevated px-5 py-6 sm:px-6 sm:py-7">
+          <p className="technical-label text-[10px] text-text-muted">Delivery window</p>
+          <p className="mt-3 text-sm leading-relaxed text-text-primary">
+            {product
+              ? `Estimated ${product.deliveryDays}–${product.deliveryDays + 3} working days after payment.`
+              : "—"}
+          </p>
         </div>
 
         <Button
@@ -223,55 +236,7 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
         </form>
       )}
 
-      <aside className="space-y-6 border border-border bg-bg-deep p-4 md:p-8">
-        <div className="border-b border-border pb-5">
-          <p className="technical-label text-[10px] text-text-muted">Cart Summary</p>
-          <p className="mt-2 display-kicker text-2xl leading-none sm:text-4xl">
-            {product?.name ?? "No frame selected"}
-          </p>
-          <p className="mt-2 text-xs uppercase tracking-[0.2em] text-text-muted">
-            {product?.brand ?? "Select from collection"}
-          </p>
-        </div>
-
-        <div className="space-y-3 border border-border/60 bg-bg-surface p-5 text-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-text-muted">Product</span>
-            <span className="text-text-primary">
-              Rs. {product ? product.price.toLocaleString("en-PK") : "0"}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-text-muted">Shipping</span>
-            <span className="text-text-primary">Included</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-text-muted">Background</span>
-            <span className="text-text-primary">{background}</span>
-          </div>
-        </div>
-
-        <div className="space-y-3 border border-border/50 bg-bg-surface p-5 text-sm text-text-muted">
-          <p className="technical-label text-[10px]">Order Notes</p>
-          <p>{notes || "No notes provided."}</p>
-        </div>
-
-        <div className="border-t border-border/70 pt-4">
-          <p className="technical-label text-[10px] text-text-muted">Total</p>
-          <p className="mt-2 text-3xl text-text-primary">
-            Rs. {product ? product.price.toLocaleString("en-PK") : "0"}
-          </p>
-        </div>
-
-        <div className="border border-border/60 bg-bg-surface p-4">
-          <p className="technical-label text-[10px] text-text-muted">Payment Method</p>
-          <p className="mt-2 text-sm text-text-primary">PayFast (secure checkout)</p>
-        </div>
-
-        <p className="text-[10px] uppercase tracking-[0.16em] text-text-muted">
-          Nationwide delivery Pakistan | Secure payment | Handcrafted to order
-        </p>
-      </aside>
+      <CheckoutSummary product={product} background={background} notes={notes} />
     </div>
   );
 }

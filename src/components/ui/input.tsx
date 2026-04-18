@@ -9,7 +9,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       type={type}
       data-slot="input"
       className={cn(
-        "machined-field disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70",
+        "machined-field min-h-11 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70",
         className
       )}
       {...props}

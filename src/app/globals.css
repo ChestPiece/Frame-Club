@@ -145,10 +145,33 @@
     min-width: 0;
   }
 
+  /* shadcn SidebarContent + any overflow region: hide track, keep scroll for long lists */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .machined-field {
     border: 1px solid var(--border);
     background-color: var(--bg-deep);
     color: var(--text-primary);
+    padding-inline: 0.875rem;
+    padding-block: 0.75rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .machined-field:focus-visible {
+    border-color: var(--brand-bright);
+  }
+
+  .machined-field::placeholder {
+    color: var(--text-muted);
+    opacity: 0.85;
   }
 
   .texture-overlay {

@@ -1,5 +1,3 @@
-import { Edit2 } from "lucide-react";
-
 export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { getProducts as listProductsForAdmin } from "@/lib/shop/data";
 import { ProductStatusToggle } from "@/components/admin/product-status-toggle";
+import { ProductPriceField } from "@/components/admin/product-price-field";
 
 export default async function AdminProductsPage() {
   const products = await listProductsForAdmin();
@@ -39,7 +38,6 @@ export default async function AdminProductsPage() {
             <TableHead>Price</TableHead>
             <TableHead>Delivery</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -48,21 +46,16 @@ export default async function AdminProductsPage() {
             <TableRow key={product.id} className={index % 2 === 0 ? "bg-bg-surface" : "bg-bg-base"}>
               <TableCell className="text-xs font-semibold text-text-primary">{product.name}</TableCell>
               <TableCell className="text-xs text-text-muted">{product.brand}</TableCell>
-              <TableCell className="text-xs text-text-muted">Rs. {product.price.toLocaleString("en-PK")}</TableCell>
+              <TableCell className="text-xs text-text-muted align-top py-4">
+                <ProductPriceField
+                  productId={product.id}
+                  productSlug={product.slug}
+                  initialPrice={product.price}
+                />
+              </TableCell>
               <TableCell className="text-xs text-text-muted">{product.deliveryDays} days</TableCell>
               <TableCell className="text-xs uppercase tracking-[0.2em] text-text-muted">
                 <ProductStatusToggle productId={product.id} status={product.status} />
-              </TableCell>
-              <TableCell className="text-text-muted">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="text-text-muted hover:text-text-primary"
-                  aria-label="Edit product"
-                >
-                  <Edit2 className="h-4 w-4" strokeWidth={1.5} />
-                </Button>
               </TableCell>
             </TableRow>
           ))}

@@ -3,8 +3,10 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { useGSAP } from "@gsap/react";
+import { X } from "lucide-react";
 import { gsap } from "@/lib/animation/gsap-config";
 import { TransitionLink } from "@/components/layout/page-transition";
+import { Button } from "@/components/ui/button";
 
 export type NavItem = {
   href: string;
@@ -135,24 +137,17 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
         <span className="display-kicker text-sm text-text-muted tracking-[0.2em]">
           NAVIGATION
         </span>
-        <button
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
           onClick={onClose}
           data-button-motion="true"
-          className="p-2 text-text-muted hover:text-text-primary transition-colors"
+          className="text-text-muted hover:text-text-primary"
           aria-label="Close navigation"
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <line x1="4" y1="4" x2="20" y2="20" />
-            <line x1="20" y1="4" x2="4" y2="20" />
-          </svg>
-        </button>
+          <X className="size-5" strokeWidth={1.5} />
+        </Button>
       </div>
 
       <nav className="flex flex-1 flex-col justify-center">

@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import { TransitionLink } from "@/components/layout/page-transition";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getProductBySlug } from "@/lib/shop/data";
 import { verifyOrderAccessToken } from "@/lib/payment/order-access-token";
 import { getOrderById } from "@/lib/db/services";
+import { formatPkr } from "@/lib/utils";
 
 type OrderConfirmationProps = {
   params: Promise<{ id: string }>;
@@ -46,13 +48,13 @@ export default async function OrderConfirmationPage({ params, searchParams }: Or
             </p>
 
             {isPaymentFailed ? (
-              <div className="mt-8 inline-flex border border-brand-mid bg-brand px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-text-accent">
+              <Badge variant="failed" className="mt-8 px-4 py-2 text-[10px] tracking-[0.16em]">
                 Payment Failed
-              </div>
+              </Badge>
             ) : (
-              <div className="mt-8 inline-flex border border-status-success-border bg-status-success-bg px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-text-success">
+              <Badge variant="success" className="mt-8 px-4 py-2 text-[10px] tracking-[0.16em]">
                 Payment Pipeline: Captured
-              </div>
+              </Badge>
             )}
 
             <div className="mt-6 grid gap-3 border border-border/60 bg-bg-deep p-7 text-sm">
@@ -70,6 +72,9 @@ export default async function OrderConfirmationPage({ params, searchParams }: Or
               </p>
               <p>
                 <span className="text-text-muted">Frame:</span> {product?.name || "Not selected"}
+              </p>
+              <p>
+                <span className="text-text-muted">Total:</span> {formatPkr(order.price)}
               </p>
               <p>
                 <span className="text-text-muted">Background:</span> {order.customization.background}

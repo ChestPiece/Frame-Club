@@ -1,4 +1,4 @@
-import { fail, ok } from "@/lib/http/api-envelope";
+import { fail, ok, parseJsonBody } from "@/lib/http/api-envelope";
 import { createOrderAccessToken } from "@/lib/payment/order-access-token";
 import { createOrder } from "@/lib/db/services";
 import {
@@ -21,7 +21,7 @@ type OrderPayload = {
 };
 
 export async function POST(request: Request) {
-  const payload = (await request.json().catch(() => null)) as OrderPayload | null;
+  const payload = await parseJsonBody<OrderPayload>(request);
 
   if (!payload) {
     return fail("INVALID_JSON", "Request body must be valid JSON.", 400);

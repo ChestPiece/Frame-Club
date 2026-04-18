@@ -93,8 +93,13 @@ export async function POST(request: Request) {
 
     await Promise.all([
       sendOrderConfirmation(order, productName),
-      sendAdminNotification(order, productName)
-    ]).catch(console.error);
+      sendAdminNotification(order, productName),
+    ]).catch((err) => {
+      console.error("PayFast webhook: payment confirmation emails failed", {
+        orderId,
+        error: err instanceof Error ? err.message : String(err),
+      });
+    });
   }
 
   return new NextResponse("OK", { status: 200 });

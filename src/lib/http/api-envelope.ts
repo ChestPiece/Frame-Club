@@ -26,3 +26,7 @@ export function fail(code: string, message: string, status = 400) {
     { status }
   );
 }
+
+export async function parseJsonBody<T>(request: Request): Promise<T | null> {
+  return (await request.json().catch(() => null)) as T | null;
+}

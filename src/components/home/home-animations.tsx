@@ -43,11 +43,12 @@ export function HomeAnimations({ children }: HomeAnimationsProps) {
       mm.add(
         {
           reduceMotion: "(prefers-reduced-motion: reduce)",
+          normal: "(prefers-reduced-motion: no-preference)",
         },
         (context) => {
           const reduceMotion = Boolean(context.conditions?.reduceMotion);
 
-                   if (reduceMotion) {
+          if (reduceMotion) {
             revealAllTargets();
             gsap.set(MOTION_REVEAL_LOCAL, { autoAlpha: 1, y: 0, x: 0, clipPath: "none", clearProps: "all" });
             gsap.set(HERO_PIN_TARGETS, { autoAlpha: 1, y: 0, x: 0, clearProps: "all" });
@@ -150,6 +151,7 @@ export function HomeAnimations({ children }: HomeAnimationsProps) {
 
           if (reduceMotion) {
             gsap.set(HIDE_TARGETS, { autoAlpha: 1, y: 0, clearProps: "all" });
+            gsap.set(HERO_REVEAL_TARGETS, { autoAlpha: 1, y: 0, clearProps: "all" });
             gsap.set(MOTION_REVEAL_LOCAL, { autoAlpha: 1, y: 0, x: 0, clipPath: "none", clearProps: "all" });
             gsap.set(HERO_PIN_TARGETS, { autoAlpha: 1, y: 0, x: 0, clearProps: "all" });
             gsap.set(DRAWSVG_LINE_TARGETS, { drawSVG: "100%", autoAlpha: 1 });

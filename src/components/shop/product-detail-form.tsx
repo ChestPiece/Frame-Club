@@ -43,14 +43,20 @@ export function ProductDetailForm({ product }: ProductDetailFormProps) {
       <form action="/checkout" className="space-y-7">
         <Input type="hidden" name="slug" value={product.slug} className="hidden" />
 
-        <div>
-          <Label className="technical-label mb-2 block text-[10px] text-text-muted">Background design</Label>
-          <RadioGroup name="background" defaultValue={product.backgrounds[0]?.value} className="mt-3 flex flex-wrap gap-3">
+        <fieldset className="min-w-0 border-0 p-0">
+          <legend className="technical-label mb-3 block text-[10px] text-text-muted">
+            Background design
+          </legend>
+          <RadioGroup
+            name="background"
+            defaultValue={product.backgrounds[0]?.value}
+            className="mt-1 flex flex-wrap gap-3"
+          >
             {product.backgrounds.map((background) => (
               <RadioGroupItem
                 key={background.value}
                 value={background.value}
-                className="h-12 w-12 border border-border/40 p-0 data-checked:border-brand min-touch-target"
+                className="h-12 w-12 cursor-pointer border border-border/40 p-0 transition-colors duration-200 data-checked:border-brand min-touch-target"
                 style={{
                   backgroundColor: background.swatch,
                   backgroundImage: backgroundPatterns[background.value],
@@ -60,7 +66,7 @@ export function ProductDetailForm({ product }: ProductDetailFormProps) {
               />
             ))}
           </RadioGroup>
-        </div>
+        </fieldset>
 
         <div>
           <Label className="technical-label mb-1 block text-[10px] text-text-muted" htmlFor="notes">

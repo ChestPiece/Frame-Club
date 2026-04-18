@@ -2,29 +2,31 @@
 @import "tw-animate-css";
 
 @layer base {
+  /* Color tokens aligned with CLAUDE.md (Machined Monolith). --bg-deep: extra-recessed chrome (inputs, footers). */
   :root {
-    --bg-deep: #030303;
-    --bg-base: #0f0d0d;
-    --bg-recessed: #0a0a0a;
-    --bg-surface: #1a1715;
-    --bg-elevated: #2c2828;
-    --bg-nav: rgba(44, 40, 40, 0.6);
+    --bg-deep: #0e0e0e;
+    --bg-base: #141313;
+    --bg-recessed: #0e0e0e;
+    --bg-surface: #1c1b1b;
+    --bg-elevated: #2a2a2a;
+    --bg-highest: #353434;
+    --bg-nav: rgba(58, 57, 57, 0.6);
 
-    --brand: #350407;
-    --brand-mid: #5c0a0d;
-    --brand-bright: #8e130c;
+    --brand: #380306;
+    --brand-mid: #8e130c;
+    --brand-bright: #c0392b;
 
-    --text-primary: #f0eded;
-    --text-muted: #7a7070;
+    --text-primary: #f5f5f5;
+    --text-muted: #888888;
     --text-accent: #d4b8b8;
     --text-error: #f1a39d;
     --text-success: #9bf0ba;
     --status-success-bg: #173628;
     --status-success-border: #2e6f4f;
 
-    --border: #3d3030;
-    --border-subtle: rgba(61, 48, 48, 0.15);
-    --shadow-ambient: rgba(53, 4, 7, 0.18);
+    --border: #494542;
+    --border-subtle: rgba(84, 67, 66, 0.15);
+    --shadow-ambient: rgba(56, 3, 6, 0.15);
 
     --font-display: "Bebas Neue", "Arial Narrow", sans-serif;
     --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -77,6 +79,7 @@
   --color-bg-recessed: var(--bg-recessed);
   --color-bg-surface: var(--bg-surface);
   --color-bg-elevated: var(--bg-elevated);
+  --color-bg-highest: var(--bg-highest);
 
   --color-brand: var(--brand);
   --color-brand-mid: var(--brand-mid);

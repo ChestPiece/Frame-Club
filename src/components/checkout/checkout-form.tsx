@@ -151,61 +151,119 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
           </p>
         </div>
 
-        {submitError ? <p className="text-sm text-error">{submitError}</p> : null}
+        {submitError ? (
+          <p id="checkout-submit-error" role="alert" className="text-sm text-error">
+            {submitError}
+          </p>
+        ) : null}
 
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
-          <div className="min-w-0">
-            <Label htmlFor="customerName" className="mb-2.5">
-              Full Name
-            </Label>
-            <Input id="customerName" {...register("customerName")} className="w-full" />
-            {errors.customerName ? (
-              <p className="mt-2 text-xs text-error">{errors.customerName.message}</p>
-            ) : null}
-          </div>
+        <fieldset className="min-w-0 space-y-0 border-0 p-0">
+          <legend className="technical-label mb-6 block w-full text-[10px] text-text-muted">
+            Contact
+          </legend>
+          <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+            <div className="min-w-0">
+              <Label htmlFor="customerName" className="mb-2.5">
+                Full Name
+              </Label>
+              <Input
+                id="customerName"
+                {...register("customerName")}
+                className="w-full"
+                aria-invalid={errors.customerName ? true : undefined}
+                aria-describedby={errors.customerName ? "customerName-error" : undefined}
+              />
+              {errors.customerName ? (
+                <p id="customerName-error" role="alert" className="mt-2 text-xs text-error">
+                  {errors.customerName.message}
+                </p>
+              ) : null}
+            </div>
 
-          <div className="min-w-0">
-            <Label htmlFor="customerPhone" className="mb-2.5">
-              Phone Number
-            </Label>
-            <Input id="customerPhone" {...register("customerPhone")} className="w-full" />
-            {errors.customerPhone ? (
-              <p className="mt-2 text-xs text-error">{errors.customerPhone.message}</p>
-            ) : null}
-          </div>
+            <div className="min-w-0">
+              <Label htmlFor="customerPhone" className="mb-2.5">
+                Phone Number
+              </Label>
+              <Input
+                id="customerPhone"
+                {...register("customerPhone")}
+                className="w-full"
+                aria-invalid={errors.customerPhone ? true : undefined}
+                aria-describedby={errors.customerPhone ? "customerPhone-error" : undefined}
+              />
+              {errors.customerPhone ? (
+                <p id="customerPhone-error" role="alert" className="mt-2 text-xs text-error">
+                  {errors.customerPhone.message}
+                </p>
+              ) : null}
+            </div>
 
-          <div className="min-w-0 md:col-span-2">
-            <Label htmlFor="customerEmail" className="mb-2.5">
-              Email
-            </Label>
-            <Input id="customerEmail" type="email" {...register("customerEmail")} className="w-full" />
-            {errors.customerEmail ? (
-              <p className="mt-2 text-xs text-error">{errors.customerEmail.message}</p>
-            ) : null}
+            <div className="min-w-0 md:col-span-2">
+              <Label htmlFor="customerEmail" className="mb-2.5">
+                Email
+              </Label>
+              <Input
+                id="customerEmail"
+                type="email"
+                autoComplete="email"
+                {...register("customerEmail")}
+                className="w-full"
+                aria-invalid={errors.customerEmail ? true : undefined}
+                aria-describedby={errors.customerEmail ? "customerEmail-error" : undefined}
+              />
+              {errors.customerEmail ? (
+                <p id="customerEmail-error" role="alert" className="mt-2 text-xs text-error">
+                  {errors.customerEmail.message}
+                </p>
+              ) : null}
+            </div>
           </div>
+        </fieldset>
 
-          <div className="min-w-0 md:col-span-2">
-            <Label htmlFor="customerAddress" className="mb-2.5">
-              Delivery Address
-            </Label>
-            <Input id="customerAddress" {...register("customerAddress")} className="w-full" />
-            {errors.customerAddress ? (
-              <p className="mt-2 text-xs text-error">{errors.customerAddress.message}</p>
-            ) : null}
-          </div>
+        <fieldset className="min-w-0 space-y-0 border-0 p-0">
+          <legend className="technical-label mb-6 block w-full text-[10px] text-text-muted">
+            Delivery
+          </legend>
+          <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+            <div className="min-w-0 md:col-span-2">
+              <Label htmlFor="customerAddress" className="mb-2.5">
+                Delivery Address
+              </Label>
+              <Input
+                id="customerAddress"
+                autoComplete="street-address"
+                {...register("customerAddress")}
+                className="w-full"
+                aria-invalid={errors.customerAddress ? true : undefined}
+                aria-describedby={errors.customerAddress ? "customerAddress-error" : undefined}
+              />
+              {errors.customerAddress ? (
+                <p id="customerAddress-error" role="alert" className="mt-2 text-xs text-error">
+                  {errors.customerAddress.message}
+                </p>
+              ) : null}
+            </div>
 
-          <div className="min-w-0 md:col-span-2">
-            <Label htmlFor="customerCity" className="mb-2.5">
-              City
-            </Label>
-            <Input id="customerCity" {...register("customerCity")} className="w-full" />
-            {errors.customerCity ? (
-              <p className="mt-2 min-h-5 text-xs text-error">{errors.customerCity.message}</p>
-            ) : (
-              <p className="mt-2 min-h-5" aria-hidden />
-            )}
+            <div className="min-w-0 md:col-span-2">
+              <Label htmlFor="customerCity" className="mb-2.5">
+                City
+              </Label>
+              <Input
+                id="customerCity"
+                autoComplete="address-level2"
+                {...register("customerCity")}
+                className="w-full"
+                aria-invalid={errors.customerCity ? true : undefined}
+                aria-describedby={errors.customerCity ? "customerCity-error" : undefined}
+              />
+              {errors.customerCity ? (
+                <p id="customerCity-error" role="alert" className="mt-2 text-xs text-error">
+                  {errors.customerCity.message}
+                </p>
+              ) : null}
+            </div>
           </div>
-        </div>
+        </fieldset>
 
         <div className="bg-bg-elevated px-5 py-6 sm:px-6 sm:py-7">
           <p className="technical-label text-[10px] text-text-muted">Delivery window</p>
@@ -221,9 +279,10 @@ export function CheckoutForm({ product, slug, background, notes, initialValues }
           disabled={isSubmitting || !!payfastData}
           variant="brand"
           size="lg"
-          className="display-kicker w-full"
+          className="display-kicker w-full cursor-pointer transition-colors duration-200"
+          aria-busy={isSubmitting || !!payfastData}
         >
-          {isSubmitting || payfastData ? "Processing Payment..." : "Proceed to Payment"}
+          {isSubmitting || payfastData ? "Redirecting to PayFast…" : "Proceed to Payment"}
         </Button>
       </form>
       

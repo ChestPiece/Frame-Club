@@ -41,13 +41,17 @@ export default async function AdminDashboardPage() {
     );
   }
 
+  const pipelinePct =
+    stats.totalOrders > 0
+      ? Math.min(100, Math.round((stats.inProduction / stats.totalOrders) * 100))
+      : 0;
+
   return (
     <div className="space-y-10">
       <section className="grid gap-0 md:grid-cols-2 lg:grid-cols-4">
         <article className="border border-border bg-bg-surface p-8">
           <div className="flex items-start justify-between">
             <p className="technical-label text-[10px] text-text-muted">Total Orders</p>
-            <span className="text-[10px] text-green-500">+12%</span>
           </div>
           <p className="mt-4 text-4xl font-bold">{stats.totalOrders}</p>
         </article>
@@ -55,15 +59,13 @@ export default async function AdminDashboardPage() {
         <article className="border border-border border-l-0 bg-bg-surface p-8">
           <div className="flex items-start justify-between">
             <p className="technical-label text-[10px] text-text-muted">Pending Orders</p>
-            <span className="text-[10px] text-brand-mid">-3%</span>
           </div>
           <p className="mt-4 text-4xl font-bold">{stats.pendingOrders}</p>
         </article>
 
         <article className="border border-border border-l-0 bg-bg-surface p-8">
           <div className="flex items-start justify-between">
-            <p className="technical-label text-[10px] text-text-muted">Revenue This Month</p>
-            <span className="text-[10px] text-green-500">+8%</span>
+            <p className="technical-label text-[10px] text-text-muted">Revenue (paid)</p>
           </div>
           <p className="mt-4 text-3xl font-bold">Rs. {stats.revenue.toLocaleString("en-PK")}</p>
         </article>
@@ -74,7 +76,7 @@ export default async function AdminDashboardPage() {
           </div>
           <p className="mt-4 text-4xl font-bold">{stats.inProduction}</p>
           <div className="mt-3 h-1 w-full bg-bg-deep">
-            <div className="h-full bg-text-accent" style={{ width: "45%" }} />
+            <div className="h-full bg-text-accent" style={{ width: `${pipelinePct}%` }} />
           </div>
         </article>
       </section>
@@ -201,10 +203,8 @@ export default async function AdminDashboardPage() {
             Metrics
           </h3>
           <p className="mt-4 text-[11px] uppercase tracking-[0.16em] text-text-accent">
-            System performance is optimal. All production modules reporting green.
+            Every frame is made to order. Status updates flow from this dashboard.
           </p>
-
-          <p className="mt-12 text-5xl font-bold text-text-primary">99.8%</p>
         </article>
       </section>
     </div>

@@ -1,4 +1,5 @@
 import { fail, ok } from "@/lib/http/api-envelope";
+import { getConfiguredAdminEmail, isUserAdmin } from "@/lib/auth/admin";
 import { getOrderById } from "@/lib/db/services";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,8 +17,11 @@ export async function GET(_request: Request, context: RouteContext) {
     return fail("UNAUTHORIZED", "Authentication required.", 401);
   }
 
-  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
-  if (adminEmail && user.email?.toLowerCase() !== adminEmail) {
+  if (!getConfiguredAdminEmail()) {
+    return fail("ADMIN_NOT_CONFIGURED", "Admin email is not configured.", 503);
+  }
+
+  if (!isUserAdmin(user.email)) {
     return fail("FORBIDDEN", "Admin access required.", 403);
   }
 

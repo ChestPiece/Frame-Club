@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import type { OrderStatus, ProductStatus } from '@/lib/db/types'
 import { sendStatusUpdate } from '@/lib/emails/send'
 import { getOrderById } from '@/lib/db/services'
+import { getConfiguredAdminEmail, isUserAdmin } from '@/lib/auth/admin'
 
 async function assertAdminSession() {
   const supabase = await createClient()
@@ -16,8 +17,11 @@ async function assertAdminSession() {
     return { ok: false as const, error: 'UNAUTHORIZED' }
   }
 
-  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase()
-  if (adminEmail && user.email?.toLowerCase() !== adminEmail) {
+  if (!getConfiguredAdminEmail()) {
+    return { ok: false as const, error: 'ADMIN_NOT_CONFIGURED' }
+  }
+
+  if (!isUserAdmin(user.email)) {
     return { ok: false as const, error: 'FORBIDDEN' }
   }
 

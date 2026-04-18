@@ -8,6 +8,8 @@ const {
   getPayFastUrlMock,
   generatePayFastSignatureMock,
   createServiceClientMock,
+  createClientMock,
+  getOrderByIdMock,
   getProductBySlugMock,
   sendOrderConfirmationMock,
   sendAdminNotificationMock,
@@ -19,6 +21,8 @@ const {
   getPayFastUrlMock: vi.fn(),
   generatePayFastSignatureMock: vi.fn(),
   createServiceClientMock: vi.fn(),
+  createClientMock: vi.fn(),
+  getOrderByIdMock: vi.fn(),
   getProductBySlugMock: vi.fn(),
   sendOrderConfirmationMock: vi.fn(),
   sendAdminNotificationMock: vi.fn(),
@@ -27,6 +31,7 @@ const {
 vi.mock("@/lib/db/services", () => ({
   createOrder: createOrderMock,
   applyWebhook: applyWebhookMock,
+  getOrderById: getOrderByIdMock,
 }));
 
 vi.mock("@/lib/payment/order-access-token", () => ({
@@ -41,10 +46,12 @@ vi.mock("@/lib/payment/payfast", () => ({
   getPayFastUrl: getPayFastUrlMock,
   generatePayFastSignature: generatePayFastSignatureMock,
   verifyPayFastSignature: verifySignatureMock,
+  assertPayfastSigningConfigured: vi.fn(),
 }));
 
 vi.mock("@/lib/supabase/server", () => ({
   createServiceClient: createServiceClientMock,
+  createClient: createClientMock,
 }));
 
 vi.mock("@/lib/shop/data", () => ({
@@ -58,11 +65,13 @@ vi.mock("@/lib/emails/send", () => ({
 
 import { POST as postOrderRoute } from "@/app/api/orders/route";
 import { POST as postWebhookRoute } from "@/app/api/payfast/webhook/route";
+import { GET as getOrderByIdRoute } from "@/app/api/orders/[id]/route";
 
 describe("api routes", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.NEXT_PUBLIC_SITE_URL = "http://localhost:3000";
+    process.env.ADMIN_EMAIL = "admin@frameclub.pk";
     getPayFastUrlMock.mockReturnValue("https://sandbox.payfast.co.za/eng/process");
     generatePayFastSignatureMock.mockReturnValue("sig");
     createOrderAccessTokenMock.mockReturnValue("token-123");
@@ -206,5 +215,60 @@ describe("api routes", () => {
     );
     expect(sendOrderConfirmationMock).toHaveBeenCalled();
     expect(sendAdminNotificationMock).toHaveBeenCalled();
+  });
+
+  it("GET /api/orders/[id] returns 503 when ADMIN_EMAIL is not configured", async () => {
+    const prev = process.env.ADMIN_EMAIL;
+    delete process.env.ADMIN_EMAIL;
+    createClientMock.mockResolvedValue({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: { email: "admin@frameclub.pk" } } }),
+      },
+    });
+
+    const res = await getOrderByIdRoute(
+      new Request("http://localhost:3000/api/orders/o1"),
+      { params: Promise.resolve({ id: "o1" }) },
+    );
+    const json = await res.json();
+
+    expect(res.status).toBe(503);
+    expect(json.error.code).toBe("ADMIN_NOT_CONFIGURED");
+    process.env.ADMIN_EMAIL = prev;
+  });
+
+  it("GET /api/orders/[id] returns order for configured admin", async () => {
+    process.env.ADMIN_EMAIL = "admin@frameclub.pk";
+    createClientMock.mockResolvedValue({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: { email: "admin@frameclub.pk" } } }),
+      },
+    });
+    getOrderByIdMock.mockResolvedValue({
+      id: "o1",
+      orderNumber: "FC-100001",
+      customerName: "A",
+      customerEmail: "a@a.com",
+      customerPhone: "1",
+      customerAddress: "x",
+      customerCity: "y",
+      productId: "p",
+      productSlug: "r34",
+      customization: { background: "b", notes: "" },
+      price: 5000,
+      paymentStatus: "paid",
+      orderStatus: "pending",
+      createdAt: "2026-01-01T00:00:00Z",
+    });
+
+    const res = await getOrderByIdRoute(
+      new Request("http://localhost:3000/api/orders/o1"),
+      { params: Promise.resolve({ id: "o1" }) },
+    );
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.success).toBe(true);
+    expect(json.data.order.id).toBe("o1");
   });
 });

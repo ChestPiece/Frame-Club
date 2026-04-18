@@ -8,7 +8,17 @@ export default async function AdminLoginPage({
 }: {
   searchParams: SearchParams;
 }) {
-  const { error } = await searchParams;
+  const params = await searchParams;
+  const rawError = params.error;
+  const errorCode = typeof rawError === "string" ? rawError : rawError?.[0];
+  const errorMessage =
+    errorCode === "forbidden"
+      ? "Access denied. Sign in with the configured admin account."
+      : errorCode === "admin_not_configured"
+        ? "Admin email is not configured. Set ADMIN_EMAIL on the server."
+        : errorCode
+          ? `Error: ${errorCode}`
+          : undefined;
 
   return (
     <main id="main-content" className="grid min-h-screen bg-bg-base lg:grid-cols-[1.05fr_1fr]">
@@ -31,8 +41,8 @@ export default async function AdminLoginPage({
             <Input name="email" type="email" placeholder="ADMIN EMAIL" required />
             <Input name="password" type="password" placeholder="PASSWORD" required />
 
-            {error && (
-              <p className="text-xs text-text-error">{error}</p>
+            {errorMessage && (
+              <p className="text-xs text-text-error">{errorMessage}</p>
             )}
 
             <button

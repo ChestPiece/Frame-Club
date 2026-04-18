@@ -237,7 +237,10 @@ describe("Design polish components", () => {
 
     expect(screen.getByRole("heading", { name: "PAYMENT ISSUE" })).toBeInTheDocument();
     expect(screen.getByText("Payment Failed")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "TRY AGAIN" })).toHaveAttribute("href", "/checkout?orderId=order-1");
+    expect(screen.getByRole("link", { name: "TRY AGAIN" })).toHaveAttribute(
+      "href",
+      "/checkout?orderId=order-1&token=t",
+    );
   });
 
   it("hides related section when there are no related products", async () => {

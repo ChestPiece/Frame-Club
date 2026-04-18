@@ -30,6 +30,13 @@
     --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
     --radius: 0px;
+
+    /* Fixed site header: ticker row + nav row (h-20). Used for hero offset & scroll-margin. */
+    --site-header-ticker-height: 2.5rem;
+    --site-header-nav-row-height: 5rem;
+    --site-header-height: calc(
+      var(--site-header-ticker-height) + var(--site-header-nav-row-height)
+    );
   }
 
   * {
@@ -175,6 +182,10 @@
   .gsap-hidden {
     visibility: hidden;
     opacity: 0;
+  }
+
+  .scroll-margin-site-header {
+    scroll-margin-top: var(--site-header-height);
   }
 }
 

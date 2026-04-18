@@ -24,12 +24,12 @@ export default async function Home() {
 
   return (
     <>
-      <main id="main-content" className="pb-0">
+      <main id="main-content" className="scroll-margin-site-header pb-0">
         <HomeAnimations>
           <section
             id="hero-section"
             data-animate-section="hero"
-            className="relative overflow-hidden bg-bg-deep texture-overlay"
+            className="scroll-margin-site-header relative overflow-hidden bg-bg-deep texture-overlay"
           >
             <div
               className="pointer-events-none absolute -left-48 -bottom-48 h-[60vw] w-[60vw] md:h-[800px] md:w-[800px]"
@@ -38,7 +38,10 @@ export default async function Home() {
                   "radial-gradient(circle at bottom left, color-mix(in srgb, var(--brand) 38%, transparent), transparent 60%)",
               }}
             />
-            <div id="hero-pin-target" className="h-dvh flex items-center">
+            <div
+              id="hero-pin-target"
+              className="flex min-h-dvh items-start pt-(--site-header-height) md:min-h-dvh md:items-center md:pt-0"
+            >
               <div className="frame-container relative z-10 grid items-center gap-6 md:gap-10 md:grid-cols-2">
                 <div className="space-y-6">
                   <div className="flex flex-col gap-4">

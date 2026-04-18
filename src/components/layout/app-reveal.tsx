@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animation/gsap-config";
 import { SITE_LOADER_DONE_EVENT } from "@/components/layout/site-loader";
 import { useScrollTriggerEnvironment } from "@/components/providers/scroll-trigger-environment";
+import { cn } from "@/lib/utils";
 
 export const APP_REVEAL_DONE_EVENT = "frameclub:app-reveal-done";
 
@@ -27,6 +28,7 @@ function dispatchAppRevealDone() {
 export function AppReveal({ children }: { children: React.ReactNode }) {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const { setAppShellVisible } = useScrollTriggerEnvironment();
+  const [revealDone, setRevealDone] = React.useState(false);
 
   useGSAP(
     () => {
@@ -37,10 +39,15 @@ export function AppReveal({ children }: { children: React.ReactNode }) {
         setAppShellVisible(true);
       };
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        gsap.set(el, { autoAlpha: 1, y: 0 });
+      const finishReveal = () => {
+        setRevealDone(true);
         markShellVisible();
         dispatchAppRevealDone();
+      };
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set(el, { autoAlpha: 1, y: 0 });
+        finishReveal();
         return;
       }
 
@@ -62,10 +69,7 @@ export function AppReveal({ children }: { children: React.ReactNode }) {
           duration: 0.8,
           ease: "power3.out",
           clearProps: "transform,opacity,visibility",
-          onComplete: () => {
-            markShellVisible();
-            dispatchAppRevealDone();
-          },
+          onComplete: finishReveal,
         });
       };
 
@@ -93,7 +97,7 @@ export function AppReveal({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div ref={rootRef} className="will-change-transform">
+    <div ref={rootRef} className={cn(!revealDone && "will-change-transform")}>
       {children}
     </div>
   );

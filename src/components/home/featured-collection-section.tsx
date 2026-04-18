@@ -22,23 +22,22 @@ type FeaturedCollectionSectionProps = {
 export function FeaturedCollectionSection({ products }: FeaturedCollectionSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<HTMLElement[]>([]);
   const flipStateRef = useRef<ReturnType<typeof Flip.getState> | null>(null);
   const scrollTriggerReady = useScrollTriggerReady();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const setCardRef = useCallback((el: HTMLElement | null, index: number) => {
-    if (el) cardRefs.current[index] = el;
-  }, []);
-
   const handleViewToggle = useCallback(
     (newMode: "grid" | "list") => {
-      if (newMode === viewMode || !gridRef.current || cardRefs.current.length === 0) return;
+      if (newMode === viewMode) return;
+      const grid = gridRef.current;
+      if (!grid) return;
+      const cards = gsap.utils.toArray<HTMLElement>("[data-featured-product-card]", grid);
+      if (cards.length === 0) return;
       if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         setViewMode(newMode);
         return;
       }
-      flipStateRef.current = Flip.getState(cardRefs.current);
+      flipStateRef.current = Flip.getState(cards);
       setViewMode(newMode);
     },
     [viewMode],
@@ -46,12 +45,16 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
 
   useGSAP(
     () => {
-      if (!scrollTriggerReady || cardRefs.current.length === 0) return;
+      if (!scrollTriggerReady || products.length === 0) return;
+      const grid = gridRef.current;
+      if (!grid) return;
+      const cards = gsap.utils.toArray<HTMLElement>("[data-featured-product-card]", grid);
+      if (cards.length !== products.length) return;
 
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(cardRefs.current.filter(Boolean), {
+        gsap.set(cards, {
           y: 0,
           opacity: 1,
           clipPath: "none",
@@ -62,7 +65,7 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const tween = gsap.fromTo(
-          cardRefs.current,
+          cards,
           { y: 80, opacity: 0, clipPath: "inset(100% 0% 0% 0%)" },
           {
             y: 0,
@@ -90,12 +93,23 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
   );
 
   useLayoutEffect(() => {
-    if (!flipStateRef.current || cardRefs.current.length === 0) return;
+    const state = flipStateRef.current;
+    if (!state) return;
+    const grid = gridRef.current;
+    if (!grid) {
+      flipStateRef.current = null;
+      return;
+    }
+    const cards = gsap.utils.toArray<HTMLElement>("[data-featured-product-card]", grid);
+    if (cards.length === 0) {
+      flipStateRef.current = null;
+      return;
+    }
     if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       flipStateRef.current = null;
       return;
     }
-    Flip.from(flipStateRef.current, {
+    Flip.from(state, {
       duration: 0.5,
       ease: "power2.inOut",
       stagger: 0.04,
@@ -149,10 +163,10 @@ export function FeaturedCollectionSection({ products }: FeaturedCollectionSectio
           ref={gridRef}
           className={cn("grid gap-6 sm:gap-8", viewMode === "grid" ? "sm:grid-cols-2 md:grid-cols-3" : "md:grid-cols-1")}
         >
-          {products.map((product, index) => (
+          {products.map((product) => (
             <Card
               key={product.id}
-              ref={(el) => setCardRef(el, index)}
+              data-featured-product-card
               data-motion-reveal
               className="group bg-bg-deep overflow-hidden border border-border/20 min-w-0"
               style={{ opacity: 0 }}

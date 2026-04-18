@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/animation/gsap-config";
 import { TransitionLink } from "@/components/layout/page-transition";
@@ -21,6 +22,11 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
   const overlayRef = React.useRef<HTMLDivElement>(null);
   const itemWrapperRefs = React.useRef<(HTMLDivElement | null)[]>([]);
   const ctaWrapperRef = React.useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   React.useEffect(() => {
     if (!isOpen) return;
@@ -116,7 +122,7 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
     { scope: overlayRef, dependencies: [isOpen], revertOnUpdate: true },
   );
 
-  return (
+  const overlay = (
     <div
       ref={overlayRef}
       className="fixed inset-0 z-90 flex flex-col bg-bg-deep"
@@ -194,4 +200,7 @@ export function FullscreenNav({ isOpen, onClose, navItems }: FullscreenNavProps)
       </div>
     </div>
   );
+
+  if (!mounted || typeof document === "undefined") return null;
+  return createPortal(overlay, document.body);
 }

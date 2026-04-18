@@ -29,12 +29,7 @@ export function SocialProofSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const counterSpanRef = useRef<HTMLSpanElement>(null);
-  const cardRefs = useRef<HTMLElement[]>([]);
   const scrollTriggerReady = useScrollTriggerReady();
-
-  const setCardRef = (el: HTMLElement | null, index: number) => {
-    if (el) cardRefs.current[index] = el;
-  };
 
   useGSAP(
     () => {
@@ -46,11 +41,6 @@ export function SocialProofSection() {
         if (counterSpanRef.current) {
           counterSpanRef.current.textContent = "50+";
         }
-        gsap.set(cardRefs.current.filter(Boolean), {
-          autoAlpha: 1,
-          clipPath: "none",
-          clearProps: "all",
-        });
         return () => {};
       });
 
@@ -73,27 +63,54 @@ export function SocialProofSection() {
             },
           });
         }
-
-        if (cardRefs.current.length > 0) {
-          gsap.fromTo(
-            cardRefs.current,
-            { clipPath: "inset(0% 100% 0% 0%)", opacity: 0 },
-            {
-              clipPath: "inset(0% 0% 0% 0%)",
-              opacity: 1,
-              duration: 0.9,
-              ease: "power3.out",
-              stagger: 0.18,
-              scrollTrigger: {
-                trigger: gridRef.current,
-                start: "top 78%",
-                once: true,
-              },
-            },
-          );
-        }
-
         return () => {};
+      });
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef, dependencies: [scrollTriggerReady] },
+  );
+
+  useGSAP(
+    () => {
+      if (!scrollTriggerReady) return;
+      const grid = gridRef.current;
+      if (!grid) return;
+      const cards = gsap.utils.toArray<HTMLElement>("[data-social-proof-card]", grid);
+      if (cards.length !== proofPoints.length) return;
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(cards, {
+          autoAlpha: 1,
+          clipPath: "none",
+          clearProps: "all",
+        });
+        return () => {};
+      });
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const tween = gsap.fromTo(
+          cards,
+          { clipPath: "inset(0% 100% 0% 0%)", opacity: 0 },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            opacity: 1,
+            duration: 0.9,
+            ease: "power3.out",
+            stagger: 0.18,
+            scrollTrigger: {
+              trigger: grid,
+              start: "top 78%",
+              once: true,
+            },
+          },
+        );
+        return () => {
+          tween.scrollTrigger?.kill();
+          tween.kill();
+        };
       });
 
       return () => mm.revert();
@@ -110,10 +127,10 @@ export function SocialProofSection() {
       </h2>
 
       <div ref={gridRef} className="grid gap-6 sm:gap-8 md:grid-cols-3">
-        {proofPoints.map((item, index) => (
+        {proofPoints.map((item) => (
           <Card
             key={item.title}
-            ref={(el) => setCardRef(el, index)}
+            data-social-proof-card
             data-motion-reveal
             className="relative overflow-hidden border border-border/30 bg-bg-elevated"
             style={{ opacity: 0 }}

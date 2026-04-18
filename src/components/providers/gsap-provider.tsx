@@ -28,6 +28,8 @@ if (typeof window !== "undefined") {
   );
   // ScrollSmoother owns scroll normalization; normalizeScroll(true) breaks trigger measurement and batch onEnter.
   ScrollTrigger.normalizeScroll(false);
+  // Reduces spurious refreshes when the mobile browser chrome shows/hides (iOS address bar).
+  ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 export function GSAPProvider({ children }: { children: React.ReactNode }) {

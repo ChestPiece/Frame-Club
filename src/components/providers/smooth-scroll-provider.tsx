@@ -9,6 +9,7 @@ import {
   SCROLL_LAYOUT_STABILIZE_FRAME_COUNT,
   isScrollSmootherEnabled,
   logScrollLayoutDebug,
+  logScrollTriggersDebug,
   scrollSmootherMatchMediaQuery,
 } from "@/lib/animation/scroll-layout";
 import { scheduleScrollTriggerRefresh } from "@/lib/animation/scroll-trigger-refresh";
@@ -80,6 +81,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           try {
             safeRefresh();
             logScrollLayoutDebug("post-create rAF");
+            logScrollTriggersDebug("post-create rAF");
           } catch {
             /* noop */
           }
@@ -93,6 +95,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
             if (generation !== layoutReadyGenerationRef.current) return;
             safeRefresh();
             logScrollLayoutDebug("post-layout-stable");
+            logScrollTriggersDebug("post-layout-stable");
             setScrollLayoutReady(true);
           })();
         });

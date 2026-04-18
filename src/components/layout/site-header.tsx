@@ -246,7 +246,7 @@ export function SiteHeader() {
       <div
         ref={navRowRef}
         className={cn(
-          "relative z-10 frame-container grid h-20 w-full min-inline-safe grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:grid-cols-[auto_1fr_auto] md:gap-4",
+          "relative z-10 frame-container grid h-20 w-full min-inline-safe grid-cols-[minmax(0,1fr)_auto] items-center gap-2 md:grid-cols-[auto_1fr_auto] md:gap-4",
           mobileNavOpen && "pointer-events-none md:pointer-events-auto",
         )}
       >
@@ -254,11 +254,16 @@ export function SiteHeader() {
           ref={logoRef}
           href="/"
           data-header-logo
-          className={`${headerReady ? "gsap-hidden" : ""} display-kicker min-inline-safe flex items-center gap-2 text-xl leading-none text-text-primary sm:gap-3 md:text-3xl`}
+          className={`${headerReady ? "gsap-hidden" : ""} display-kicker min-w-0 min-inline-safe flex max-w-full items-center gap-2 text-xl leading-none text-text-primary sm:gap-3 md:max-w-none md:text-3xl`}
         >
-          <Image src="/Assets/FrameClub.png" alt="The Frame Club Logo" width={34} height={34} className="object-contain sm:h-9 sm:w-9" />
-          <span className="hidden sm:inline">THE FRAME CLUB</span>
-          <span className="sm:hidden">FRAME CLUB</span>
+          <Image
+            src="/Assets/FrameClub.png"
+            alt="The Frame Club Logo"
+            width={34}
+            height={34}
+            className="size-[34px] shrink-0 object-contain sm:h-9 sm:w-9"
+          />
+          <span className="hidden min-w-0 truncate sm:inline">THE FRAME CLUB</span>
         </TransitionLink>
 
         <NavigationMenu className="hidden justify-self-center md:flex">
@@ -302,13 +307,13 @@ export function SiteHeader() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <div className="flex items-center justify-self-end gap-3">
+        <div className="flex shrink-0 items-center justify-self-end gap-2 sm:gap-3">
           <Button
             render={<TransitionLink href="/shop" />}
             variant="brand"
             size="sm"
             data-header-cta
-            className={`${headerReady ? "gsap-hidden" : ""} display-kicker min-touch-target px-4 py-2 md:px-6 md:text-sm`}
+            className={`${headerReady ? "gsap-hidden" : ""} display-kicker min-touch-target px-3 py-2 sm:px-4 md:px-6 md:text-sm`}
           >
             <span className="md:hidden">ORDER</span>
             <span className="hidden md:inline">ORDER NOW</span>

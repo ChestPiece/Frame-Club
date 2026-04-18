@@ -24,13 +24,8 @@ const steps = [
 
 export function HowItWorksSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<HTMLElement[]>([]);
   const ghostRefs = useRef<HTMLDivElement[]>([]);
   const scrollTriggerReady = useScrollTriggerReady();
-
-  const setCardRef = useCallback((el: HTMLElement | null, index: number) => {
-    if (el) cardRefs.current[index] = el;
-  }, []);
 
   const setGhostRef = useCallback((el: HTMLDivElement | null, index: number) => {
     if (el) ghostRefs.current[index] = el;
@@ -62,18 +57,22 @@ export function HowItWorksSection() {
 
   useGSAP(
     () => {
-      if (!scrollTriggerReady || cardRefs.current.length === 0) return;
+      if (!scrollTriggerReady) return;
+      const root = sectionRef.current;
+      if (!root) return;
+      const cards = gsap.utils.toArray<HTMLElement>("[data-how-step-card]", root);
+      if (cards.length !== steps.length) return;
 
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(cardRefs.current.filter(Boolean), { opacity: 1, y: 0, clearProps: "all" });
+        gsap.set(cards, { opacity: 1, y: 0, clearProps: "all" });
         return () => {};
       });
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const tween = gsap.fromTo(
-          cardRefs.current,
+          cards,
           { y: 60, opacity: 0 },
           {
             y: 0,
@@ -82,7 +81,7 @@ export function HowItWorksSection() {
             ease: "power3.out",
             stagger: 0.12,
             scrollTrigger: {
-              trigger: sectionRef.current,
+              trigger: root,
               start: "top 75%",
               once: true,
             },
@@ -115,7 +114,7 @@ export function HowItWorksSection() {
         {steps.map((step, index) => (
           <Card
             key={step.label}
-            ref={(el) => setCardRef(el, index)}
+            data-how-step-card
             data-motion-reveal
             onMouseEnter={() => handleCardEnter(index)}
             onMouseLeave={() => handleCardLeave(index)}
